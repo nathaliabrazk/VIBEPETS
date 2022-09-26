@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 VIBEPETS/VIBEPETS.xcodeproj/project.xcworkspace/xcuserdata/luizaraujo.xcuserdatad/UserInterfaceState.xcuserstate
 *.xcuserstate
+*.xcodeproj
+.DS_Store
