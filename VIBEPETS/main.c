@@ -45,21 +45,15 @@ int main(int argc, char *argv[]) {
 	switch (opcao) 
 	
 	{ 
-	case 'A': 
-	printf ("Você escolheu  Shampoo Pré-Banho Pelôncio\n"); 
-	break; 
+	case 'A':  
 	case 'a': 
 	printf ("Você escolheu  Shampoo Pré-Banho Pelôncio\n"); 
 	break; 
 	case 'B': 
-	printf ("Você escolheu Shampoo Pelos Claros Pelôncio\n"); 
-	break;
 	case 'b': 
 	printf ("Você escolheu Shampoo Pelos Claros Pelôncio\n"); 
 	break;
-	case 'C': 
-	printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n"); 
-	break; 
+	case 'C':  
 	case 'c': 
 	printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n"); 
 	break; 
@@ -77,21 +71,15 @@ int main(int argc, char *argv[]) {
 	switch (opcao)
 	
 	{
-	case 'A': 
-	printf ("Você escolheu Avelã\n"); 
-	break; 
+	case 'A':  
 	case 'a': 
 	printf ("Você escolheu Avelã\n"); 
 	break; 
-	case 'B': 
-	printf ("Você escolheu Melância\n"); 
-	break; 
+	case 'B':  
 	case 'b': 
 	printf ("Você escolheu Melância\n"); 
 	break; 
 	case 'C': 
-	printf ("Você escolheu Morango\n"); 
-	break; 
 	case 'c': 
 	printf ("Você escolheu Morango\n"); 
 	break; 
@@ -112,15 +100,11 @@ int main(int argc, char *argv[]) {
 	case 'a': 
 	printf ("Você escolheu Amêndoas e Ameixa\n"); 
 	break; 
-	case 'B': 
-	printf ("Você escolheu Avelã e Cereja\n"); 
-	break; 
+	case 'B':  
 	case 'b': 
 	printf ("Você escolheu Avelã e Cereja\n"); 
 	break; 
 	case 'C': 
-	printf ("Você escolheu Melância\n"); 
-	break; 
 	case 'c': 
 	printf ("Você escolheu Melância\n"); 
 	break; 
