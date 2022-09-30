@@ -109,8 +109,6 @@ int main(int argc, char *argv[]) {
 	switch (opcao)
 	{
 	case 'A': 
-	printf ("Você escolheu Amêndoas e Ameixa\n"); 
-	break; 
 	case 'a': 
 	printf ("Você escolheu Amêndoas e Ameixa\n"); 
 	break; 
