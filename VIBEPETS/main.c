@@ -29,7 +29,8 @@ struct Administrador {
 #define BIN_TEL "vibe_pet-persistencia_tel.bin"
 #define BIN_END "vibe_pet-persistencia_end.bin"
 
-#define SHOW_DEBUG 1 // 1 = SHOW || 0 = HIDE => Printa ou não coisas na tela
+// 1 = Mostra || 0 = Esconde => Printa ou não coisas na tela, msg de erro e etc.
+#define SHOW_DEBUG 1
 
 
 // #############################################################################
@@ -139,29 +140,26 @@ int main(int argc, char *argv[]) {
      }
      */
     
-    //
+    // Criar um ADM.
     struct Administrador adm1;
     adm1.cod_adm = 0;
     strcpy(adm1.nome, "admin");
     strcpy(adm1.cpf, "01234567890");
     strcpy(adm1.senha, "admin123");
     
-//    salvarPerfilAdministrador(adm1);
-    
-    
+    // Criar outro ADM.
     struct Administrador adm2;
     adm2.cod_adm = 0;
     strcpy(adm2.nome, "Carlos");
     strcpy(adm2.cpf, "01234567890");
     strcpy(adm2.senha, "admin123");
     
+    // Persistir os ADMs criados.
+//    salvarPerfilAdministrador(adm1);
 //    salvarPerfilAdministrador(adm2);
     
-    
-    // MOSTRAR TODOS ADMs
+    // Mostrar todos ADMs.
     printarTodosPerfisAdministrador();
-    
-    
     
     system("pause");
     
@@ -170,7 +168,7 @@ int main(int argc, char *argv[]) {
 
 
 // #############################################################################
-// PERSISTENCIA EM XML
+// PERSISTENCIA EM BIN
 
 // #################################
 // SALVAR PERFIL DE ADMINISTRADOR
@@ -207,13 +205,14 @@ int salvarPerfilAdministrador(struct Administrador adm) {
     //Gravando os dados no arquivo usando a função fwrite
     fwrite(&adm, sizeof(struct Administrador), 1, ptrArq);
     
-    //fechando o arquivo
+    // Fechando o arquivo
     fclose(ptrArq);
     
-    //retornando o valor do resultado.
+    // Retornando o valor do resultado.
     return(resultado);
 }
 
+// #################################
 // LER TODOS PERFIS DE ADM
 void printarTodosPerfisAdministrador() {
     struct Administrador adm;
@@ -224,7 +223,7 @@ void printarTodosPerfisAdministrador() {
     //abertura do arquivo
     ptrArq = fopen(BIN_ADM,"rb");
     
-    //testando se o arquivo foi aberto com sucesso
+    // Testando se o arquivo foi aberto com sucesso
     if (ptrArq != NULL) {
         printf ("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_ADM);
         
@@ -234,19 +233,34 @@ void printarTodosPerfisAdministrador() {
         exit (1);
     }
     
-    //leitura do arquivo binário
-    //Sintaxe: fread(&variavel, num_bytes, num_registros, arquivo);
-    printf("ADMINISTRADORES: \n");
+    // Leitura do arquivo binário
+    // Sintaxe: fread(&variavel, num_bytes, num_registros, arquivo);
+    printf("ADMINISTRADORES\n");
     printf("-----------------------------------------------------------------------------------\n");
     printf ("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
     printf("-----------------------------------------------------------------------------------\n");
 
     while(fread(&adm, sizeof(struct Administrador), 1, ptrArq))
-        printf ("%-05d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
+        printf ("%-5d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
+    printf("\n\n\n");
 
-    //fechando o arquivo
+    // Fechando o arquivo
     fclose(ptrArq);
 }
+
+//TODO: ⚠️ FALTA O RESTANTE DO CRUD ⚠️
+
+// #################################
+// LER UM PERFIL DE ADM
+
+// #################################
+// BUSCAR ADM POR CODIGO
+
+// #################################
+// ALTERAR UM PERFIL DE ADM
+
+// #################################
+// DELETAR UM PERFIL DE ADM
 
 
 
