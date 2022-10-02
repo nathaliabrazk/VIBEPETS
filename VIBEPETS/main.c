@@ -296,8 +296,10 @@ void printarTodosPerfisAdministrador() {
 
 // #################################
 // BUSCAR ADM POR CODIGO
+// Uma função para retornar Administrador procurando pelo código.
 // RETORNO:
-//  - struct Administrador
+//  - encontrado: instancia com dados encontrados;
+//  - não encontrado: instancia com cod = -1;
 struct Administrador buscarAdministradorPorCod(int cod) {
     struct Administrador adm;
     adm.cod_adm = -1;
