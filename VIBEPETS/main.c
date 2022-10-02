@@ -12,14 +12,28 @@
 
 // #############################################################################
 // DECLARACAO DE TIPOS
+
+
+
+
+
+
+
+
+
+
+
+
+
 struct Administrador {
     int cod_adm;
     char nome[50];
     char cpf[12];
     char senha[25];
-    int cargo;
-    int ativo;
+    int cargo;      // 0 = admin || 1 = funcionario
+    int ativo;      // 0 = inativo/deletado || 1 = ativo / funcionando
 };
+
 
 
 // #############################################################################
@@ -142,6 +156,10 @@ int main(int argc, char *argv[]) {
      }
      */
     
+    char nome[50] = "Luiz";
+    
+
+    
     // Criar um ADM.
     struct Administrador adm1;
     adm1.cod_adm = 0;
@@ -151,18 +169,32 @@ int main(int argc, char *argv[]) {
     
     // Criar outro ADM.
     struct Administrador adm2;
-    adm2.cod_adm = 0;
+    adm2.cod_adm = 1;
     adm2.cargo = 1; // Funcionario 0 = adm
+    adm2.ativo = 1;
     strcpy(adm2.nome, "Carlos");
     strcpy(adm2.cpf, "01234567890");
     strcpy(adm2.senha, "admin123");
+    
     
     // Persistir os ADMs criados.
 //    salvarPerfilAdministrador(adm1);
 //    salvarPerfilAdministrador(adm2);
 
     // Mostrar todos ADMs.
-    printarTodosPerfisAdministrador();
+//    printarTodosPerfisAdministrador();
+    
+    
+    // BUSCA DE ADM
+    struct Administrador adm3;
+    
+    adm3 = buscarAdministradorPorCod(0);
+    
+    printf("\n+++++++++++++++++++++\n");
+    printf("NOME: %s", adm3.nome);
+    printf("\n+++++++++++++++++++++\n\n");
+    
+    
     
     
     
@@ -178,15 +210,16 @@ int main(int argc, char *argv[]) {
 // #################################
 // SALVAR PERFIL DE ADMINISTRADOR
 // RETORNO:
-//  - 0 : se não houve erros;
-//  - !=: se houve erro(s);
+//  - 0    : se não houve erros;
+//  - != 0 : se houve erro(s);
 int salvarPerfilAdministrador(struct Administrador adm) {
     int resultado = 0;
     
     // Ponteiro para encontrar o arquivo a ser manipulado.
     FILE *ptrArq;
     
-    ptrArq = fopen (BIN_ADM, "ab"); //Se não abriu, cria.
+    //Se não abriu, cria.
+    ptrArq = fopen (BIN_ADM, "ab");
     
     // Verifica se o arquivo abriu.
     if (ptrArq != NULL) {
@@ -249,23 +282,69 @@ void printarTodosPerfisAdministrador() {
     printf ("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
     printf("-----------------------------------------------------------------------------------\n");
 
-    while(fread(&adm, sizeof(struct Administrador), 1, ptrArq))
+    while(fread(&adm, sizeof(struct Administrador), 1, ptrArq)) {
         printf ("%05d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
-    printf("\n\n\n");
+    }
 
     // Fechando o arquivo
     fclose(ptrArq);
 }
 
+
 //TODO: ⚠️ FALTA O RESTANTE DO CRUD ⚠️
-struct Administrador buscarAdministradorPorCod(int cod) {
-    
-}
+
+
 // #################################
 // BUSCAR ADM POR CODIGO
+// RETORNO:
+//  - struct Administrador
+struct Administrador buscarAdministradorPorCod(int cod) {
+    struct Administrador adm;
+    adm.cod_adm = -1;
+    adm.ativo = 0;
+    
+    // Ponteiro para encontrar o arquivo a ser manipulado.
+    FILE *ptrArq;
+    
+    //abertura do arquivo
+    ptrArq = fopen(BIN_ADM, "rb");
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if (ptrArq != NULL) {
+        if(SHOW_DEBUG == 1) {
+            printf ("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_ADM);
+        }
+        
+    } else {
+        if(SHOW_DEBUG == 1) {
+            printf ("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_ADM);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    // Procura em todos os registros do documento.
+    while(fread(&adm, sizeof(struct Administrador), 1, ptrArq)) {
+        // Compara o cod recebido.
+        if(adm.cod_adm == cod) {
+            if(SHOW_DEBUG == 1) {
+                printf ("\n\nAdministrador encontrado com sucesso.\n\n");
+            }
+            return adm;
+        }
+    }
+
+    // Fechando o arquivo
+    fclose(ptrArq);
+    
+    return adm;
+}
 
 // #################################
 // PRINTAR UM PERFIL DE ADM
+void printarAdministrador(struct Administrador adm) {
+    //TODO: criar View de perfil ADM.
+}
 
 // #################################
 // ALTERAR UM PERFIL DE ADM
@@ -280,7 +359,7 @@ struct Administrador buscarAdministradorPorCod(int cod) {
 
 // #############################################################################
 // AUXILIARES
-
+// printar adm
 
 
 
