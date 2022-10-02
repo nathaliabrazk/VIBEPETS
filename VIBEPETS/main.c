@@ -19,6 +19,19 @@ struct Administrador {
     char senha[25];
 };
 
+// CLIENTE
+struct Cliente {
+	int cod_cliente;
+	char nome[50];
+	char email[50];
+	char opcao;
+    char endereco; 
+	char cpf[12];
+    int  dia;
+	int  mes;
+	int  ano;
+	int  tel;
+};
 
 // #############################################################################
 // CONSTANTES
@@ -42,48 +55,50 @@ void printarTodosPerfisAdministrador(void);
 int main(int argc, char *argv[]) {
     setlocale (LC_ALL, "");
     // Propriedades
-    
-    char nome[50], email[50], opcao, endereco, cpf[12];
-    int  dia, mes, ano, tel;
-    
+    char opcao;
+	struct Cliente cliente;
+	  
     // Entradas
     
     printf("Digite o nome: ");
-    scanf("%s", nome);
-    
+    scanf("%s", cliente.nome);
+    fflush (stdin);
+    system ("cls");
     printf("Digite email: ");
-    scanf("%s", email);
-    
+    scanf("%s", cliente.email);
+    fflush (stdin);
+    system ("cls");
     printf("Digite Endereco:");
-    scanf("%s", &endereco);
-    
+    scanf("%s", cliente.endereco);
+    fflush (stdin);
+    system ("cls");
     printf("Digite o telefone:");
-    scanf("%d", &tel);
+	gets(cliente.tel);
     
     printf("Digite o CPF:");
-    scanf ("%s", cpf);
+    scanf ("%s", cliente.cpf);
     
     printf("Digite sua data de nascimento:");
     printf("Digite o dia: ");
-    scanf("%d", &dia);
+    scanf("%d", &cliente.dia);
     
     printf("Digite o mes: ");
-    scanf("%d", &mes);
+    scanf("%d", &cliente.mes);
     
     printf("Digite o ano: ");
-    scanf("%d", &ano);
+    scanf("%d", &cliente.ano);
     
     // Processamento
     
     // Saida
-    printf("O nome inserido: %s", nome);
-    printf("O email inserido: %s\n", email);
-    printf("O dia inserido:  %d\n", dia);
-    printf("O telefone inserido: %d\n", tel);
-    printf("O CPF inserido: %s\n", cpf);
-    printf("O dia inserido: %i\n", dia);
-    printf("O mes inserido: %i\n", mes);
-    printf("O ano inserido: %i\n", ano);
+    printf("O nome inserido: %s",cliente. nome);
+    printf("O email inserido: %s\n", cliente.email);
+    printf("O dia inserido:  %d\n", cliente.dia);
+    printf("O telefone inserido: %d\n", cliente.tel);
+    printf("O CPF inserido: %s\n", cliente.cpf);
+    printf("O dia inserido: %i\n", cliente.dia);
+    printf("O mes inserido: %i\n", cliente.mes);
+    printf("O ano inserido: %i\n", cliente.ano);
     
     printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
     printf ("Escolha o Shampoo para seu pet:\n");
