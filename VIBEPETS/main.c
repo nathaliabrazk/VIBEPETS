@@ -225,10 +225,14 @@ void printarTodosPerfisAdministrador() {
     
     // Testando se o arquivo foi aberto com sucesso
     if (ptrArq != NULL) {
-        printf ("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_ADM);
+        if(SHOW_DEBUG == 1) {
+            printf ("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_ADM);
+        }
         
     } else {
-        printf ("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_ADM);
+        if(SHOW_DEBUG == 1) {
+            printf ("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_ADM);
+        }
         system ("pause");
         exit (1);
     }
@@ -241,7 +245,7 @@ void printarTodosPerfisAdministrador() {
     printf("-----------------------------------------------------------------------------------\n");
 
     while(fread(&adm, sizeof(struct Administrador), 1, ptrArq))
-        printf ("%-5d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
+        printf ("%05d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
     printf("\n\n\n");
 
     // Fechando o arquivo
@@ -251,33 +255,16 @@ void printarTodosPerfisAdministrador() {
 //TODO: ⚠️ FALTA O RESTANTE DO CRUD ⚠️
 
 // #################################
-// LER UM PERFIL DE ADM
+// BUSCAR ADM POR CODIGO
 
 // #################################
-// BUSCAR ADM POR CODIGO
+// PRINTAR UM PERFIL DE ADM
 
 // #################################
 // ALTERAR UM PERFIL DE ADM
 
 // #################################
 // DELETAR UM PERFIL DE ADM
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
