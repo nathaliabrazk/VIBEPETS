@@ -2,7 +2,7 @@
 //  main.c
 //  VIBEPETS
 //
-//  Created by Nathália Braz on 24/09/22.
+//  Created by Nath�lia Braz on 24/09/22.
 //
 
 #include <stdio.h>
@@ -42,141 +42,143 @@ void printarTodosPerfisAdministrador(void);
 int main(int argc, char *argv[]) {
     setlocale (LC_ALL, "");
     // Propriedades
-    /*
-     char nome[50], email[50], opcao, endereco;
-     int  dia, mes, ano, cpf, tel;
-     
-     // Entradas
-     
-     printf("Digite o nome: ");
-     scanf("%s", nome);
-     printf("Digite email: ");
-     scanf("%s", email);
-     printf("Digite Endere�o:");
-     scanf("%s", &endereco);
-     printf("Digite o telefone:");
-     scanf("%d", tel);
-     printf("Didigite o CPF:")
-     scanf ("%s", cpf);
-     prinf("Digite sua data de nascimento:");
-     printf("Digite o dia: ");
-     scanf("%i", &dia);
-     printf("Digite o m�s: ");
-     scanf("%i", mes);
-     printf("Digite o ano: ");
-     scanf("%i", ano);
-     
-     // Processamento
-     
-     
-     // Saida
-     printf("O nome inserido: %s", nome);
-     printf("O email inserido: %s\n", email);
-     printf("O dia inserido:  %d\n", dia);
-     printf("O telefone inserido: %d\n", tel);
-     printf("O CPF inserido: %s\n", cpf);
-     printf("O dia inserido: %i\n", dia);
-     printf("O m�s inserido: %i\n", mes);
-     printf("O ano inserido: %i\n", ano);
-     
-     
-     
-     
-     printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
-     printf ("Escolha o Shampoo para seu pet:\n");
-     printf ("A- Shampoo Pré-Banho Pelôncio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrâncias:	Avelã - Melância - Dove - Morango\n");
-     printf ("Opção:\n");
-     scanf ("%s", &opcao);
-     fflush (stdin);
-     system ("cls");
-     
-     switch (opcao) {
-     case 'A':
-     case 'a':
-     printf ("Você escolheu  Shampoo Pré-Banho Pelôncio\n");
-     break;
-     case 'B':
-     case 'b':
-     printf ("Você escolheu Shampoo Pelos Claros Pelôncio\n");
-     break;
-     case 'C':
-     case 'c':
-     printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n");
-     break;
-     default:
-     printf ("Opção inválida");
-     }
-     
-     printf ("Escolha a fragrância do Condicionador para seu pet:\n");
-     printf ("A-Avelã \nB- Melância \nC- Morango\n");
-     printf ("Opção:\n");
-     scanf ("%c", &opcao);
-     fflush (stdin);
-     system ("cls");
-     
-     switch (opcao) {
-     case 'A':
-     case 'a':
-     printf ("Você escolheu Avelã\n");
-     break;
-     case 'B':
-     case 'b':
-     printf ("Você escolheu Melância\n");
-     break;
-     case 'C':
-     case 'c':
-     printf ("Você escolheu Morango\n");
-     break;
-     default:
-     
-     printf ("Opção inválida");
-     }
-     printf ("Escolha a colônia Perfume Pet Clean Max para seu pet:\n");
-     printf ("A-  Amêndoas e Ameixa \nB- Avelã e Cereja \nC- Melancia\n");
-     printf ("Opção:\n");
-     scanf ("%c", &opcao);
-     fflush (stdin);
-     system ("cls");
-     
-     switch (opcao)
-     {
-     case 'A':
-     case 'a':
-     printf ("Você escolheu Amêndoas e Ameixa\n");
-     break;
-     case 'B':
-     case 'b':
-     printf ("Você escolheu Avelã e Cereja\n");
-     break;
-     case 'C':
-     case 'c':
-     printf ("Você escolheu Melância\n");
-     break;
-     default:
-     printf ("Opção inválida");
-     }
-     */
+    
+    char nome[50], email[50], opcao, endereco, cpf[12];
+    int  dia, mes, ano, tel;
+    
+    // Entradas
+    
+    printf("Digite o nome: ");
+    scanf("%s", nome);
+    
+    printf("Digite email: ");
+    scanf("%s", email);
+    
+    printf("Digite Endereco:");
+    scanf("%s", &endereco);
+    
+    printf("Digite o telefone:");
+    scanf("%d", &tel);
+    
+    printf("Digite o CPF:");
+    scanf ("%s", cpf);
+    
+    printf("Digite sua data de nascimento:");
+    printf("Digite o dia: ");
+    scanf("%d", &dia);
+    
+    printf("Digite o mes: ");
+    scanf("%d", &mes);
+    
+    printf("Digite o ano: ");
+    scanf("%d", &ano);
+    
+    // Processamento
+    
+    // Saida
+    printf("O nome inserido: %s", nome);
+    printf("O email inserido: %s\n", email);
+    printf("O dia inserido:  %d\n", dia);
+    printf("O telefone inserido: %d\n", tel);
+    printf("O CPF inserido: %s\n", cpf);
+    printf("O dia inserido: %i\n", dia);
+    printf("O mes inserido: %i\n", mes);
+    printf("O ano inserido: %i\n", ano);
+    
+    printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
+    printf ("Escolha o Shampoo para seu pet:\n");
+    printf ("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrâncias:	Avelã - Melância - Dove - Morango\n");
+    printf ("Opção:\n");
+    scanf ("%s", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    switch (opcao) {
+        case 'A':
+        case 'a':
+            printf ("Voce escolheu  Shampoo Pré-Banho Pelôncio\n");
+            break;
+        case 'B':
+        case 'b':
+            printf ("Voc escolheu Shampoo Pelos Claros Pelôncio\n");
+            break;
+        case 'C':
+        case 'c':
+            printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n");
+            break;
+        default:
+            printf ("Opção inválida");
+    }
+    
+    printf ("Escolha a fragrância do Condicionador para seu pet:\n");
+    printf ("A-Avelã \nB- Melância \nC- Morango\n");
+    printf ("Opção:\n");
+    scanf ("%c", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    switch (opcao) {
+        case 'A':
+        case 'a':
+            printf ("Você escolheu Avelã\n");
+            break;
+        case 'B':
+        case 'b':
+            printf ("Você escolheu Melância\n");
+            break;
+        case 'C':
+        case 'c':
+            printf ("Você escolheu Morango\n");
+            break;
+        default:
+            
+            printf ("Opção inválida");
+    }
+    printf ("Escolha a colônia Perfume Pet Clean Max para seu pet:\n");
+    printf ("A-  Amêndoas e Ameixa \nB- Avelã e Cereja \nC- Melancia\n");
+    printf ("Opção:\n");
+    scanf ("%c", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    switch (opcao)
+    {
+        case 'A':
+        case 'a':
+            printf ("Você escolheu Amêndoas e Ameixa\n");
+            break;
+        case 'B':
+        case 'b':
+            printf ("Você escolheu Avelã e Cereja\n");
+            break;
+        case 'C':
+        case 'c':
+            printf ("Você escolheu Melância\n");
+            break;
+        default:
+            printf ("Opção inválida");
+    }
     
     // Criar um ADM.
-    struct Administrador adm1;
-    adm1.cod_adm = 0;
-    strcpy(adm1.nome, "admin");
-    strcpy(adm1.cpf, "01234567890");
-    strcpy(adm1.senha, "admin123");
-    
-    // Criar outro ADM.
-    struct Administrador adm2;
-    adm2.cod_adm = 0;
-    strcpy(adm2.nome, "Carlos");
-    strcpy(adm2.cpf, "01234567890");
-    strcpy(adm2.senha, "admin123");
+    //    struct Administrador adm1;
+    //    adm1.cod_adm = 0;
+    //    strcpy(adm1.nome, "admin");
+    //    strcpy(adm1.cpf, "01234567890");
+    //    strcpy(adm1.senha, "admin123");
+    //
+    //    // Criar outro ADM.
+    //    struct Administrador adm2;
+    //    adm2.cod_adm = 0;
+    //    strcpy(adm2.nome, "Carlos");
+    //    strcpy(adm2.cpf, "01234567890");
+    //    strcpy(adm2.senha, "admin123");
     
     // Persistir os ADMs criados.
-//    salvarPerfilAdministrador(adm1);
-//    salvarPerfilAdministrador(adm2);
+    //    salvarPerfilAdministrador(adm1);
+    //    salvarPerfilAdministrador(adm2);
     
     // Mostrar todos ADMs.
-    printarTodosPerfisAdministrador();
+    //    printarTodosPerfisAdministrador();
     
     system("pause");
     
@@ -260,11 +262,11 @@ void printarTodosPerfisAdministrador() {
     printf("-----------------------------------------------------------------------------------\n");
     printf ("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
     printf("-----------------------------------------------------------------------------------\n");
-
+    
     while(fread(&adm, sizeof(struct Administrador), 1, ptrArq))
         printf ("%05d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
     printf("\n\n\n");
-
+    
     // Fechando o arquivo
     fclose(ptrArq);
 }
@@ -299,12 +301,12 @@ void printarTodosPerfisAdministrador() {
  ptrArq = fopen ("binario.bin", "wb"); //Se não abriu, cria.
  
  if (ptrArq!=NULL)
-     printf ("\n\nArquivo binario.bin foi aberto com sucesso\n");
+ printf ("\n\nArquivo binario.bin foi aberto com sucesso\n");
  else
  {
-     printf ("\n\nErro: O arquivo binario.bin não foi aberto\n");
-     system ("pause");
-     exit (0);
+ printf ("\n\nErro: O arquivo binario.bin não foi aberto\n");
+ system ("pause");
+ exit (0);
  }
  
  //Gravando os dados no arquivo usando a função fwrite
