@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+//#include <curses.h>
 
 // PROTOTIPOS
 
@@ -114,21 +115,52 @@ int main(int argc, char *argv[]) {
     // Criando a variável ponteiro para o arquivo
     FILE *pont_arq;
     char palavra[20]; // variável do tipo string
+    char c;
+    int r;
+    char texto_str[20];
 
     // Abrindo o arquivo
     pont_arq = fopen("arquivo.txt", "a");
     
-    // Mensagem para o usuário
-    if (pont_arq == NULL) {
-        printf("ERRO! O arquivo não foi aberto!\n\n\n");
-        
-    } else {
-        printf("O arquivo foi aberto com sucesso!\n\n\n");
+    //testando se o arquivo foi realmente criado
+    if(pont_arq == NULL) {
+        printf("Erro na abertura do arquivo!");
+        return 1;
     }
     
-    // Fechando arquivo
+    printf("Escreva uma palavra para testar gravacao de arquivo: ");
+    scanf("%s", palavra);
+    
+    //usando fprintf para armazenar a string no arquivo
+    fprintf(pont_arq, "%s", palavra);
+    
+    
+    //Gravando strings no arquivo
+//    r = fputs("Programando em Linguagem C.", pont_arq);
+    
+    //Verificando se os dados foram gravados com sucesso
+    if( r == EOF) {
+        printf("Erro ao tentar gravar os dados! \n");
+    } else {
+        printf("Dados gravados com sucesso!\n\n");
+    }
+    
+    
+    //usando fclose para fechar o arquivo
     fclose(pont_arq);
     
+    pont_arq = fopen("arquivo.txt","r");
+    
+    while(fgets(texto_str, 20, pont_arq) != NULL)
+    printf("%s", texto_str);
+    
+    
+    
+    
+    
+    
+    //usando fclose para fechar o arquivo
+    fclose(pont_arq);
     
     system("pause");
     
