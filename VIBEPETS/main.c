@@ -60,11 +60,11 @@ int main(int argc, char *argv[]) {
      scanf ("%s", cpf);
      prinf("Digite sua data de nascimento:");
      printf("Digite o dia: ");
-     scanf("%d", &dia);
+     scanf("%i", &dia);
      printf("Digite o mês: ");
-     scanf("%d", mes);
+     scanf("%i", mes);
      printf("Digite o ano: ");
-     scanf("%d", ano);
+     scanf("%i", ano);
      
      // Processamento
      
@@ -75,7 +75,9 @@ int main(int argc, char *argv[]) {
      printf("O dia inserido:  %d\n", dia);
      printf("O telefone inserido: %d\n", tel);
      printf("O CPF inserido: %s\n", cpf);
-     
+     printf("O dia inserido: %i\n", dia);
+     printf("O mês inserido: %i\n", mes);
+     printf("O ano inserido: %i\n", ano);
      
      
      
