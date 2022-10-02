@@ -25,7 +25,7 @@ struct Cliente {
 	char nome[50];
 	char email[50];
 	char opcao;
-    char endereco; 
+    char endereco[50];
 	char cpf[12];
     int  dia;
 	int  mes;
@@ -61,24 +61,29 @@ int main(int argc, char *argv[]) {
     // Entradas
     
     printf("Digite o nome: ");
-    scanf("%s", cliente.nome);
+    gets(cliente.nome);
     fflush (stdin);
     system ("cls");
+    
     printf("Digite email: ");
-    scanf("%s", cliente.email);
+    gets(cliente.email);
     fflush (stdin);
     system ("cls");
+    
     printf("Digite Endereco:");
-    scanf("%s", cliente.endereco);
+    gets(cliente.endereco);
     fflush (stdin);
-    system ("cls");
+    system("cls");
+    
     printf("Digite o telefone:");
-	gets(cliente.tel);
+	scanf("%d", &cliente.tel);
+    fflush (stdin);
     
     printf("Digite o CPF:");
-    scanf ("%s", cliente.cpf);
+    gets(cliente.cpf);
+    fflush (stdin);
     
-    printf("Digite sua data de nascimento:");
+    printf("DIGITE SUA DATA DE NASCIMENTO\n");
     printf("Digite o dia: ");
     scanf("%d", &cliente.dia);
     
@@ -91,7 +96,8 @@ int main(int argc, char *argv[]) {
     // Processamento
     
     // Saida
-    printf("O nome inserido: %s",cliente. nome);
+    printf("\n\n\n\n\n\n");
+    printf("O nome inserido: %s\n",cliente. nome);
     printf("O email inserido: %s\n", cliente.email);
     printf("O dia inserido:  %d\n", cliente.dia);
     printf("O telefone inserido: %d\n", cliente.tel);
@@ -102,8 +108,8 @@ int main(int argc, char *argv[]) {
     
     printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
     printf ("Escolha o Shampoo para seu pet:\n");
-    printf ("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrâncias:	Avelã - Melância - Dove - Morango\n");
-    printf ("Opção:\n");
+    printf ("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrancias:	Avela - Melancia - Dove - Morango\n");
+    printf ("Opcao:\n");
     scanf ("%s", &opcao);
     fflush (stdin);
     system ("cls");
@@ -111,7 +117,7 @@ int main(int argc, char *argv[]) {
     switch (opcao) {
         case 'A':
         case 'a':
-            printf ("Voce escolheu  Shampoo Pré-Banho Pelôncio\n");
+            printf ("Voce escolheu  Shampoo Pro-Banho Pelôncio\n");
             break;
         case 'B':
         case 'b':
@@ -119,15 +125,15 @@ int main(int argc, char *argv[]) {
             break;
         case 'C':
         case 'c':
-            printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n");
+            printf ("Voce escolheu Shampoo Pelos Escuros Pelôncio\n");
             break;
         default:
-            printf ("Opção inválida");
+            printf ("Opcao invalida");
     }
     
-    printf ("Escolha a fragrância do Condicionador para seu pet:\n");
-    printf ("A-Avelã \nB- Melância \nC- Morango\n");
-    printf ("Opção:\n");
+    printf ("Escolha a fragrancia do Condicionador para seu pet:\n");
+    printf ("A-Avela \nB- Melancia \nC- Morango\n");
+    printf ("Opcao:\n");
     scanf ("%c", &opcao);
     fflush (stdin);
     system ("cls");
@@ -135,23 +141,23 @@ int main(int argc, char *argv[]) {
     switch (opcao) {
         case 'A':
         case 'a':
-            printf ("Você escolheu Avelã\n");
+            printf ("Voce escolheu Avela\n");
             break;
         case 'B':
         case 'b':
-            printf ("Você escolheu Melância\n");
+            printf ("Voce escolheu Melancia\n");
             break;
         case 'C':
         case 'c':
-            printf ("Você escolheu Morango\n");
+            printf ("Voce escolheu Morango\n");
             break;
         default:
             
-            printf ("Opção inválida");
+            printf ("Opcao invalida");
     }
-    printf ("Escolha a colônia Perfume Pet Clean Max para seu pet:\n");
-    printf ("A-  Amêndoas e Ameixa \nB- Avelã e Cereja \nC- Melancia\n");
-    printf ("Opção:\n");
+    printf ("Escolha a colonia Perfume Pet Clean Max para seu pet:\n");
+    printf ("A-  Amendoas e Ameixa \nB- Avela e Cereja \nC- Melancia\n");
+    printf ("Opcao:\n");
     scanf ("%c", &opcao);
     fflush (stdin);
     system ("cls");
@@ -160,18 +166,18 @@ int main(int argc, char *argv[]) {
     {
         case 'A':
         case 'a':
-            printf ("Você escolheu Amêndoas e Ameixa\n");
+            printf ("Voce escolheu Amendoas e Ameixa\n");
             break;
         case 'B':
         case 'b':
-            printf ("Você escolheu Avelã e Cereja\n");
+            printf ("Voce escolheu Avela e Cereja\n");
             break;
         case 'C':
         case 'c':
-            printf ("Você escolheu Melância\n");
+            printf ("Voce escolheu Melancia\n");
             break;
         default:
-            printf ("Opção inválida");
+            printf ("Opcao invalida");
     }
     
     // Criar um ADM.
