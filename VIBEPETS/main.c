@@ -17,6 +17,8 @@ struct Administrador {
     char nome[50];
     char cpf[12];
     char senha[25];
+    int cargo;
+    int ativo;
 };
 
 
@@ -30,14 +32,14 @@ struct Administrador {
 #define BIN_END "vibe_pet-persistencia_end.bin"
 
 // 1 = Mostra || 0 = Esconde => Printa ou não coisas na tela, msg de erro e etc.
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
 
 // #############################################################################
 // PROTOTIPOS
 int salvarPerfilAdministrador(struct Administrador);
 void printarTodosPerfisAdministrador(void);
-
+struct Administrador buscarAdministradorPorCod(int);
 
 int main(int argc, char *argv[]) {
     setlocale (LC_ALL, "");
@@ -150,6 +152,7 @@ int main(int argc, char *argv[]) {
     // Criar outro ADM.
     struct Administrador adm2;
     adm2.cod_adm = 0;
+    adm2.cargo = 1; // Funcionario 0 = adm
     strcpy(adm2.nome, "Carlos");
     strcpy(adm2.cpf, "01234567890");
     strcpy(adm2.senha, "admin123");
@@ -157,9 +160,11 @@ int main(int argc, char *argv[]) {
     // Persistir os ADMs criados.
 //    salvarPerfilAdministrador(adm1);
 //    salvarPerfilAdministrador(adm2);
-    
+
     // Mostrar todos ADMs.
     printarTodosPerfisAdministrador();
+    
+    
     
     system("pause");
     
@@ -253,7 +258,9 @@ void printarTodosPerfisAdministrador() {
 }
 
 //TODO: ⚠️ FALTA O RESTANTE DO CRUD ⚠️
-
+struct Administrador buscarAdministradorPorCod(int cod) {
+    
+}
 // #################################
 // BUSCAR ADM POR CODIGO
 
@@ -266,6 +273,13 @@ void printarTodosPerfisAdministrador() {
 // #################################
 // DELETAR UM PERFIL DE ADM
 
+
+
+
+
+
+// #############################################################################
+// AUXILIARES
 
 
 
