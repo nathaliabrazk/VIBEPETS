@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
     setlocale (LC_ALL, "");
     // Propriedades
     /*
-     char nome[50], email[50], opcao;
-     int  dia, mes, ano, endereco, cpf, tel;
+     char nome[50], email[50], opcao, endereco;
+     int  dia, mes, ano, cpf, tel;
      
      // Entradas
      
@@ -52,18 +52,33 @@ int main(int argc, char *argv[]) {
      scanf("%s", nome);
      printf("Digite email: ");
      scanf("%s", email);
+     printf("Digite Endereço:");
+     scanf("%s", &endereco);
+     printf("Digite o telefone:");
+     scanf("%d", tel);
+     printf("Didigite o CPF:")
+     scanf ("%s", cpf);
+     prinf("Digite sua data de nascimento:");
      printf("Digite o dia: ");
      scanf("%d", &dia);
-     
+     printf("Digite o mês: ");
+     scanf("%d", mes);
+     printf("Digite o ano: ");
+     scanf("%d", ano);
      
      // Processamento
      
      
      // Saida
-     printf("O nome digitado e: %s", nome);
-     printf("O email digitado e: %s", email);
+     printf("O nome inserido: %s", nome);
+     printf("O email inserido: %s\n", email);
+     printf("O dia inserido:  %d\n", dia);
+     printf("O telefone inserido: %d\n", tel);
+     printf("O CPF inserido: %s\n", cpf);
      
-     scanf("O dia digitado foi:  %d", &dia);
+     
+     
+     
      
      printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
      printf ("Escolha o Shampoo para seu pet:\n");
@@ -350,3 +365,4 @@ void printarTodosPerfisAdministrador() {
  fclose(ptrArq);
  
  */
+
