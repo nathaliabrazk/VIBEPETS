@@ -112,55 +112,74 @@ int main(int argc, char *argv[]) {
      printf ("Opção inválida");
      }
      */
-    // Criando a variável ponteiro para o arquivo
-    FILE *pont_arq;
-    char palavra[20]; // variável do tipo string
-    char c;
-    int r;
-    char texto_str[20];
+    
+    char ch [15] = "Teste geral";
+    int valor [15] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    int i=0;
+    FILE *ptrArq;
+    
+    ptrArq = fopen ("binario.bin", "wb"); //Se não abriu, cria.
+    
+    if (ptrArq!=NULL)
+        printf ("\n\nArquivo binario.bin foi aberto com sucesso\n");
+    else
+    {
+        printf ("\n\nErro: O arquivo binario.bin não foi aberto\n");
+        system ("pause");
+        exit (0);
+    }
+    
+    //Gravando os dados no arquivo usando a função fwrite
+    fwrite (ch, sizeof (char), 15, ptrArq);
+    fwrite (valor, sizeof(int), 15, ptrArq);
+    
+    //fechando o arquivo
+    fclose(ptrArq);
+    
 
-    // Abrindo o arquivo
-    pont_arq = fopen("arquivo.txt", "a");
-    
-    //testando se o arquivo foi realmente criado
-    if(pont_arq == NULL) {
-        printf("Erro na abertura do arquivo!");
-        return 1;
-    }
-    
-    printf("Escreva uma palavra para testar gravacao de arquivo: ");
-    scanf("%s", palavra);
-    
-    //usando fprintf para armazenar a string no arquivo
-    fprintf(pont_arq, "%s", palavra);
+    // Leitura
     
     
-    //Gravando strings no arquivo
-//    r = fputs("Programando em Linguagem C.", pont_arq);
+    //abertura do arquivo
+    ptrArq = fopen("binario.bin","rb");
     
-    //Verificando se os dados foram gravados com sucesso
-    if( r == EOF) {
-        printf("Erro ao tentar gravar os dados! \n");
+    //testando se o arquivo foi aberto com sucesso
+    if (ptrArq != NULL) {
+        printf ("\n\nArquivo binario.bin foi aberto com sucesso\n\n");
+        
     } else {
-        printf("Dados gravados com sucesso!\n\n");
+        printf ("\n\nERRO: O arquivo binario.bin não foi aberto e criado\n");
+        system ("pause");
+        exit (1);
     }
     
+    //leitura do arquivo binário
+    //Sintaxe: fread(&variavel, num_bytes, num_registros, arquivo);
     
-    //usando fclose para fechar o arquivo
-    fclose(pont_arq);
+    //retorna o conteúdo contido em uma ocorrência do tamanho da variável ch.
+    fread(ch, sizeof(ch),1,ptrArq);
     
-    pont_arq = fopen("arquivo.txt","r");
+    //retorna o conteúdo contido em uma ocorrência do tamanho da variável valor.
+    fread(valor,sizeof(valor),1,ptrArq);
     
-    while(fgets(texto_str, 20, pont_arq) != NULL)
-    printf("%s", texto_str);
+    printf("Vetor de caracteres: \n");
+    
+    for(i = 0; i < 15; i++)
+    {
+        printf("%c",ch[i]);
+    }
+    
+    printf("\nVetor de inteiros: ");
+    
+    for(i = 0; i < 15; i++)
+    {
+        printf("\n%d",valor[i]);
+    }
+    
+    //fechando o arquivo
+    fclose(ptrArq);
     
     
-    
-    
-    
-    
-    //usando fclose para fechar o arquivo
-    fclose(pont_arq);
     
     system("pause");
     
