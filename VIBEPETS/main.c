@@ -2,7 +2,7 @@
 //  main.c
 //  VIBEPETS
 //
-//  Created by Nathália Braz on 24/09/22.
+//  Created by Nath�lia Braz on 24/09/22.
 //
 
 #include <stdio.h>
@@ -13,18 +13,6 @@
 // #############################################################################
 // DECLARACAO DE TIPOS
 
-
-
-
-
-
-
-
-
-
-
-
-
 struct Administrador {
     int cod_adm;
     char nome[50];
@@ -34,6 +22,19 @@ struct Administrador {
     int ativo;      // 0 = inativo/deletado || 1 = ativo / funcionando
 };
 
+// CLIENTE
+struct Cliente {
+	int cod_cliente;
+	char nome[50];
+	char email[50];
+	char opcao;
+    char endereco[50];
+	char cpf[12];
+    int  dia;
+	int  mes;
+	int  ano;
+	int  tel;
+};
 
 
 // #############################################################################
@@ -45,9 +46,9 @@ struct Administrador {
 #define BIN_TEL "vibe_pet-persistencia_tel.bin"
 #define BIN_END "vibe_pet-persistencia_end.bin"
 
-// 1 = Mostra || 0 = Esconde => Printa ou não coisas na tela, msg de erro e etc.
-#define SHOW_DEBUG 0
 
+// 1 = Mostra || 0 = Esconde => Printa ou nao coisas na tela, msg de erro e etc.
+#define SHOW_DEBUG 1
 
 // #############################################################################
 // PROTOTIPOS
@@ -58,131 +59,159 @@ struct Administrador buscarAdministradorPorCod(int);
 int main(int argc, char *argv[]) {
     setlocale (LC_ALL, "");
     // Propriedades
-    /*
-     char nome[50], email[50], opcao;
-     int  dia, mes, ano, endereco, cpf, tel;
-     
-     // Entradas
-     
-     printf("Digite o nome: ");
-     scanf("%s", nome);
-     printf("Digite email: ");
-     scanf("%s", email);
-     printf("Digite o dia: ");
-     scanf("%d", &dia);
-     
-     
-     // Processamento
-     
-     
-     // Saida
-     printf("O nome digitado e: %s", nome);
-     printf("O email digitado e: %s", email);
-     
-     scanf("O dia digitado foi:  %d", &dia);
-     
-     printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
-     printf ("Escolha o Shampoo para seu pet:\n");
-     printf ("A- Shampoo Pré-Banho Pelôncio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrâncias:	Avelã - Melância - Dove - Morango\n");
-     printf ("Opção:\n");
-     scanf ("%s", &opcao);
-     fflush (stdin);
-     system ("cls");
-     
-     switch (opcao) {
-     case 'A':
-     case 'a':
-     printf ("Você escolheu  Shampoo Pré-Banho Pelôncio\n");
-     break;
-     case 'B':
-     case 'b':
-     printf ("Você escolheu Shampoo Pelos Claros Pelôncio\n");
-     break;
-     case 'C':
-     case 'c':
-     printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n");
-     break;
-     default:
-     printf ("Opção inválida");
-     }
-     
-     printf ("Escolha a fragrância do Condicionador para seu pet:\n");
-     printf ("A-Avelã \nB- Melância \nC- Morango\n");
-     printf ("Opção:\n");
-     scanf ("%c", &opcao);
-     fflush (stdin);
-     system ("cls");
-     
-     switch (opcao) {
-     case 'A':
-     case 'a':
-     printf ("Você escolheu Avelã\n");
-     break;
-     case 'B':
-     case 'b':
-     printf ("Você escolheu Melância\n");
-     break;
-     case 'C':
-     case 'c':
-     printf ("Você escolheu Morango\n");
-     break;
-     default:
-     
-     printf ("Opção inválida");
-     }
-     printf ("Escolha a colônia Perfume Pet Clean Max para seu pet:\n");
-     printf ("A-  Amêndoas e Ameixa \nB- Avelã e Cereja \nC- Melancia\n");
-     printf ("Opção:\n");
-     scanf ("%c", &opcao);
-     fflush (stdin);
-     system ("cls");
-     
-     switch (opcao)
-     {
-     case 'A':
-     case 'a':
-     printf ("Você escolheu Amêndoas e Ameixa\n");
-     break;
-     case 'B':
-     case 'b':
-     printf ("Você escolheu Avelã e Cereja\n");
-     break;
-     case 'C':
-     case 'c':
-     printf ("Você escolheu Melância\n");
-     break;
-     default:
-     printf ("Opção inválida");
-     }
-     */
+    char opcao;
+	struct Cliente cliente;
+	  
+    // Entradas
+    
+    printf("Digite o nome: ");
+    fgets(cliente.nome, sizeof(cliente.nome), stdin);
+    fflush (stdin);
+    system ("cls");
+    
+    printf("Digite email: ");
+    fgets(cliente.email, sizeof(cliente.email), stdin);
+    fflush (stdin);
+    system ("cls");
+    
+    printf("Digite Endereco:");
+    fgets(cliente.endereco, sizeof(cliente.endereco), stdin);
+    fflush (stdin);
+    system("cls");
+    
+    printf("Digite o telefone:");
+    scanf("%d", &cliente.tel);
+    fflush (stdin);
+    
+    printf("Digite o CPF:");
+    fgets(cliente.cpf, sizeof(cliente.cpf), stdin);
+    fflush (stdin);
+    
+    printf("DIGITE SUA DATA DE NASCIMENTO\n");
+    printf("Digite o dia: ");
+    scanf("%d", &cliente.dia);
+    
+    printf("Digite o mes: ");
+    scanf("%d", &cliente.mes);
+    
+    printf("Digite o ano: ");
+    scanf("%d", &cliente.ano);
+    
+    // Processamento
+    
+    // Saida
+    printf("\n\n\n\n\n\n");
+    printf("O nome inserido: %s\n",cliente. nome);
+    printf("O email inserido: %s\n", cliente.email);
+    printf("O dia inserido:  %d\n", cliente.dia);
+    printf("O telefone inserido: %d\n", cliente.tel);
+    printf("O CPF inserido: %s\n", cliente.cpf);
+    printf("O dia inserido: %i\n", cliente.dia);
+    printf("O mes inserido: %i\n", cliente.mes);
+    printf("O ano inserido: %i\n", cliente.ano);
+    
+    printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
+    printf ("Escolha o Shampoo para seu pet:\n");
+    printf ("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrancias:	Avela - Melancia - Dove - Morango\n");
+    printf ("Opcao:\n");
+    scanf ("%s", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    switch (opcao) {
+        case 'A':
+        case 'a':
+            printf ("Voce escolheu  Shampoo Pro-Banho Pelôncio\n");
+            break;
+        case 'B':
+        case 'b':
+            printf ("Voc escolheu Shampoo Pelos Claros Pelôncio\n");
+            break;
+        case 'C':
+        case 'c':
+            printf ("Voce escolheu Shampoo Pelos Escuros Pelôncio\n");
+            break;
+        default:
+            printf ("Opcao invalida");
+    }
+    
+    printf ("Escolha a fragrancia do Condicionador para seu pet:\n");
+    printf ("A-Avela \nB- Melancia \nC- Morango\n");
+    printf ("Opcao:\n");
+    scanf ("%c", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    switch (opcao) {
+        case 'A':
+        case 'a':
+            printf ("Voce escolheu Avela\n");
+            break;
+        case 'B':
+        case 'b':
+            printf ("Voce escolheu Melancia\n");
+            break;
+        case 'C':
+        case 'c':
+            printf ("Voce escolheu Morango\n");
+            break;
+        default:
+            
+            printf ("Opcao invalida");
+    }
+    printf ("Escolha a colonia Perfume Pet Clean Max para seu pet:\n");
+    printf ("A-  Amendoas e Ameixa \nB- Avela e Cereja \nC- Melancia\n");
+    printf ("Opcao:\n");
+    scanf ("%c", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    switch (opcao)
+    {
+        case 'A':
+        case 'a':
+            printf ("Voce escolheu Amendoas e Ameixa\n");
+            break;
+        case 'B':
+        case 'b':
+            printf ("Voce escolheu Avela e Cereja\n");
+            break;
+        case 'C':
+        case 'c':
+            printf ("Voce escolheu Melancia\n");
+            break;
+        default:
+            printf ("Opcao invalida");
+    }
     
     char nome[50] = "Luiz";
     
 
     
     // Criar um ADM.
-    struct Administrador adm1;
-    adm1.cod_adm = 0;
-    strcpy(adm1.nome, "admin");
-    strcpy(adm1.cpf, "01234567890");
-    strcpy(adm1.senha, "admin123");
-    
-    // Criar outro ADM.
-    struct Administrador adm2;
-    adm2.cod_adm = 1;
+    //    struct Administrador administrador1;
+    //    administrador1.cod_administrador = 0;
+    //    strcpy(administrador1.nome, "administrador");
+    //    strcpy(administrador1.cpf, "01234567890");
+    //    strcpy(administrador1.senha, "administrador123");
+    //
+    //    // Criar outro ADM.
+    //    struct Administrador administrador2;
+    //    administrador2.cod_administrador = 0;
     adm2.cargo = 1; // Funcionario 0 = adm
     adm2.ativo = 1;
-    strcpy(adm2.nome, "Carlos");
-    strcpy(adm2.cpf, "01234567890");
-    strcpy(adm2.senha, "admin123");
+    //    strcpy(administrador2.nome, "Carlos");
+    //    strcpy(administrador2.cpf, "01234567890");
+    //    strcpy(administrador2.senha, "administrador123");
+
     
     
     // Persistir os ADMs criados.
-//    salvarPerfilAdministrador(adm1);
-//    salvarPerfilAdministrador(adm2);
-
+    //    salvarPerfilAdministrador(administrador1);
+    //    salvarPerfilAdministrador(administrador2);
+    
     // Mostrar todos ADMs.
-//    printarTodosPerfisAdministrador();
+    //    printarTodosPerfisAdministrador();
     
     
     // BUSCA DE ADM
@@ -210,41 +239,41 @@ int main(int argc, char *argv[]) {
 // #################################
 // SALVAR PERFIL DE ADMINISTRADOR
 // RETORNO:
-//  - 0    : se não houve erros;
-//  - != 0 : se houve erro(s);
-int salvarPerfilAdministrador(struct Administrador adm) {
+//  - 0 : se nao houve erros;
+//  - !=: se houve erro(s);
+int salvarPerfilAdministrador(struct Administrador administrador) {
     int resultado = 0;
     
     // Ponteiro para encontrar o arquivo a ser manipulado.
-    FILE *ptrArq;
+    FILE *ponteiroArquivo;
     
     //Se não abriu, cria.
-    ptrArq = fopen (BIN_ADM, "ab");
+    ponteiroArquivo = fopen (BIN_ADM, "ab");
     
     // Verifica se o arquivo abriu.
-    if (ptrArq != NULL) {
+    if (ponteiroArquivo != NULL) {
         if(SHOW_DEBUG == 1) {
             printf ("\n\nArquivo %s foi aberto com sucesso\n", BIN_ADM);
         }
         
     } else {
-        // Se não abriu, troca para 1 que significa erro.
+        // Se nao abriu, troca para 1 que significa erro.
         resultado = 1;
         
         // Mostra a mensagem de erro.
         if(SHOW_DEBUG == 1) {
-            printf ("\n\nErro: O arquivo %s não foi aberto\n", BIN_ADM);
+            printf ("\n\nErro: O arquivo %s nao foi aberto\n", BIN_ADM);
             system ("pause");
         }
         // Retorna o erro.
         return(resultado);
     }
     
-    //Gravando os dados no arquivo usando a função fwrite
-    fwrite(&adm, sizeof(struct Administrador), 1, ptrArq);
+    //Gravando os dados no arquivo usando a funcao fwrite
+    fwrite(&administrador, sizeof(struct Administrador), 1, ponteiroArquivo);
     
     // Fechando o arquivo
-    fclose(ptrArq);
+    fclose(ponteiroArquivo);
     
     // Retornando o valor do resultado.
     return(resultado);
@@ -253,45 +282,46 @@ int salvarPerfilAdministrador(struct Administrador adm) {
 // #################################
 // LER TODOS PERFIS DE ADM
 void printarTodosPerfisAdministrador() {
-    struct Administrador adm;
+    struct Administrador administrador;
     
     // Ponteiro para encontrar o arquivo a ser manipulado.
-    FILE *ptrArq;
+    FILE *ponteiroArquivo;
     
     //abertura do arquivo
-    ptrArq = fopen(BIN_ADM,"rb");
+    ponteiroArquivo = fopen(BIN_ADM,"rb");
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ptrArq != NULL) {
+    if (ponteiroArquivo != NULL) {
         if(SHOW_DEBUG == 1) {
             printf ("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_ADM);
         }
         
     } else {
         if(SHOW_DEBUG == 1) {
-            printf ("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_ADM);
+            printf ("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_ADM);
         }
         system ("pause");
         exit (1);
     }
     
-    // Leitura do arquivo binário
+    // Leitura do arquivo binario
     // Sintaxe: fread(&variavel, num_bytes, num_registros, arquivo);
     printf("ADMINISTRADORES\n");
     printf("-----------------------------------------------------------------------------------\n");
     printf ("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
     printf("-----------------------------------------------------------------------------------\n");
 
-    while(fread(&adm, sizeof(struct Administrador), 1, ptrArq)) {
-        printf ("%05d|%-30s|%-15s|%-30s\n", adm.cod_adm, adm.nome, adm.cpf, adm.senha);
-    }
-
+    while(fread(&administrador, sizeof(struct Administrador), 1, ponteiroArquivo))
+        printf ("%05d|%-30s|%-15s|%-30s\n", administrador.cod_adm, administrador.nome, administrador.cpf, administrador.senha);
+    printf("\n\n\n");
+    
     // Fechando o arquivo
-    fclose(ptrArq);
+    fclose(ponteiroArquivo);
 }
 
 
 //TODO: ⚠️ FALTA O RESTANTE DO CRUD ⚠️
+
 
 
 // #################################
@@ -372,25 +402,25 @@ void printarAdministrador(struct Administrador adm) {
  char ch [15] = "Teste geral";
  int valor [15] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
  int i=0;
- FILE *ptrArq;
+ FILE *ponteiroArquivo;
  
- ptrArq = fopen ("binario.bin", "wb"); //Se não abriu, cria.
+ ponteiroArquivo = fopen ("binario.bin", "wb"); //Se nao abriu, cria.
  
- if (ptrArq!=NULL)
-     printf ("\n\nArquivo binario.bin foi aberto com sucesso\n");
+ if (ponteiroArquivo!=NULL)
+ printf ("\n\nArquivo binario.bin foi aberto com sucesso\n");
  else
  {
-     printf ("\n\nErro: O arquivo binario.bin não foi aberto\n");
-     system ("pause");
-     exit (0);
+ printf ("\n\nErro: O arquivo binario.bin nao foi aberto\n");
+ system ("pause");
+ exit (0);
  }
  
- //Gravando os dados no arquivo usando a função fwrite
- fwrite(ch, sizeof (char), 15, ptrArq);
- fwrite(valor, sizeof(int), 15, ptrArq);
+ //Gravando os dados no arquivo usando a funcao fwrite
+ fwrite(ch, sizeof (char), 15, ponteiroArquivo);
+ fwrite(valor, sizeof(int), 15, ponteiroArquivo);
  
  //fechando o arquivo
- fclose(ptrArq);
+ fclose(ponteiroArquivo);
  */
 
 
@@ -401,31 +431,31 @@ void printarAdministrador(struct Administrador adm) {
  char ch [15] = "Teste geral";
  int valor [15] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
  int i=0;
- FILE *ptrArq;
+ FILE *ponteiroArquivo;
  
  
  
  //abertura do arquivo
- ptrArq = fopen("binario.bin","rb");
+ ponteiroArquivo = fopen("binario.bin","rb");
  
  //testando se o arquivo foi aberto com sucesso
- if (ptrArq != NULL) {
+ if (ponteiroArquivo != NULL) {
  printf ("\n\nArquivo binario.bin foi aberto com sucesso\n\n");
  
  } else {
- printf ("\n\nERRO: O arquivo binario.bin não foi aberto e criado\n");
+ printf ("\n\nERRO: O arquivo binario.bin nao foi aberto e criado\n");
  system ("pause");
  exit (1);
  }
  
- //leitura do arquivo binário
+ //leitura do arquivo binario
  //Sintaxe: fread(&variavel, num_bytes, num_registros, arquivo);
  
- //retorna o conteúdo contido em uma ocorrência do tamanho da variável ch.
- fread(ch, sizeof(ch),1,ptrArq);
+ //retorna o conteudo contido em uma ocorrencia do tamanho da variavel ch.
+ fread(ch, sizeof(ch),1,ponteiroArquivo);
  
- //retorna o conteúdo contido em uma ocorrência do tamanho da variável valor.
- fread(valor,sizeof(valor),1,ptrArq);
+ //retorna o conteudo contido em uma ocorrencia do tamanho da variavel valor.
+ fread(valor,sizeof(valor),1,ponteiroArquivo);
  
  printf("Vetor de caracteres: \n");
  
@@ -442,6 +472,7 @@ void printarAdministrador(struct Administrador adm) {
  }
  
  //fechando o arquivo
- fclose(ptrArq);
+ fclose(ponteiroArquivo);
  
  */
+
