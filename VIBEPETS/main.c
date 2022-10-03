@@ -27,13 +27,12 @@ struct Cliente {
 	int cod_cliente;
 	char nome[50];
 	char email[50];
-	char opcao;
     char endereco[50];
 	char cpf[12];
-    int  dia;
-	int  mes;
-	int  ano;
-	int  tel;
+    int  nascimentoDia;
+	int  nascimentoMes;
+	int  nascimentoAno;
+	int  telefone;
 };
 
 
@@ -58,6 +57,7 @@ struct Administrador buscarAdministradorPorCod(int);
 
 int main(int argc, char *argv[]) {
     setlocale (LC_ALL, "");
+    
     // Propriedades
     char opcao;
 	struct Cliente cliente;
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     system("cls");
     
     printf("Digite o telefone:");
-    scanf("%d", &cliente.tel);
+    scanf("%d", &cliente.telefone);
     fflush (stdin);
     
     printf("Digite o CPF:");
@@ -89,13 +89,13 @@ int main(int argc, char *argv[]) {
     
     printf("DIGITE SUA DATA DE NASCIMENTO\n");
     printf("Digite o dia: ");
-    scanf("%d", &cliente.dia);
+    scanf("%d", &cliente.nascimentoDia);
     
     printf("Digite o mes: ");
-    scanf("%d", &cliente.mes);
+    scanf("%d", &cliente.nascimentoMes);
     
     printf("Digite o ano: ");
-    scanf("%d", &cliente.ano);
+    scanf("%d", &cliente.nascimentoAno);
     
     // Processamento
     
@@ -103,12 +103,12 @@ int main(int argc, char *argv[]) {
     printf("\n\n\n\n\n\n");
     printf("O nome inserido: %s\n",cliente. nome);
     printf("O email inserido: %s\n", cliente.email);
-    printf("O dia inserido:  %d\n", cliente.dia);
-    printf("O telefone inserido: %d\n", cliente.tel);
+    printf("O dia inserido:  %d\n", cliente.nascimentoDia);
+    printf("O telefone inserido: %d\n", cliente.telefone);
     printf("O CPF inserido: %s\n", cliente.cpf);
-    printf("O dia inserido: %i\n", cliente.dia);
-    printf("O mes inserido: %i\n", cliente.mes);
-    printf("O ano inserido: %i\n", cliente.ano);
+    printf("O dia inserido: %i\n", cliente.nascimentoDia);
+    printf("O mes inserido: %i\n", cliente.nascimentoMes);
+    printf("O ano inserido: %i\n", cliente.nascimentoAno);
     
     printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
     printf ("Escolha o Shampoo para seu pet:\n");
@@ -198,8 +198,8 @@ int main(int argc, char *argv[]) {
     //    // Criar outro ADM.
     //    struct Administrador administrador2;
     //    administrador2.cod_administrador = 0;
-    adm2.cargo = 1; // Funcionario 0 = adm
-    adm2.ativo = 1;
+    //    administrador2.cargo = 1; // Funcionario 0 = adm
+    //    administrador2.ativo = 1;
     //    strcpy(administrador2.nome, "Carlos");
     //    strcpy(administrador2.cpf, "01234567890");
     //    strcpy(administrador2.senha, "administrador123");
