@@ -71,7 +71,7 @@ int buscarAdministradorPorCod(int);
 void alterarAdministrador(int);
 void printarMensagemContinuar(void);
 int acessarUltimoCodigoAdministrador(void);
-
+void deletarAdministrador(int);
 void lerDadosAdministrador(struct Administrador*);
 
 
@@ -261,11 +261,13 @@ int main(int argc, char *argv[]) {
     }
     while(opcao != 'x' && opcao != 'X') {
 
-
+        
+        fflush(stdin);
         printf("\n");
         printf("a) INSERIR NOVO ADM\n");
         printf("b) ALTERAR ADM\n");
         printf("c) LISTAR ADMS\n");
+        printf("d) DELETAR ADM\n");
         printf("X) SAIR\n");
         printf("OPCAO: ");
         scanf("%c", &opcao); fflush(stdin);
@@ -291,10 +293,22 @@ int main(int argc, char *argv[]) {
                 
                 printarMensagemContinuar();
                 break;
-
+                
             case 'c':
             case 'C':
                 printarTodosPerfisAdministrador();
+                printarMensagemContinuar();
+                break;
+                
+            case 'd':
+            case 'D':
+                printarTodosPerfisAdministrador();
+
+                printf("INFORME O CODIGO PARA ALTERAR: ");
+                scanf("%d", &codigo);
+                
+                registro = buscarAdministradorPorCod(codigo);
+                deletarAdministrador(registro);
                 printarMensagemContinuar();
                 break;
 
@@ -307,8 +321,15 @@ int main(int argc, char *argv[]) {
                 printf("OPCAO INVALIDA!");
         }
     }
-    int ultimoCod = acessarUltimoCodigoAdministrador();
-    printf("\n\nULTIMO COD: %d\n\n", ultimoCod);
+    
+    if(SHOW_DEBUG == 1) {
+        int ultimoCod = acessarUltimoCodigoAdministrador();
+        if(ultimoCod == -1) {
+            
+        } else {
+            printf("\n\nULTIMO COD: %d\n\n", ultimoCod);
+        }
+    }
     system("pause");
     
     fclose(ponteiroArquivoADM);
@@ -453,7 +474,9 @@ int acessarUltimoCodigoAdministrador() {
     
     fseek(ponteiroArquivoADM, -1 * sizeof(struct Administrador), SEEK_END);
     if(fread(&administrador, sizeof(struct Administrador), -1, ponteiroArquivoADM)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        if(SHOW_DEBUG == 1) {
+            printarMensagem("Problemas na leitura do registro!!!");
+        }
         return -1;
     }
     
@@ -531,6 +554,10 @@ void printarTodosPerfisAdministrador() {
 
 // #################################
 // ALTERAR UM PERFIL DE ADM
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e mostra como está momento antes da alteracao, apos isso rece novos dados e atualiza.
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
 void alterarAdministrador(int registro) {
     struct Administrador administradorAux;
     
@@ -555,6 +582,61 @@ void alterarAdministrador(int registro) {
     
     printf("\n\n Novos dados \n\n");
     lerDadosAdministrador(&administradorAux);
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoADM, -(int) sizeof(struct Administrador), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&administradorAux, sizeof(struct Administrador), 1, ponteiroArquivoADM);
+    fflush(ponteiroArquivoADM); /*despejar os arquivos no disco rígido*/
+}
+
+
+
+// #################################
+// DELETAR UM PERFIL DE ADM
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e apaga logicamente (deixa invisivel);
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
+void deletarAdministrador(int registro) {
+    struct Administrador administradorAux;
+    
+    if(fseek(ponteiroArquivoADM, (registro)*sizeof(administradorAux), SEEK_SET) != 0){
+        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
+        return;
+    }
+    
+    if(fread(&administradorAux, sizeof(struct Administrador), 1, ponteiroArquivoADM)!= 1){
+        printarMensagem("Problemas na leitura do registro!!!");
+        return;
+    }
+    
+    if(administradorAux.ativo == '*'){
+        printarMensagem("Registro já está apagado!!!\n\n");
+        return;
+    }
+    
+    
+    printf("\n\n Dados Atuais \n\n");
+    printarAdministradorTopicos(administradorAux);
+    
+    fflush(stdin);
+    printf("\n\n Apagar o registro (s/n)???: ");
+    char resp = getchar();
+    
+    if(resp != 's' && resp != 'S') {
+        return;
+    }
+    
+    fflush(stdin);
+    administradorAux.ativo = '*';
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoADM, -(int) sizeof(struct Administrador), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&administradorAux, sizeof(struct Administrador), 1, ponteiroArquivoADM);
+    fflush(ponteiroArquivoADM); /*despejar os arquivos no disco rígido*/
+    
     
     // recuar um registro no arquivo
     fseek(ponteiroArquivoADM, -(int) sizeof(struct Administrador), SEEK_CUR);
@@ -686,7 +768,7 @@ void lerDadosAdministrador(struct Administrador *administrador) {
     printf("CPF  : ");
     gets(administrador->cpf);
     fflush(stdin);
-    
+    c
     printf("Senha: ");
     gets(administrador->senha);
     fflush(stdin);
