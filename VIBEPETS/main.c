@@ -253,6 +253,7 @@ void mainMenu() {
     char opcao = 'a';
     
     while(opcao != 'x' && opcao != 'X') {
+        system ("cls");
         
         printf("\nMENU PRINCIPAL\n");
         printf("\tA) MENU AGENDAMENTO\n");
@@ -445,6 +446,7 @@ void menuCliente() {
     char opcao = 'a';
     
     while(opcao != 'x' && opcao != 'X') {
+        system ("cls");
         
         printf("\nMENU CLIENTE\n");
         printf("\tI) INSERIR NOVO\n");
@@ -669,7 +671,7 @@ void printarClienteLista(struct Cliente cliente) {
     //TODO: criar View de perfil CLIENTE.
     
     //    printf("-----------------------------------------------------------------------------------\n");
-    printf("%05d|%-30s|%-15s|%-30s|%-30s|%-15d|%d/%d/%d\n\n", cliente.codigo, cliente.nome, cliente.cpf, cliente.email, cliente.endereco, cliente.telefone, cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
+    printf("%05d|%-30s|%-15s|%-30s|%-30s|%-15d|%02d/%02d/%d\n", cliente.codigo, cliente.nome, cliente.cpf, cliente.email, cliente.endereco, cliente.telefone, cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
     //    printf("-----------------------------------------------------------------------------------\n");
 }
 
@@ -684,7 +686,7 @@ void printarClienteTopicos(struct Cliente cliente) {
         printf("%-10s: %s\n", "EMAIL", cliente.email);
         printf("%-10s: %s\n", "ENDERECO", cliente.endereco);
         printf("%-10s: %d\n", "TELEFONE", cliente.telefone);
-        printf("%-10s: %d/%d/%d\n", "NASCIMENTO", cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
+        printf("%-10s: %02d/%02d/%d\n", "NASCIMENTO", cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
         
     } else {
         printf("\nCLIENTE DELETADO!\n");
@@ -710,7 +712,7 @@ void printarTodosRegistrosCliente() {
     printarCabecalhoTodosClientes();
     
     while(1){
-        if(fread(&cliente, sizeof(cliente), 1, ponteiroArquivoCLIENTE)!= 1)break; /*Sair do laço*/
+        if(fread(&cliente, sizeof(cliente), 1, ponteiroArquivoCLIENTE)!= 1) break; /*Sair do laço*/
         if(cliente.ativo == '*') continue; /*Passa ao próximo*/
         printarClienteLista(cliente);
         //        printarClienteTopicos(cliente);
@@ -847,6 +849,7 @@ void menuFuncionario() {
     char opcao = 'a';
     
     while(opcao != 'x' && opcao != 'X') {
+        system ("cls");
         
         printf("\n MENU FUNCIONARIO\n");
         printf("\tI) INSERIR NOVO\n");
