@@ -79,9 +79,22 @@ void lerDadosAdministrador(struct Administrador*);
 
 
 int main(int argc, char *argv[]) {
-    setlocale (LC_ALL, "");
+    struct Funcionario funcionario;
+    char opcao = 'a';
+    int codigo = 0;
+    int registro = 0;
+    
     
     // INICIALIZACOES
+    // Cuidado, esta acao apaga todo o Banco de Dados.
+    if(DELETE_FILES == 1) {
+        printarMensagem("-----------------------------------------------------------\n");
+        printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
+        fflush(stdin); opcao = getchar();
+        if(opcao == 's' || opcao == 'S') {
+            codigo = remove(BIN_FUN);
+        }
+    }
     abrirArquivos();
     
     // Propriedades
@@ -211,18 +224,8 @@ int main(int argc, char *argv[]) {
     //    }
     
     
-    
-    char opcao = 'a';
-    int codigo = 0;
-    int registro = 0;
-    
-    if(DELETE_FILES == 1) {
-        codigo = remove(BIN_ADM);
-    }
     while(opcao != 'x' && opcao != 'X') {
 
-        
-        fflush(stdin);
         printf("\n");
         printf("a) INSERIR NOVO ADM\n");
         printf("b) ALTERAR ADM\n");
@@ -230,7 +233,9 @@ int main(int argc, char *argv[]) {
         printf("d) DELETAR ADM\n");
         printf("X) SAIR\n");
         printf("OPCAO: ");
-        scanf("%c", &opcao); fflush(stdin);
+//        scanf("%c", &opcao); fflush(stdin);
+        opcao = getchar();
+        fflush(stdin);
 
         switch(opcao) {
             case 'a':
