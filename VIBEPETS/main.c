@@ -69,6 +69,7 @@ void abrirTodosArquivos(void);
 void fecharTodosArquivos(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
+void fecharArquivoFuncionario(void);
 void fecharArquivoCliente(void);
 
 // #################################
@@ -119,9 +120,8 @@ char* formatarCPF(char[]);
 
 
 // #################################
-// VALIDAR FUNCOES
+// VALIDACOES
 void receberValidarCPF(char*);
-
 
 
 
@@ -969,16 +969,15 @@ void lerDadosFuncionario(struct Funcionario *funcionario) {
     
     fflush(stdin);
     printf("Nome : ");
-    gets(funcionario->nome);
-    fflush(stdin);
+    gets(funcionario->nome); fflush(stdin);
     
-    printf("CPF  : ");
-    gets(funcionario->cpf);
-    fflush(stdin);
+//    printf("CPF  : ");
+//    gets(funcionario->cpf); fflush(stdin);
+    //TODO: Testar depois
+    receberValidarCPF(funcionario->cpf);
     
     printf("Senha: ");
-    gets(funcionario->senha);
-    fflush(stdin);
+    gets(funcionario->senha); fflush(stdin);
     
     printf("Cargo: ");
     scanf("%d", &funcionario->cargo); // Funcionario 0 = adm
@@ -1356,13 +1355,13 @@ char *formatarCPF(char *cpf) {
 //    - O cpf se a entrada for valida;
 //    - '*' se erro, ou entrada invalida
 void receberValidarCPF(char *cpf) {
-    char flag = 'x';
+    char entradaValida = 'x';
     int indice = 0;
     int contadorErros = 0;
     
     char entrada[15];
     
-    while(flag == 'x') {
+    while(entradaValida == 'x') {
         
         printf("CPF: ");
         gets(entrada); fflush(stdin);
@@ -1372,24 +1371,24 @@ void receberValidarCPF(char *cpf) {
         
         // Checar quantidade inserida.
         if(contadorCaracteres == 11) {
-            flag = 's';
+            entradaValida = 's';
             
         } else {
             if(contadorErros >= 2) {
                 printarMensagem("\nQuantidade de numeros incorreta.\n");
             }
-            flag = 'x';
+            entradaValida = 'x';
         }
         
         
         // Checar se tem somente numeros.
-        if(flag == 's') {
+        if(entradaValida == 's') {
             for(indice = 0; indice < contadorCaracteres; indice++){
                 if(entrada[indice] < '0' || entrada[indice] > '9'){
                     if(contadorErros >= 2) {
                         printarMensagem("\nInforme apenas valores numericos.\n");
                     }
-                    flag = 'x';
+                    entradaValida = 'x';
                     break;
                 }
             }
@@ -1399,7 +1398,20 @@ void receberValidarCPF(char *cpf) {
     }
     
     // Passar a entrada por parametro.
-    if(flag == 's') {
+    if(entradaValida == 's') {
         strcpy(cpf, entrada);
     }
 }
+
+// #################################
+// VALIDAR OPCOES PARA MENUS NUMERICOS
+// PARAMETRO:
+//    - min: o valor minimo que e aceito
+//    - max: o valor maximo que e aceito
+int receberValidarOpcaoNumero(int min, int max)
+
+// #################################
+// VALIDAR OPCOES PARA MENUS DE LETRAS
+// PARAMETRO:
+//    - opcoes: 'string' com as possibilidades de opcoes
+char receberValidarOpcaoLetra(char *opcoes)
