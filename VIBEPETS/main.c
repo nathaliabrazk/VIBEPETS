@@ -75,6 +75,7 @@ void menuClienteInserir(void);
 void menuClienteAlterar(void);
 void menuClienteDeletar(void);
 
+void printarCabecalhoTodosClientes(void);
 int  salvarRegistroCliente(struct Cliente);
 void printarMensagem(char *msg);
 void printarTodosRegistrosCliente(void);
@@ -445,7 +446,7 @@ void menuCliente() {
     
     while(opcao != 'x' && opcao != 'X') {
         
-        printf("\n MENU CLIENTE\n");
+        printf("\nMENU CLIENTE\n");
         printf("\tI) INSERIR NOVO\n");
         printf("\tA) ALTERAR\n");
         printf("\tL) LISTAR\n");
@@ -668,7 +669,7 @@ void printarClienteLista(struct Cliente cliente) {
     //TODO: criar View de perfil CLIENTE.
     
     //    printf("-----------------------------------------------------------------------------------\n");
-    printf("%05d|%-30s|%-15s|%-30s|%-30s|%5d|%d/%d/%d\n\n", cliente.codigo, cliente.nome, cliente.cpf, cliente.email, cliente.endereco, cliente.telefone, cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
+    printf("%05d|%-30s|%-15s|%-30s|%-30s|%-15d|%d/%d/%d\n\n", cliente.codigo, cliente.nome, cliente.cpf, cliente.email, cliente.endereco, cliente.telefone, cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
     //    printf("-----------------------------------------------------------------------------------\n");
 }
 
@@ -682,12 +683,19 @@ void printarClienteTopicos(struct Cliente cliente) {
         printf("%-10s: %s\n", "CPF", cliente.cpf);
         printf("%-10s: %s\n", "EMAIL", cliente.email);
         printf("%-10s: %s\n", "ENDERECO", cliente.endereco);
-        printf("%-8s: %d\n", "TELEFONE", cliente.telefone);
+        printf("%-10s: %d\n", "TELEFONE", cliente.telefone);
         printf("%-10s: %d/%d/%d\n", "NASCIMENTO", cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
         
     } else {
         printf("\nCLIENTE DELETADO!\n");
     }
+}
+
+void printarCabecalhoTodosClientes() {
+    printf("CLIENTES\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("%-5s|%-30s|%-15s|%-30s|%-30s|%-15s|%-10s|\n", "COD", "NOME", "CPF", "EMAIL", "ENDERECO","TELEFONE", "NASC");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
 }
 
 // #################################
@@ -699,17 +707,7 @@ void printarTodosRegistrosCliente() {
     // Volta o ponteiro para o inicio.
     rewind(ponteiroArquivoCLIENTE);
     
-    
-        printf("%-10s: %s\n", "EMAIL", cliente.email);
-        printf("%-10s: %s\n", "ENDERECO", cliente.endereco);
-        printf("%-8s: %d\n", "TELEFONE", cliente.telefone);
-        printf("%-10s: %d/%d/%d\n", "NASCIMENTO", cliente.nascimentoDia, cliente.nascimentoMes, cliente.nascimentoAno);
-    
-    
-    printf("CLIENTES\n");
-    printf("---------------------------------------------------------------------------------------------------------------------\n");
-    printf("%-5s|%-30s|%-15s|%-30s|%-30s|%-15s|%-10s|\n", "COD", "NOME", "CPF", "EMAIL", "ENDERECO","TELEFONE", "NASC");
-    printf("---------------------------------------------------------------------------------------------------------------------\n");
+    printarCabecalhoTodosClientes();
     
     while(1){
         if(fread(&cliente, sizeof(cliente), 1, ponteiroArquivoCLIENTE)!= 1)break; /*Sair do laço*/
@@ -747,7 +745,6 @@ void alterarCliente(int registro) {
         printarMensagem("Um registro apagado não pode ser alterado!!! \n\n");
         return;
     }
-    
     
     printf("\n\n Dados Atuais \n\n");
     printarClienteTopicos(clienteAux);
