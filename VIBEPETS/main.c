@@ -15,6 +15,7 @@
 // CONSTANTES
 #define BIN_FUN "vibe_pet-persistencia_func.bin"
 #define BIN_CLI "vibe_pet-persistencia_cli.bin"
+//#define BIN_PRO "vibe_pet-persistencia_prod.bin"
 //#define BIN_SER "vibe_pet-persistencia_serv.bin"
 //#define BIN_TEL "vibe_pet-persistencia_tel.bin"
 //#define BIN_END "vibe_pet-persistencia_end.bin"
@@ -26,6 +27,7 @@
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
 FILE *ponteiroArquivoFUNCIONARIO;
 FILE *ponteiroArquivoCLIENTE;
+//FILE *ponteiroArquivoProduto;
 //FILE *ponteiroArquivoSERVICO;
 //FILE *ponteiroArquivoTELEFONE;
 //FILE *ponteiroArquivoENDERECO;
@@ -139,19 +141,6 @@ int main(int argc, char *argv[]) {
     // MENU PRINCIPAL
     mainMenu();
     
-    //
-    //    // Processamento
-    //
-    //    // Saida
-    //    printf("\n\n\n\n\n\n");
-    //    printf("O nome inserido: %s\n", cliente.nome);
-    //    printf("O email inserido: %s\n", cliente.email);
-    //    printf("O dia inserido:  %d\n", cliente.nascimentoDia);
-    //    printf("O telefone inserido: %d\n", cliente.telefone);
-    //    printf("O CPF inserido: %s\n", cliente.cpf);
-    //    printf("O dia inserido: %i\n", cliente.nascimentoDia);
-    //    printf("O mes inserido: %i\n", cliente.nascimentoMes);
-    //    printf("O ano inserido: %i\n", cliente.nascimentoAno);
     //
     //    printf("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
     //    printf("Escolha o Shampoo para seu pet:\n");
@@ -298,6 +287,197 @@ void mainMenu() {
     }
 }
 
+// #################################
+// MENU CLIENTE
+void menuCliente() {
+    char opcao = 'a';
+    
+    while(opcao != 'x' && opcao != 'X') {
+        system ("cls");
+        
+        printf("\nMENU CLIENTE\n");
+        printf("\tI) INSERIR NOVO\n");
+        printf("\tA) ALTERAR\n");
+        printf("\tL) LISTAR\n");
+        printf("\tD) DELETAR\n");
+        printf("\tX) VOLTAR\n");
+        printf("OPCAO: ");
+        //        scanf("%c", &opcao); fflush(stdin);
+        opcao = getchar();
+        fflush(stdin);
+        
+        switch(opcao) {
+            case 'i':
+            case 'I':
+                menuClienteInserir();
+                break;
+                
+            case 'a':
+            case 'A':
+                menuClienteAlterar();
+                break;
+                
+            case 'l':
+            case 'L':
+                menuClienteListarTodos();
+                break;
+                
+            case 'd':
+            case 'D':
+                menuClienteDeletar();
+                break;
+                
+            case 'x':
+            case 'X':
+                printf("VOLTANDO!");
+                break;
+                
+            default:
+                printf("OPCAO INVALIDA!");
+        }
+    }
+}
+
+void menuClienteListarTodos() {
+    printarTodosRegistrosCliente();
+    printarMensagemContinuar();
+}
+
+void menuClienteInserir() {
+    struct Cliente cliente;
+    
+    lerDadosCliente(&cliente);
+    salvarRegistroCliente(cliente);
+    printarClienteLista(cliente);
+    printarClienteTopicos(cliente);
+}
+
+void menuClienteAlterar() {
+    int codigo = 0;
+    int registro = 0;
+    
+    printarTodosRegistrosCliente();
+    
+    printf("INFORME O CODIGO PARA ALTERAR: ");
+    scanf("%d", &codigo);
+    
+    registro = buscarClientePorCod(codigo);
+    alterarCliente(registro);
+    
+    printarMensagemContinuar();
+}
+
+void menuClienteDeletar() {
+    int codigo = 0;
+    int registro = 0;
+    
+    printarTodosRegistrosCliente();
+    
+    printf("INFORME O CODIGO PARA ALTERAR: ");
+    scanf("%d", &codigo);
+    
+    registro = buscarClientePorCod(codigo);
+    deletarCliente(registro);
+    printarMensagemContinuar();
+}
+
+// #################################
+// MENU FUNCIONARIO
+void menuFuncionario() {
+    char opcao = 'a';
+    
+    while(opcao != 'x' && opcao != 'X') {
+        system ("cls");
+        
+        printf("\n MENU FUNCIONARIO\n");
+        printf("\tI) INSERIR NOVO\n");
+        printf("\tA) ALTERAR\n");
+        printf("\tL) LISTAR\n");
+        printf("\tD) DELETAR\n");
+        printf("\tX) VOLTAR\n");
+        printf("OPCAO: ");
+        //        scanf("%c", &opcao); fflush(stdin);
+        opcao = getchar();
+        fflush(stdin);
+        
+        switch(opcao) {
+            case 'i':
+            case 'I':
+                menuFuncionarioInserir();
+                break;
+                
+            case 'a':
+            case 'A':
+                menuFuncionarioAlterar();
+                break;
+                
+            case 'l':
+            case 'L':
+                menuFuncionarioListarTodos();
+                break;
+                
+            case 'd':
+            case 'D':
+                menuFuncionarioDeletar();
+                break;
+                
+            case 'x':
+            case 'X':
+                printf("VOLTANDO!");
+                break;
+                
+            default:
+                printf("OPCAO INVALIDA!");
+        }
+    }
+}
+
+void menuFuncionarioListarTodos() {
+    printarTodosRegistrosFuncionario();
+    printarMensagemContinuar();
+}
+
+void menuFuncionarioInserir() {
+    struct Funcionario funcionario;
+    
+    lerDadosFuncionario(&funcionario);
+    salvarRegistroFuncionario(funcionario);
+    printarFuncionarioLista(funcionario);
+    printarFuncionarioTopicos(funcionario);
+}
+
+void menuFuncionarioAlterar() {
+    int codigo = 0;
+    int registro = 0;
+    
+    printarTodosRegistrosFuncionario();
+    
+    printf("INFORME O CODIGO PARA ALTERAR: ");
+    scanf("%d", &codigo);
+    
+    registro = buscarFuncionarioPorCod(codigo);
+    alterarFuncionario(registro);
+    
+    printarMensagemContinuar();
+}
+
+void menuFuncionarioDeletar() {
+    int codigo = 0;
+    int registro = 0;
+    
+    printarTodosRegistrosFuncionario();
+    
+    printf("INFORME O CODIGO PARA ALTERAR: ");
+    scanf("%d", &codigo);
+    
+    registro = buscarFuncionarioPorCod(codigo);
+    deletarFuncionario(registro);
+    printarMensagemContinuar();
+}
+
+
+
+
 
 // #############################################################################
 // PERSISTENCIA EM BINARIOS
@@ -440,99 +620,6 @@ void fecharArquivoCliente() {
 // #############################################################################
 // CLIENTE
 
-// #################################
-// MENU CLIENTE
-void menuCliente() {
-    char opcao = 'a';
-    
-    while(opcao != 'x' && opcao != 'X') {
-        system ("cls");
-        
-        printf("\nMENU CLIENTE\n");
-        printf("\tI) INSERIR NOVO\n");
-        printf("\tA) ALTERAR\n");
-        printf("\tL) LISTAR\n");
-        printf("\tD) DELETAR\n");
-        printf("\tX) VOLTAR\n");
-        printf("OPCAO: ");
-        //        scanf("%c", &opcao); fflush(stdin);
-        opcao = getchar();
-        fflush(stdin);
-        
-        switch(opcao) {
-            case 'i':
-            case 'I':
-                menuClienteInserir();
-                break;
-                
-            case 'a':
-            case 'A':
-                menuClienteAlterar();
-                break;
-                
-            case 'l':
-            case 'L':
-                menuClienteListarTodos();
-                break;
-                
-            case 'd':
-            case 'D':
-                menuClienteDeletar();
-                break;
-                
-            case 'x':
-            case 'X':
-                printf("VOLTANDO!");
-                break;
-                
-            default:
-                printf("OPCAO INVALIDA!");
-        }
-    }
-}
-
-void menuClienteListarTodos() {
-    printarTodosRegistrosCliente();
-    printarMensagemContinuar();
-}
-
-void menuClienteInserir() {
-    struct Cliente cliente;
-    
-    lerDadosCliente(&cliente);
-    salvarRegistroCliente(cliente);
-    printarClienteLista(cliente);
-    printarClienteTopicos(cliente);
-}
-
-void menuClienteAlterar() {
-    int codigo = 0;
-    int registro = 0;
-    
-    printarTodosRegistrosCliente();
-    
-    printf("INFORME O CODIGO PARA ALTERAR: ");
-    scanf("%d", &codigo);
-    
-    registro = buscarClientePorCod(codigo);
-    alterarCliente(registro);
-    
-    printarMensagemContinuar();
-}
-
-void menuClienteDeletar() {
-    int codigo = 0;
-    int registro = 0;
-    
-    printarTodosRegistrosCliente();
-    
-    printf("INFORME O CODIGO PARA ALTERAR: ");
-    scanf("%d", &codigo);
-    
-    registro = buscarClientePorCod(codigo);
-    deletarCliente(registro);
-    printarMensagemContinuar();
-}
 
 // #################################
 // LER OS DADOS DE CLIENTE
@@ -842,100 +929,6 @@ void deletarCliente(int registro) {
 // #############################################################################
 // FUNCIONARIO
 
-
-// #################################
-// MENU FUNCIONARIO
-void menuFuncionario() {
-    char opcao = 'a';
-    
-    while(opcao != 'x' && opcao != 'X') {
-        system ("cls");
-        
-        printf("\n MENU FUNCIONARIO\n");
-        printf("\tI) INSERIR NOVO\n");
-        printf("\tA) ALTERAR\n");
-        printf("\tL) LISTAR\n");
-        printf("\tD) DELETAR\n");
-        printf("\tX) VOLTAR\n");
-        printf("OPCAO: ");
-        //        scanf("%c", &opcao); fflush(stdin);
-        opcao = getchar();
-        fflush(stdin);
-        
-        switch(opcao) {
-            case 'i':
-            case 'I':
-                menuFuncionarioInserir();
-                break;
-                
-            case 'a':
-            case 'A':
-                menuFuncionarioAlterar();
-                break;
-                
-            case 'l':
-            case 'L':
-                menuFuncionarioListarTodos();
-                break;
-                
-            case 'd':
-            case 'D':
-                menuFuncionarioDeletar();
-                break;
-                
-            case 'x':
-            case 'X':
-                printf("VOLTANDO!");
-                break;
-                
-            default:
-                printf("OPCAO INVALIDA!");
-        }
-    }
-}
-
-void menuFuncionarioListarTodos() {
-    printarTodosRegistrosFuncionario();
-    printarMensagemContinuar();
-}
-
-void menuFuncionarioInserir() {
-    struct Funcionario funcionario;
-    
-    lerDadosFuncionario(&funcionario);
-    salvarRegistroFuncionario(funcionario);
-    printarFuncionarioLista(funcionario);
-    printarFuncionarioTopicos(funcionario);
-}
-
-void menuFuncionarioAlterar() {
-    int codigo = 0;
-    int registro = 0;
-    
-    printarTodosRegistrosFuncionario();
-    
-    printf("INFORME O CODIGO PARA ALTERAR: ");
-    scanf("%d", &codigo);
-    
-    registro = buscarFuncionarioPorCod(codigo);
-    alterarFuncionario(registro);
-    
-    printarMensagemContinuar();
-}
-
-void menuFuncionarioDeletar() {
-    int codigo = 0;
-    int registro = 0;
-    
-    printarTodosRegistrosFuncionario();
-    
-    printf("INFORME O CODIGO PARA ALTERAR: ");
-    scanf("%d", &codigo);
-    
-    registro = buscarFuncionarioPorCod(codigo);
-    deletarFuncionario(registro);
-    printarMensagemContinuar();
-}
 
 // #################################
 // LER OS DADOS DE FUNCIONARIO
