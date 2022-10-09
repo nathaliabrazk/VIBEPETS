@@ -15,20 +15,20 @@
 // CONSTANTES
 #define BIN_FUN "vibe_pet-persistencia_func.bin"
 #define BIN_CLI "vibe_pet-persistencia_cli.bin"
-#define BIN_SER "vibe_pet-persistencia_serv.bin"
-#define BIN_TEL "vibe_pet-persistencia_tel.bin"
-#define BIN_END "vibe_pet-persistencia_end.bin"
+//#define BIN_SER "vibe_pet-persistencia_serv.bin"
+//#define BIN_TEL "vibe_pet-persistencia_tel.bin"
+//#define BIN_END "vibe_pet-persistencia_end.bin"
 
 
 #define SHOW_DEBUG 1    // 1 = Mostra coisas na tela, msg de erro e etc.
 #define DELETE_FILES 0  // 1 = Apaga os arquivos ao iniciar o sistema(zera o BD)
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
-FILE *ponteiroArquivoFUN;
-FILE *ponteiroArquivoCLI;
-//FILE *ponteiroArquivoSER;
-//FILE *ponteiroArquivoTEL;
-//FILE *ponteiroArquivoEND;
+FILE *ponteiroArquivoFUNCIONARIO;
+FILE *ponteiroArquivoCLIENTE;
+//FILE *ponteiroArquivoSERVICO;
+//FILE *ponteiroArquivoTELEFONE;
+//FILE *ponteiroArquivoENDERECO;
 
 
 // #############################################################################
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
     //
     //    // Saida
     //    printf("\n\n\n\n\n\n");
-    //    printf("O nome inserido: %s\n",cliente. nome);
+    //    printf("O nome inserido: %s\n", cliente.nome);
     //    printf("O email inserido: %s\n", cliente.email);
     //    printf("O dia inserido:  %d\n", cliente.nascimentoDia);
     //    printf("O telefone inserido: %d\n", cliente.telefone);
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
     //
     //    printf("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
     //    printf("Escolha o Shampoo para seu pet:\n");
-    //    printf("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrancias:	Avela - Melancia - Dove - Morango\n");
+    //    printf("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Peloncio \nC- Shampoo Pelos Escuros Peloncio \nFragrancias:	Avela - Melancia - Dove - Morango\n");
     //    printf("Opcao:\n");
     //    scanf ("%s", &opcao);
     //    fflush (stdin);
@@ -163,15 +163,15 @@ int main(int argc, char *argv[]) {
     //    switch (opcao) {
     //        case 'A':
     //        case 'a':
-    //            printf("Voce escolheu  Shampoo Pro-Banho Pelôncio\n");
+    //            printf("Voce escolheu  Shampoo Pro-Banho Peloncio\n");
     //            break;
     //        case 'B':
     //        case 'b':
-    //            printf("Voc escolheu Shampoo Pelos Claros Pelôncio\n");
+    //            printf("Voc escolheu Shampoo Pelos Claros Peloncio\n");
     //            break;
     //        case 'C':
     //        case 'c':
-    //            printf("Voce escolheu Shampoo Pelos Escuros Pelôncio\n");
+    //            printf("Voce escolheu Shampoo Pelos Escuros Peloncio\n");
     //            break;
     //        default:
     //            printf("Opcao invalida");
@@ -247,18 +247,18 @@ int main(int argc, char *argv[]) {
 
 
 // #############################################################################
-// MAIN MENU
+// MENUS
 void mainMenu() {
     char opcao = 'a';
     
     while(opcao != 'x' && opcao != 'X') {
         
         printf("\nMENU PRINCIPAL\n");
-        printf("  a) MENU AGENDAMENTO\n");
-        printf("  p) MENU PRODUTO\n");
-        printf("  c) MENU CLIENTE\n");
-        printf("  f) MENU FUNCIONARIO\n");
-        printf("  x) SAIR\n");
+        printf("\tA) MENU AGENDAMENTO\n");
+        printf("\tP) MENU PRODUTO\n");
+        printf("\tC) MENU CLIENTE\n");
+        printf("\tF) MENU FUNCIONARIO\n");
+        printf("\tX) SAIR\n");
         printf("OPCAO: ");
         //        scanf("%c", &opcao); fflush(stdin);
         opcao = getchar();
@@ -277,7 +277,7 @@ void mainMenu() {
                 
             case 'c':
             case 'C':
-                printf("---> FAZER MENU CLIENTE <--- ");
+                menuCliente();
                 break;
                 
             case 'p':
@@ -295,30 +295,6 @@ void mainMenu() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // #############################################################################
@@ -349,17 +325,17 @@ void abrirTodosArquivos() {
     
     // ---------------------------------
     // Abrir arquivo de Funcionarios
-    ponteiroArquivoFUN = fopen(BIN_FUN, "r+b"); //tentar abrir
+    ponteiroArquivoFUNCIONARIO = fopen(BIN_FUN, "r+b"); //tentar abrir
     
-    if(ponteiroArquivoFUN == NULL){
-        ponteiroArquivoFUN  = fopen(BIN_FUN, "w+b"); // criar o arquivo
+    if(ponteiroArquivoFUNCIONARIO == NULL){
+        ponteiroArquivoFUNCIONARIO  = fopen(BIN_FUN, "w+b"); // criar o arquivo
         
-        if(ponteiroArquivoFUN == NULL){
+        if(ponteiroArquivoFUNCIONARIO == NULL){
             if(SHOW_DEBUG == 1) {
                 printf("Erro fatal: impossível abrir/criar o arquivo '%s'\n", BIN_FUN);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito nehum...
+            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -367,39 +343,39 @@ void abrirTodosArquivos() {
     
     // ---------------------------------
     // Abrir arquivo de Clientes
-    ponteiroArquivoCLI = fopen(BIN_CLI, "r+b"); //tentar abrir
+    ponteiroArquivoCLIENTE = fopen(BIN_CLI, "r+b"); //tentar abrir
     
-    if(ponteiroArquivoCLI == NULL){
-        ponteiroArquivoCLI  = fopen(BIN_CLI, "w+b"); // criar o arquivo
+    if(ponteiroArquivoCLIENTE == NULL){
+        ponteiroArquivoCLIENTE  = fopen(BIN_CLI, "w+b"); // criar o arquivo
         
-        if(ponteiroArquivoCLI == NULL){
+        if(ponteiroArquivoCLIENTE == NULL){
             if(SHOW_DEBUG == 1) {
                 printf("Erro fatal: impossível abrir/criar o arquivo '%s'\n", BIN_CLI);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito nehum...
+            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
     }
     
-    //    #define BIN_SER "vibe_pet-persistencia_serv.bin"
+    //    #define BIN_SER "vibe_pet-persistencia_ser.bin"
     //    #define BIN_TEL "vibe_pet-persistencia_tel.bin"
     //    #define BIN_END "vibe_pet-persistencia_end.bin"
 }
 
 void abrirArquivoFuncionario() {
-    ponteiroArquivoFUN = fopen(BIN_FUN, "r+b"); //tentar abrir
+    ponteiroArquivoFUNCIONARIO = fopen(BIN_FUN, "r+b"); //tentar abrir
     
-    if(ponteiroArquivoFUN == NULL){
-        ponteiroArquivoFUN  = fopen(BIN_FUN, "w+b"); // criar o arquivo
+    if(ponteiroArquivoFUNCIONARIO == NULL){
+        ponteiroArquivoFUNCIONARIO  = fopen(BIN_FUN, "w+b"); // criar o arquivo
         
-        if(ponteiroArquivoFUN == NULL){
+        if(ponteiroArquivoFUNCIONARIO == NULL){
             if(SHOW_DEBUG == 1) {
                 printf("Erro fatal: impossível abrir/criar o arquivo '%s'\n", BIN_FUN);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito nehum...
+            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -407,55 +383,60 @@ void abrirArquivoFuncionario() {
 }
 
 void abrirArquivoCliente() {
-    ponteiroArquivoCLI = fopen(BIN_CLI, "r+b"); //tentar abrir
+    ponteiroArquivoCLIENTE = fopen(BIN_CLI, "r+b"); //tentar abrir
     
-    if(ponteiroArquivoCLI == NULL){
-        ponteiroArquivoCLI  = fopen(BIN_CLI, "w+b"); // criar o arquivo
+    if(ponteiroArquivoCLIENTE == NULL){
+        ponteiroArquivoCLIENTE  = fopen(BIN_CLI, "w+b"); // criar o arquivo
         
-        if(ponteiroArquivoCLI == NULL){
+        if(ponteiroArquivoCLIENTE == NULL){
             if(SHOW_DEBUG == 1) {
                 printf("Erro fatal: impossível abrir/criar o arquivo '%s'\n", BIN_CLI);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito nehum...
+            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
     }
 }
 
-
+// #################################
+// FECHAR OS ARQUIVOS
 void fecharTodosArquivos() {
+    // Atualizar os arquivos.
+    fflush(ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoCLIENTE);
+//    fflush(ponteiroArquivoSERVICO);
+//    fflush(ponteiroArquivoTELEFONE);
+//    fflush(ponteiroArquivoENDERECO);
     
-    fclose(ponteiroArquivoFUN);
-    fclose(ponteiroArquivoCLI);
-//    fclose(ponteiroArquivoSER);
-//    fclose(ponteiroArquivoTEL);
-//    fclose(ponteiroArquivoEND);
+    // Fechar os arquivos.
+    fclose(ponteiroArquivoFUNCIONARIO);
+    fclose(ponteiroArquivoCLIENTE);
+//    fclose(ponteiroArquivoSERVICO);
+//    fclose(ponteiroArquivoTELEFONE);
+//    fclose(ponteiroArquivoENDERECO);
 }
 
+void fecharArquivoFuncionario() {
+    // Atualizar o arquivo.
+    fflush(ponteiroArquivoFUNCIONARIO);
+    
+    // Fechar o arquivo.
+    fclose(ponteiroArquivoFUNCIONARIO);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void fecharArquivoCliente() {
+    // Atualizar o arquivo.
+    fflush(ponteiroArquivoCLIENTE);
+    
+    // Fechar o arquivo.
+    fclose(ponteiroArquivoCLIENTE);
+}
 
 
 // #############################################################################
 // CLIENTE
-
 
 // #################################
 // MENU CLIENTE
@@ -465,11 +446,11 @@ void menuCliente() {
     while(opcao != 'x' && opcao != 'X') {
         
         printf("\n MENU CLIENTE\n");
-        printf("  i) INSERIR NOVO\n");
-        printf("  a) ALTERAR\n");
-        printf("  l) LISTAR\n");
-        printf("  d) DELETAR\n");
-        printf("  x) SAIR\n");
+        printf("\tI) INSERIR NOVO\n");
+        printf("\tA) ALTERAR\n");
+        printf("\tL) LISTAR\n");
+        printf("\tD) DELETAR\n");
+        printf("\tX) VOLTAR\n");
         printf("OPCAO: ");
         //        scanf("%c", &opcao); fflush(stdin);
         opcao = getchar();
@@ -498,7 +479,7 @@ void menuCliente() {
                 
             case 'x':
             case 'X':
-                printf("SAINDO!");
+                printf("VOLTANDO!");
                 break;
                 
             default:
@@ -596,8 +577,8 @@ int salvarRegistroCliente(struct Cliente cliente) {
     cliente.codigo = acessarUltimoCodigoCliente() + 1;
     
     // Poe o novo cliente no final do arquivo.
-    fseek(ponteiroArquivoCLI, 0L, SEEK_END);
-    if(fwrite(&cliente, sizeof(cliente), 1, ponteiroArquivoCLI)!= 1) {
+    fseek(ponteiroArquivoCLIENTE, 0L, SEEK_END);
+    if(fwrite(&cliente, sizeof(cliente), 1, ponteiroArquivoCLIENTE)!= 1) {
         if(SHOW_DEBUG == 1) {
             printarMensagem("Adicionar cliente: Falhou a escrita do registro");
         }
@@ -620,7 +601,7 @@ int buscarClientePorCod(int cod) {
     int codigo = -1;
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ponteiroArquivoCLI != NULL) {
+    if (ponteiroArquivoCLIENTE != NULL) {
         if(SHOW_DEBUG == 1) {
             printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_CLI);
         }
@@ -633,9 +614,9 @@ int buscarClientePorCod(int cod) {
         exit(1);
     }
     
-    rewind(ponteiroArquivoCLI);
+    rewind(ponteiroArquivoCLIENTE);
     // Procura em todos os registros do documento.
-    while(fread(&adm, sizeof(struct Cliente), 1, ponteiroArquivoCLI)) {
+    while(fread(&adm, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)) {
         // Incrementa ++ porque comeca com -1.
         codigo += 1;
         
@@ -664,8 +645,8 @@ int buscarClientePorCod(int cod) {
 int acessarUltimoCodigoCliente() {
     struct Cliente cliente;
     
-    fseek(ponteiroArquivoCLI, -1 * sizeof(struct Cliente), SEEK_END);
-    if(fread(&cliente, sizeof(struct Cliente), -1, ponteiroArquivoCLI)!= 1){
+    fseek(ponteiroArquivoCLIENTE, -1 * sizeof(struct Cliente), SEEK_END);
+    if(fread(&cliente, sizeof(struct Cliente), -1, ponteiroArquivoCLIENTE)!= 1){
         if(SHOW_DEBUG == 1) {
             printarMensagem("Problemas na leitura do registro!!!");
         }
@@ -716,7 +697,7 @@ void printarTodosRegistrosCliente() {
     int n_Linhas = 0;
     
     // Volta o ponteiro para o inicio.
-    rewind(ponteiroArquivoCLI);
+    rewind(ponteiroArquivoCLIENTE);
     
     
         printf("%-10s: %s\n", "EMAIL", cliente.email);
@@ -731,7 +712,7 @@ void printarTodosRegistrosCliente() {
     printf("---------------------------------------------------------------------------------------------------------------------\n");
     
     while(1){
-        if(fread(&cliente, sizeof(cliente), 1, ponteiroArquivoCLI)!= 1)break; /*Sair do laço*/
+        if(fread(&cliente, sizeof(cliente), 1, ponteiroArquivoCLIENTE)!= 1)break; /*Sair do laço*/
         if(cliente.ativo == '*') continue; /*Passa ao próximo*/
         printarClienteLista(cliente);
         //        printarClienteTopicos(cliente);
@@ -752,12 +733,12 @@ void printarTodosRegistrosCliente() {
 void alterarCliente(int registro) {
     struct Cliente clienteAux;
     
-    if(fseek(ponteiroArquivoCLI, (registro)*sizeof(clienteAux), SEEK_SET) != 0){
+    if(fseek(ponteiroArquivoCLIENTE, (registro)*sizeof(clienteAux), SEEK_SET) != 0){
         printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
         return;
     }
     
-    if(fread(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLI)!= 1){
+    if(fread(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)!= 1){
         printarMensagem("Problemas na leitura do registro!!!");
         return;
     }
@@ -775,10 +756,10 @@ void alterarCliente(int registro) {
     lerDadosCliente(&clienteAux);
     
     // recuar um registro no arquivo
-    fseek(ponteiroArquivoCLI, -(int) sizeof(struct Cliente), SEEK_CUR);
+    fseek(ponteiroArquivoCLIENTE, -(int) sizeof(struct Cliente), SEEK_CUR);
     // reescrever o registro;
-    fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLI);
-    fflush(ponteiroArquivoCLI); /*despejar os arquivos no disco rígido*/
+    fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE);
+    fflush(ponteiroArquivoCLIENTE); /*despejar os arquivos no disco rígido*/
 }
 
 // #################################
@@ -790,12 +771,12 @@ void alterarCliente(int registro) {
 void deletarCliente(int registro) {
     struct Cliente clienteAux;
     
-    if(fseek(ponteiroArquivoCLI, (registro)*sizeof(clienteAux), SEEK_SET) != 0){
+    if(fseek(ponteiroArquivoCLIENTE, (registro)*sizeof(clienteAux), SEEK_SET) != 0){
         printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
         return;
     }
     
-    if(fread(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLI)!= 1){
+    if(fread(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)!= 1){
         printarMensagem("Problemas na leitura do registro!!!");
         return;
     }
@@ -821,17 +802,17 @@ void deletarCliente(int registro) {
     clienteAux.ativo = '*';
     
     // recuar um registro no arquivo
-    fseek(ponteiroArquivoCLI, -(int) sizeof(struct Cliente), SEEK_CUR);
+    fseek(ponteiroArquivoCLIENTE, -(int) sizeof(struct Cliente), SEEK_CUR);
     // reescrever o registro;
-    fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLI);
-    fflush(ponteiroArquivoCLI); /*despejar os arquivos no disco rígido*/
+    fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE);
+    fflush(ponteiroArquivoCLIENTE); /*despejar os arquivos no disco rígido*/
     
     
     // recuar um registro no arquivo
-    fseek(ponteiroArquivoCLI, -(int) sizeof(struct Cliente), SEEK_CUR);
+    fseek(ponteiroArquivoCLIENTE, -(int) sizeof(struct Cliente), SEEK_CUR);
     // reescrever o registro;
-    fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLI);
-    fflush(ponteiroArquivoCLI); /*despejar os arquivos no disco rígido*/
+    fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE);
+    fflush(ponteiroArquivoCLIENTE); /*despejar os arquivos no disco rígido*/
 }
 
 
@@ -871,11 +852,11 @@ void menuFuncionario() {
     while(opcao != 'x' && opcao != 'X') {
         
         printf("\n MENU FUNCIONARIO\n");
-        printf("  i) INSERIR NOVO\n");
-        printf("  a) ALTERAR\n");
-        printf("  l) LISTAR\n");
-        printf("  d) DELETAR\n");
-        printf("  x) SAIR\n");
+        printf("\tI) INSERIR NOVO\n");
+        printf("\tA) ALTERAR\n");
+        printf("\tL) LISTAR\n");
+        printf("\tD) DELETAR\n");
+        printf("\tX) VOLTAR\n");
         printf("OPCAO: ");
         //        scanf("%c", &opcao); fflush(stdin);
         opcao = getchar();
@@ -904,7 +885,7 @@ void menuFuncionario() {
                 
             case 'x':
             case 'X':
-                printf("SAINDO!");
+                printf("VOLTANDO!");
                 break;
                 
             default:
@@ -993,8 +974,8 @@ int salvarRegistroFuncionario(struct Funcionario funcionario) {
     funcionario.codigo = acessarUltimoCodigoFuncionario() + 1;
     
     // Poe o novo funcionario no final do arquivo.
-    fseek(ponteiroArquivoFUN, 0L, SEEK_END);
-    if(fwrite(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUN)!= 1) {
+    fseek(ponteiroArquivoFUNCIONARIO, 0L, SEEK_END);
+    if(fwrite(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1) {
         if(SHOW_DEBUG == 1) {
             printarMensagem("Adicionar funcionario: Falhou a escrita do registro");
         }
@@ -1017,7 +998,7 @@ int buscarFuncionarioPorCod(int cod) {
     int codigo = -1;
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ponteiroArquivoFUN != NULL) {
+    if (ponteiroArquivoFUNCIONARIO != NULL) {
         if(SHOW_DEBUG == 1) {
             printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
         }
@@ -1030,9 +1011,9 @@ int buscarFuncionarioPorCod(int cod) {
         exit(1);
     }
     
-    rewind(ponteiroArquivoFUN);
+    rewind(ponteiroArquivoFUNCIONARIO);
     // Procura em todos os registros do documento.
-    while(fread(&adm, sizeof(struct Funcionario), 1, ponteiroArquivoFUN)) {
+    while(fread(&adm, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
         // Incrementa ++ porque comeca com -1.
         codigo += 1;
         
@@ -1061,8 +1042,8 @@ int buscarFuncionarioPorCod(int cod) {
 int acessarUltimoCodigoFuncionario() {
     struct Funcionario funcionario;
     
-    fseek(ponteiroArquivoFUN, -1 * sizeof(struct Funcionario), SEEK_END);
-    if(fread(&funcionario, sizeof(struct Funcionario), -1, ponteiroArquivoFUN)!= 1){
+    fseek(ponteiroArquivoFUNCIONARIO, -1 * sizeof(struct Funcionario), SEEK_END);
+    if(fread(&funcionario, sizeof(struct Funcionario), -1, ponteiroArquivoFUNCIONARIO)!= 1){
         if(SHOW_DEBUG == 1) {
             printarMensagem("Problemas na leitura do registro!!!");
         }
@@ -1114,7 +1095,7 @@ void printarTodosRegistrosFuncionario() {
     int n_Linhas = 0;
     
     // Volta o ponteiro para o inicio.
-    rewind(ponteiroArquivoFUN);
+    rewind(ponteiroArquivoFUNCIONARIO);
     
     printf("FUNCIONARIOES\n");
     printf("-----------------------------------------------------------------------------------\n");
@@ -1122,7 +1103,7 @@ void printarTodosRegistrosFuncionario() {
     printf("-----------------------------------------------------------------------------------\n");
     
     while(1){
-        if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUN)!= 1)break; /*Sair do laço*/
+        if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
         if(funcionario.ativo == '*') continue; /*Passa ao próximo*/
         printarFuncionarioLista(funcionario);
         //        printarFuncionarioTopicos(funcionario);
@@ -1143,12 +1124,12 @@ void printarTodosRegistrosFuncionario() {
 void alterarFuncionario(int registro) {
     struct Funcionario funcionarioAux;
     
-    if(fseek(ponteiroArquivoFUN, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
+    if(fseek(ponteiroArquivoFUNCIONARIO, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
         printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
         return;
     }
     
-    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUN)!= 1){
+    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
         printarMensagem("Problemas na leitura do registro!!!");
         return;
     }
@@ -1166,10 +1147,10 @@ void alterarFuncionario(int registro) {
     lerDadosFuncionario(&funcionarioAux);
     
     // recuar um registro no arquivo
-    fseek(ponteiroArquivoFUN, -(int) sizeof(struct Funcionario), SEEK_CUR);
+    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
     // reescrever o registro;
-    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUN);
-    fflush(ponteiroArquivoFUN); /*despejar os arquivos no disco rígido*/
+    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
 
 // #################################
@@ -1181,12 +1162,12 @@ void alterarFuncionario(int registro) {
 void deletarFuncionario(int registro) {
     struct Funcionario funcionarioAux;
     
-    if(fseek(ponteiroArquivoFUN, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
+    if(fseek(ponteiroArquivoFUNCIONARIO, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
         printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
         return;
     }
     
-    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUN)!= 1){
+    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
         printarMensagem("Problemas na leitura do registro!!!");
         return;
     }
@@ -1212,17 +1193,17 @@ void deletarFuncionario(int registro) {
     funcionarioAux.ativo = '*';
     
     // recuar um registro no arquivo
-    fseek(ponteiroArquivoFUN, -(int) sizeof(struct Funcionario), SEEK_CUR);
+    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
     // reescrever o registro;
-    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUN);
-    fflush(ponteiroArquivoFUN); /*despejar os arquivos no disco rígido*/
+    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
     
     
     // recuar um registro no arquivo
-    fseek(ponteiroArquivoFUN, -(int) sizeof(struct Funcionario), SEEK_CUR);
+    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
     // reescrever o registro;
-    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUN);
-    fflush(ponteiroArquivoFUN); /*despejar os arquivos no disco rígido*/
+    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
 
 
