@@ -61,6 +61,8 @@ struct Cliente {
 
 // #############################################################################
 // PROTOTIPOS
+void adicionarFuncionario(void);
+
 void abrirArquivos(void);
 int salvarRegistroAdministrador(struct Administrador);
 void printarMensagem(char *msg);
@@ -208,50 +210,8 @@ int main(int argc, char *argv[]) {
     //            printf("Opcao invalida");
     //    }
     
-    /*
-    // Criar um ADM.
-    struct Administrador administrador1;
-    administrador1.cod_adm = 0;
-    strcpy(administrador1.nome, "administrador1");
-    strcpy(administrador1.cpf, "01234567890");
-    strcpy(administrador1.senha, "administrador123");
-    administrador1.cargo = 0; // Funcionario 0 = adm
-    administrador1.ativo = ' ';
-    
-    // Criar outro ADM.
-    struct Administrador administrador2;
-    administrador2.cod_adm = 0;
-    administrador2.cargo = 1; // Funcionario 0 = adm
-    administrador2.ativo = ' ';
-    strcpy(administrador2.nome, "aaaa");
-    strcpy(administrador2.cpf, "01234567890");
-    strcpy(administrador2.senha, "administrador123");
     
     
-    // Persistir os ADMs criados.
-//        salvarRegistroAdministrador(administrador1);
-//        salvarRegistroAdministrador(administrador2);
-    printarAdministradorTopicos(administrador1);
-    printarAdministradorTopicos(administrador2);
-    // Mostrar todos ADMs.
-    printarTodosPerfisAdministrador();
-    */
-    
-    // BUSCA DE ADM
-    //    struct Administrador adm3;
-    //
-    //    adm3 = buscarAdministradorPorCod(0);
-    //
-    //    printf("\n+++++++++++++++++++++\n");
-    //    printf("NOME: %s", adm3.nome);
-    //    printf("\n+++++++++++++++++++++\n\n");
-    //
-    //
-    //
-    //    printarAdministradorTopicos(adm3);
-    //    printarAdministradorLista(adm3);
-    
-    struct Administrador administrador;
     char opcao = 'a';
     int codigo = 0;
     int registro = 0;
@@ -275,10 +235,7 @@ int main(int argc, char *argv[]) {
         switch(opcao) {
             case 'a':
             case 'A':
-                lerDadosAdministrador(&administrador);
-                salvarRegistroAdministrador(administrador);
-                printarAdministradorLista(administrador);
-                printarAdministradorTopicos(administrador);
+                adicionarFuncionario();
                 break;
 
             case 'b':
@@ -337,6 +294,62 @@ int main(int argc, char *argv[]) {
     printf("\n\n\n");
     return 0;
 }
+
+
+
+
+// #############################################################################
+// ADICIONAR FUNCIONARIO
+void adicionarFuncionario() {
+    struct Administrador administrador;
+    
+    lerDadosAdministrador(&administrador);
+    salvarRegistroAdministrador(administrador);
+    printarAdministradorLista(administrador);
+    printarAdministradorTopicos(administrador);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // #############################################################################
@@ -645,101 +658,6 @@ void deletarAdministrador(int registro) {
     fflush(ponteiroArquivoADM); /*despejar os arquivos no disco rígido*/
 }
 
-// #################################
-// DELETAR UM PERFIL DE ADM
-
-
-
-
-// #############################################################################
-// AUXILIARES
-// printar adm
-
-
-
-
-
-/* EXEMPLO DE GRAVAÇÃO DE ARQUIVO BIN
- 
- char ch [15] = "Teste geral";
- int valor [15] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
- int i=0;
- FILE *ponteiroArquivoADM;
- 
- ponteiroArquivoADM = fopen ("binario.bin", "wb"); //Se nao abriu, cria.
- 
- if (ponteiroArquivoADM!=NULL)
- printf("\n\nArquivo binario.bin foi aberto com sucesso\n");
- else
- {
- printf("\n\nErro: O arquivo binario.bin nao foi aberto\n");
- system ("pause");
- exit (0);
- }
- 
- //Gravando os dados no arquivo usando a funcao fwrite
- fwrite(ch, sizeof (char), 15, ponteiroArquivoADM);
- fwrite(valor, sizeof(int), 15, ponteiroArquivoADM);
- 
- //fechando o arquivo
- fclose(ponteiroArquivoADM);
- */
-
-
-
-
-/* EXEMPLO DE LEITURA DE ARQUIVO BIN
- 
- char ch [15] = "Teste geral";
- int valor [15] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
- int i=0;
- FILE *ponteiroArquivoADM;
- 
- 
- 
- //abertura do arquivo
- ponteiroArquivoADM = fopen("binario.bin","rb");
- 
- //testando se o arquivo foi aberto com sucesso
- if (ponteiroArquivoADM != NULL) {
- printf("\n\nArquivo binario.bin foi aberto com sucesso\n\n");
- 
- } else {
- printf("\n\nERRO: O arquivo binario.bin nao foi aberto e criado\n");
- system ("pause");
- exit (1);
- }
- 
- //leitura do arquivo binario
- //Sintaxe: fread(&variavel, num_bytes, num_registros, arquivo);
- 
- //retorna o conteudo contido em uma ocorrencia do tamanho da variavel ch.
- fread(ch, sizeof(ch),1,ponteiroArquivoADM);
- 
- //retorna o conteudo contido em uma ocorrencia do tamanho da variavel valor->
- fread(valor,sizeof(valor),1,ponteiroArquivoADM);
- 
- printf("Vetor de caracteres: \n");
- 
- for(i = 0; i < 15; i++)
- {
- printf("%c",ch[i]);
- }
- 
- printf("\nVetor de inteiros: ");
- 
- for(i = 0; i < 15; i++)
- {
- printf("\n%d",valor[i]);
- }
- 
- //fechando o arquivo
- fclose(ponteiroArquivoADM);
- 
- */
-
-
-
 // #############################################################################
 // FUNCOES AUXILIARES
 
@@ -768,7 +686,7 @@ void lerDadosAdministrador(struct Administrador *administrador) {
     printf("CPF  : ");
     gets(administrador->cpf);
     fflush(stdin);
-    c
+    
     printf("Senha: ");
     gets(administrador->senha);
     fflush(stdin);
