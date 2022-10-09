@@ -316,7 +316,10 @@ void mainMenu() {
             case 'X':
                 printf("SAINDO!");
                 break;
-                
+            case 'Z'
+        	case 'z'
+        		printf("---> FAZER MENU SERVIÇOS <--- ");
+       			break;
             default:
                 printf("OPCAO INVALIDA!");
         }
