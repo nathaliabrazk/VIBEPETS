@@ -59,15 +59,20 @@ struct Cliente {
     char ativo;      // '*' = inativo/deletado
 };
 
+
 // #############################################################################
 // PROTOTIPOS
 
+// #################################
+// ARQUIVOS
 void abrirTodosArquivos(void);
 void fecharTodosArquivos(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
+void fecharArquivoCliente(void);
 
-
+// #################################
+// MENUS
 void mainMenu(void);
 
 
@@ -79,13 +84,11 @@ void menuClienteDeletar(void);
 
 void printarCabecalhoTodosClientes(void);
 int  salvarRegistroCliente(struct Cliente);
-void printarMensagem(char *msg);
 void printarTodosRegistrosCliente(void);
 void printarClienteLista(struct Cliente);
 void printarClienteTopicos(struct Cliente);
 int  buscarClientePorCod(int);
 void alterarCliente(int);
-void printarMensagemContinuar(void);
 int  acessarUltimoCodigoCliente(void);
 void deletarCliente(int);
 void lerDadosCliente(struct Cliente*);
@@ -98,16 +101,28 @@ void menuFuncionarioAlterar(void);
 void menuFuncionarioDeletar(void);
 
 int  salvarRegistroFuncionario(struct Funcionario);
-void printarMensagem(char *msg);
 void printarTodosRegistrosFuncionario(void);
 void printarFuncionarioLista(struct Funcionario);
 void printarFuncionarioTopicos(struct Funcionario);
 int  buscarFuncionarioPorCod(int);
 void alterarFuncionario(int);
-void printarMensagemContinuar(void);
 int  acessarUltimoCodigoFuncionario(void);
 void deletarFuncionario(int);
 void lerDadosFuncionario(struct Funcionario*);
+
+
+// #################################
+// FUNCOES AUXILIARES
+void printarMensagem(char *msg);
+void printarMensagemContinuar(void);
+char* formatarCPF(char[]);
+
+
+// #################################
+// VALIDAR FUNCOES
+void receberValidarCPF(char*);
+
+
 
 
 
@@ -126,8 +141,29 @@ int main(int argc, char *argv[]) {
             remove(BIN_FUN);
         }
     }
-    
     abrirTodosArquivos();
+    
+    // MENU PRINCIPAL
+    mainMenu();
+    
+//    struct Cliente cli;
+//
+//    receberValidarCPF(cli.cpf);
+//    printf("C.P.F.: %s\n\n", cli.cpf);
+//
+//
+//
+//    strcpy(cli.cpf, "sdasd");
+//    printf("C.P.F.: %s\n\n", cli.cpf);
+//
+//
+//    receberValidarCPF(cli.cpf);
+//    printf("C.P.F.: %s\n\n", cli.cpf);
+    
+    
+    
+    
+    
     
     
     // Propriedades
@@ -135,11 +171,6 @@ int main(int argc, char *argv[]) {
     //	struct Cliente cliente;
     
     
-    
-    
-    
-    // MENU PRINCIPAL
-    mainMenu();
     
     //
     //    printf("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
@@ -628,8 +659,10 @@ void lerDadosCliente(struct Cliente *cliente) {
     printf("Nome : "); fflush(stdin);
     gets(cliente->nome); fflush(stdin);
     
-    printf("CPF:");
-    gets(cliente->cpf); fflush(stdin);
+//    printf("CPF:");
+//    gets(cliente->cpf); fflush(stdin);
+    //TODO: Testar depois
+    receberValidarCPF(cliente->cpf);
     
     printf("Email: ");
     gets(cliente->email); fflush(stdin);
@@ -1236,4 +1269,137 @@ void printarMensagem(char *msg){
 void printarMensagemContinuar() {
     printf("%s", "\n\n Pressione <Enter> para continuar . . .");
     getchar();
+}
+
+
+// #################################
+// FORMATAR CPF
+// Por pontos e hifen. Ex.:
+//    123.456.789-10
+char *formatarCPF(char *cpf) {
+    int i, j = 0;
+    
+    //Aloca o espaço necessário
+    char *cpfFormatado = (char*) malloc(15 * sizeof(char));
+    
+    if (!cpfFormatado) {
+        //Se malloc retornar nulo é porque não há memória suficiente para alocar o espaço necessário
+        if(SHOW_DEBUG == 1) {
+            printarMensagem("Nao ha espaco suficiente na memoria.");
+        }
+        return cpfFormatado;
+    }
+    
+    // Uma forma de acrescentar os '.' e o '-'
+//    cpfFormatado[0] = cpf[0];
+//    cpfFormatado[1] = cpf[1];
+//    cpfFormatado[2] = cpf[2];
+//    cpfFormatado[3] = '.';
+//    cpfFormatado[4] = cpf[3];
+//    cpfFormatado[5] = cpf[4];
+//    cpfFormatado[6] = cpf[5];
+//    cpfFormatado[7] = '.';
+//    cpfFormatado[8] = cpf[6];
+//    cpfFormatado[9] = cpf[7];
+//    cpfFormatado[10] = cpf[8];
+//    cpfFormatado[11] = '-';
+//    cpfFormatado[12] = cpf[9];
+//    cpfFormatado[13] = cpf[10];
+    
+    
+    // Outra forma de acrescentar
+    for(i = 0; i < 15; i++) {
+        
+        if(i == 3 || i == 7) {
+            cpfFormatado[i] = '.';
+            i++;
+            
+        } else if(i == 11) {
+            cpfFormatado[i] = '-';
+            i++;
+        }
+
+        cpfFormatado[i] = cpf[j];
+        j++;
+    }
+    
+    return cpfFormatado;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #############################################################################
+// VALIDACOES
+
+
+// #################################
+// VALIDAR CPF
+// Recebe e valida a entrade de CPF.
+// RETORNOS:
+//    - O cpf se a entrada for valida;
+//    - '*' se erro, ou entrada invalida
+void receberValidarCPF(char *cpf) {
+    char flag = 'x';
+    int indice = 0;
+    int contadorErros = 0;
+    
+    char entrada[15];
+    
+    while(flag == 'x') {
+        
+        printf("CPF: ");
+        gets(entrada); fflush(stdin);
+        
+        // Pegar a quantidade de caracteres digitado.
+        int contadorCaracteres = (int) strlen(entrada);
+        
+        // Checar quantidade inserida.
+        if(contadorCaracteres == 11) {
+            flag = 's';
+            
+        } else {
+            if(contadorErros >= 2) {
+                printarMensagem("\nQuantidade de numeros incorreta.\n");
+            }
+            flag = 'x';
+        }
+        
+        
+        // Checar se tem somente numeros.
+        if(flag == 's') {
+            for(indice = 0; indice < contadorCaracteres; indice++){
+                if(entrada[indice] < '0' || entrada[indice] > '9'){
+                    if(contadorErros >= 2) {
+                        printarMensagem("\nInforme apenas valores numericos.\n");
+                    }
+                    flag = 'x';
+                    break;
+                }
+            }
+        }
+        
+        contadorErros++;
+    }
+    
+    // Passar a entrada por parametro.
+    if(flag == 's') {
+        strcpy(cpf, entrada);
+    }
 }
