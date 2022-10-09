@@ -38,7 +38,7 @@ struct Servico {
     int   codigo;
     char  nome[30];
     int   duracao;
-    float valor;
+    int   valor;
     char  ativo;     // '*' = inativo/deletado
 };
 
@@ -285,6 +285,7 @@ void mainMenu() {
         printf("\tP) MENU PRODUTO\n");
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
+        printf("\tS) MENU SERVIÇOS\n");
         printf("\tX) SAIR\n");
         printf("OPCAO: ");
         //        scanf("%c", &opcao); fflush(stdin);
@@ -311,15 +312,15 @@ void mainMenu() {
             case 'P':
                 printf("---> FAZER MENU PRODUTO <--- ");
                 break;
-                
+            case 'S':
+        	case 's':
+        		printf("---> FAZER MENU SERVIÇOS <--- ");
+       			break;  
             case 'x':
             case 'X':
                 printf("SAINDO!");
                 break;
-            case 'Z'
-        	case 'z'
-        		printf("---> FAZER MENU SERVIÇOS <--- ");
-       			break;
+           
             default:
                 printf("OPCAO INVALIDA!");
         }
@@ -478,7 +479,7 @@ void fecharArquivoCliente() {
 void menuServico() {
     char opcao = 'a';
     
-    while(opcao != 'x' && opcao != 'X') {
+    while(opcao != 'Z' && opcao != 'z') {
         system ("cls");
         
         printf("\n MENU SERVICO\n");
@@ -517,7 +518,8 @@ void menuServico() {
             case 'X':
                 printf("VOLTANDO!");
                 break;
-                
+              
+
             default:
                 printf("OPCAO INVALIDA!");
         }
@@ -576,16 +578,12 @@ void lerDadosServico(struct Servico *servico) {
     gets(servico->nome);
     fflush(stdin);
     
-    printf("CPF  : ");
-    gets(servico->cpf);
+    printf("Duração  : ");
+    gets(servico->duracao);
     fflush(stdin);
     
-    printf("Senha: ");
-    gets(servico->senha);
-    fflush(stdin);
-    
-    printf("Cargo: ");
-    scanf("%d", &servico->cargo); // Servico 0 = adm
+    printf("Valor : ");
+    gets(servico->valor);
     fflush(stdin);
     
     servico->ativo = ' '; // Qualquer coisa menos '*' significa ativo
@@ -695,7 +693,7 @@ void printarServicoLista(struct Servico servico) {
     //TODO: criar View de perfil SERVICO.
     
     //    printf("-----------------------------------------------------------------------------------\n");
-    printf("%05d|%-30s|%-15s|%-30s\n", servico.codigo, servico.nome, servico.cpf, servico.senha);
+    printf("%05d|%-30s|%-15s|%-30s\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
     //    printf("-----------------------------------------------------------------------------------\n");
 }
 
@@ -704,13 +702,13 @@ void printarServicoTopicos(struct Servico servico) {
     if(servico.ativo == ' ') {
         printf("%-6s: %d\n", "CODIGO", servico.codigo);
         printf("%-6s: %s\n", "NOME", servico.nome);
-        printf("%-6s: %s\n", "CPF", servico.cpf);
-        printf("%-6s: %s\n", "SENHA", servico.senha);
-        if(servico.cargo == 1) {
-            printf("%-6s: %s\n", "CARGO", "Servico");
+        printf("%-6s: %s\n", "DURAÇÃO", servico.duracao);
+        printf("%-6s: %S\n", "VALOR", servico.valor);
+        if(servico.duracao == 1) {
+            printf("%-6s: %s\n", "DURAÇÃO", "Servico");
             
-        } else if(servico.cargo == 0) {
-            printf("%-6s: %s\n", "CARGO", "Servico");
+        } else if(servico.duracao == 0) {
+            printf("%-6s: %s\n", "DURAÇÃO", "Servico");
         }
         
     } else {
@@ -729,7 +727,7 @@ void printarTodosRegistrosServico() {
     
     printf("SERVICOS\n");
     printf("-----------------------------------------------------------------------------------\n");
-    printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
+    printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "DURAÇÃO", "VALOR");
     printf("-----------------------------------------------------------------------------------\n");
     
     while(1){
