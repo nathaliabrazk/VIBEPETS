@@ -77,7 +77,6 @@ struct Cliente {
 void abrirTodosArquivos(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
-
 void abrirArquivoServico(void);
 
 void fecharTodosArquivos(void);
@@ -86,8 +85,9 @@ void fecharArquivoFuncionario(void);
 void fecharArquivoServico(void);
 
 
+// #################################
+// MENUS
 void menuPrincipal(void);
-
 
 void menuServico(void);
 void menuServicoListarTodos(void);
@@ -95,6 +95,21 @@ void menuServicoInserir(void);
 void menuServicoAlterar(void);
 void menuServicoDeletar(void);
 
+void menuCliente(void);
+void menuClienteListarTodos(void);
+void menuClienteInserir(void);
+void menuClienteAlterar(void);
+void menuClienteDeletar(void);
+
+void menuFuncionario(void);
+void menuFuncionarioListarTodos(void);
+void menuFuncionarioInserir(void);
+void menuFuncionarioAlterar(void);
+void menuFuncionarioDeletar(void);
+
+
+// #################################
+// FUNCOES CRUD
 int  salvarRegistroServico(struct Servico);
 void printarTodosRegistrosServico(void);
 void printarServicoLista(struct Servico);
@@ -104,20 +119,6 @@ void alterarServico(int);
 int  acessarUltimoCodigoServico(void);
 void deletarServico(int);
 void lerDadosServico(struct Servico*);
-
-void fecharArquivoFuncionario(void);
-void fecharArquivoCliente(void);
-
-// #################################
-// MENUS
-void mainMenu(void);
-
-
-void menuCliente(void);
-void menuClienteListarTodos(void);
-void menuClienteInserir(void);
-void menuClienteAlterar(void);
-void menuClienteDeletar(void);
 
 void printarCabecalhoTodosClientes(void);
 int  salvarRegistroCliente(struct Cliente);
@@ -129,13 +130,6 @@ void alterarCliente(int);
 int  acessarUltimoCodigoCliente(void);
 void deletarCliente(int);
 void lerDadosCliente(struct Cliente*);
-
-
-void menuFuncionario(void);
-void menuFuncionarioListarTodos(void);
-void menuFuncionarioInserir(void);
-void menuFuncionarioAlterar(void);
-void menuFuncionarioDeletar(void);
 
 int  salvarRegistroFuncionario(struct Funcionario);
 void printarTodosRegistrosFuncionario(void);
@@ -158,7 +152,7 @@ char* formatarCPF(char[]);
 // #################################
 // VALIDACOES
 void receberValidarCPF(char*);
-int receberValidarOpcaoNumero(int, int);
+int  receberValidarOpcaoNumero(int, int);
 char receberValidarOpcaoLetra(char*);
 
 
@@ -177,7 +171,7 @@ int main(int argc, char *argv[]) {
             remove(BIN_FUN);
         }
     }
-//    abrirTodosArquivos();
+    abrirTodosArquivos();
 
     // MENU PRINCIPAL
     menuPrincipal();
@@ -316,12 +310,11 @@ void menuPrincipal() {
         printf("\nMENU PRINCIPAL\n");
         printf("\tA) MENU AGENDAMENTO\n");
         printf("\tP) MENU PRODUTO\n");
-        printf("\tS) MENU SERVICO\n");
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
         printf("\tS) MENU SERVICOS\n");
         printf("\tX) SAIR\n");
-        opcao = receberValidarOpcaoLetra("apcfx");
+        opcao = receberValidarOpcaoLetra("apcfxs");
         
         switch(opcao) {
             case 'a':
@@ -622,25 +615,6 @@ void abrirTodosArquivos() {
         }
     }
     
-
-    // ---------------------------------
-    // Abrir arquivo de Servico.
-    ponteiroArquivoSERVICO = fopen(BIN_SER, "r+b"); //tentar abrir
-    
-    if(ponteiroArquivoSERVICO == NULL){
-        ponteiroArquivoSERVICO  = fopen(BIN_SER, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoSERVICO == NULL){
-            if(SHOW_DEBUG == 1) {
-                printf("Erro fatal: impossível abrir/criar o arquivo '%s'\n", BIN_SER);
-            }
-            
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
-    
     //    #define BIN_TEL "vibe_pet-persistencia_tel.bin"
     //    #define BIN_END "vibe_pet-persistencia_end.bin"
 }
@@ -854,11 +828,12 @@ void lerDadosServico(struct Servico *servico) {
     gets(servico->nome); fflush(stdin);
     
     printf("Duracao: ");
-    scanf("%d", servico->duracao);
+    scanf("%d", &servico->duracao);
     
     printf("Valor  : ");
-    scanf("%lf", servico->valor);
+    scanf("%f", &servico->valor);
     
+    printf("🤔 VALOR INSERIDO: %f", servico->valor);
     servico->ativo = ' '; // Qualquer coisa menos '*' significa ativo
 }
 
@@ -966,9 +941,7 @@ int acessarUltimoCodigoServico() {
 void printarServicoLista(struct Servico servico) {
     //TODO: criar View de perfil SERVICO.
     
-    //    printf("-----------------------------------------------------------------------------------\n");
-    printf("%05d|%-30s|%-15d|R$%-30d\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
-    //    printf("-----------------------------------------------------------------------------------\n");
+    printf("%05d|%-30s|%5d min |R$ %5.2f\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
 }
 
 void printarServicoTopicos(struct Servico servico) {
@@ -978,13 +951,7 @@ void printarServicoTopicos(struct Servico servico) {
         printf("%-7s: %s\n", "NOME", servico.nome);
 
         printf("%-7s: %d\n", "DURACAO", servico.duracao);
-        printf("%-7s: %d\n", "VALOR", servico.valor);
-        if(servico.duracao == 1) {
-            printf("%-7s: %s\n", "DURACAO", "Servico");
-            
-        } else if(servico.duracao == 0) {
-            printf("%-7s: %s\n", "DURACAO", "Servico");
-        }
+        printf("%-7s: %f\n", "VALOR", servico.valor);
         
     } else {
         printf("\nSERVICO DELETADO!\n");
@@ -1002,7 +969,7 @@ void printarTodosRegistrosServico() {
     
     printf("SERVICOS\n");
     printf("-----------------------------------------------------------------------------------\n");
-    printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "DURACAO", "VALOR");
+    printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
     printf("-----------------------------------------------------------------------------------\n");
     
     while(1){
