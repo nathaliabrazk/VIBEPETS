@@ -21,9 +21,9 @@
 //#define BIN_TEL "vibe_pet-persistencia_tel.bin"
 //#define BIN_END "vibe_pet-persistencia_end.bin"
 
-
 #define SHOW_DEBUG 1    // 1 = Mostra coisas na tela, msg de erro e etc.
 #define DELETE_FILES 0  // 1 = Apaga os arquivos ao iniciar o sistema(zera o BD)
+
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
 FILE *ponteiroArquivoFUNCIONARIO;
@@ -176,28 +176,6 @@ int main(int argc, char *argv[]) {
     // MENU PRINCIPAL
     menuPrincipal();
     
-//   printf("OPCAO: %c", receberValidarOpcaoLetra("faxdc"));
-//    printf("OPCAO: ", receberValidarOpcaoNumero(0, 5));
-    
-//    struct Cliente cli;
-//
-//    receberValidarCPF(cli.cpf);
-//    printf("C.P.F.: %s\n\n", cli.cpf);
-//
-//
-//
-//    strcpy(cli.cpf, "sdasd");
-//    printf("C.P.F.: %s\n\n", cli.cpf);
-//
-//
-//    receberValidarCPF(cli.cpf);
-//    printf("C.P.F.: %s\n\n", cli.cpf);
-    
-    
-    
-    
-    
-    
     
     // Propriedades
     //    char opcao;
@@ -288,15 +266,14 @@ int main(int argc, char *argv[]) {
     //            printf("\n\nULTIMO COD: %d\n\n", ultimoCod);
     //        }
     //    }
-    system("pause");
     
     fecharTodosArquivos();
     
     printf("\n\n\n");
+    system("pause");
+    
     return 0;
 }
-
-
 
 
 // #############################################################################
@@ -336,10 +313,12 @@ void menuPrincipal() {
             case 'P':
                 printf("---> FAZER MENU PRODUTO <--- ");
                 break;
+                
             case 'S':
         	case 's':
                 menuServico();
-       			break;  
+       			break;
+                
             case 'x':
             case 'X':
                 printf("SAINDO!");
@@ -534,7 +513,6 @@ void menuFuncionarioDeletar() {
 }
 
 
-
 // #############################################################################
 // PERSISTENCIA EM BINARIOS
 
@@ -720,9 +698,12 @@ void fecharArquivoServico() {
 
 
 
+
+
+
+
 // #############################################################################
 // SERVICO
-
 
 // #################################
 // MENU SERVICO
@@ -909,7 +890,6 @@ int buscarServicoPorCod(int cod) {
     return codigo;
 }
 
-
 // #################################
 // BUSCAR CODIGO DO ULTIMO REGISTRO
 // Uma função para ir ate o ultimo registro, ultimo servico cadastrado e
@@ -1083,34 +1063,8 @@ void deletarServico(int registro) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // #############################################################################
 // CLIENTE
-
 
 // #################################
 // LER OS DADOS DE CLIENTE
@@ -1365,7 +1319,6 @@ void deletarCliente(int registro) {
         return;
     }
     
-    
     printf("\n\n Dados Atuais \n\n");
     printarClienteTopicos(clienteAux);
     
@@ -1403,18 +1356,8 @@ void deletarCliente(int registro) {
 
 
 
-
-
-
-
-
-
-
-
-
 // #############################################################################
 // FUNCIONARIO
-
 
 // #################################
 // LER OS DADOS DE FUNCIONARIO
@@ -1652,7 +1595,6 @@ void deletarFuncionario(int registro) {
         return;
     }
     
-    
     printf("\n\n Dados Atuais \n\n");
     printarFuncionarioTopicos(funcionarioAux);
     
@@ -1680,21 +1622,6 @@ void deletarFuncionario(int registro) {
     fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
     fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1784,19 +1711,8 @@ char *formatarCPF(char *cpf) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 // #############################################################################
 // VALIDACOES
-
 
 // #################################
 // VALIDAR CPF
