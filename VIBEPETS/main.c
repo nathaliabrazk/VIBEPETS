@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <ctype.h>
 #include <string.h>
 
 
@@ -15,8 +16,8 @@
 // CONSTANTES
 #define BIN_FUN "vibe_pet-persistencia_func.bin"
 #define BIN_CLI "vibe_pet-persistencia_cli.bin"
+#define BIN_SER "vibe_pet-persistencia_serv.bin"
 //#define BIN_PRO "vibe_pet-persistencia_prod.bin"
-//#define BIN_SER "vibe_pet-persistencia_serv.bin"
 //#define BIN_TEL "vibe_pet-persistencia_tel.bin"
 //#define BIN_END "vibe_pet-persistencia_end.bin"
 
@@ -27,8 +28,8 @@
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
 FILE *ponteiroArquivoFUNCIONARIO;
 FILE *ponteiroArquivoCLIENTE;
+FILE *ponteiroArquivoSERVICO;
 //FILE *ponteiroArquivoProduto;
-//FILE *ponteiroArquivoSERVICO;
 //FILE *ponteiroArquivoTELEFONE;
 //FILE *ponteiroArquivoENDERECO;
 
@@ -122,8 +123,8 @@ char* formatarCPF(char[]);
 // #################################
 // VALIDACOES
 void receberValidarCPF(char*);
-
-
+int receberValidarOpcaoNumero(int, int);
+char receberValidarOpcaoLetra(char*);
 
 
 int main(int argc, char *argv[]) {
@@ -141,10 +142,18 @@ int main(int argc, char *argv[]) {
             remove(BIN_FUN);
         }
     }
-    abrirTodosArquivos();
+//    abrirTodosArquivos();
     
     // MENU PRINCIPAL
-    mainMenu();
+//    mainMenu();
+    
+    
+    
+    
+    
+    
+    printf("OPCAO: %c", receberValidarOpcaoLetra("faxdc"));
+//    printf("OPCAO: ", receberValidarOpcaoNumero(0, 5));
     
 //    struct Cliente cli;
 //
@@ -281,10 +290,7 @@ void mainMenu() {
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
         printf("\tX) SAIR\n");
-        printf("OPCAO: ");
-        //        scanf("%c", &opcao); fflush(stdin);
-        opcao = getchar();
-        fflush(stdin);
+        opcao = receberValidarOpcaoLetra("apcfx");
         
         switch(opcao) {
             case 'a':
@@ -332,10 +338,7 @@ void menuCliente() {
         printf("\tL) LISTAR\n");
         printf("\tD) DELETAR\n");
         printf("\tX) VOLTAR\n");
-        printf("OPCAO: ");
-        //        scanf("%c", &opcao); fflush(stdin);
-        opcao = getchar();
-        fflush(stdin);
+        opcao = receberValidarOpcaoLetra("ialdx");
         
         switch(opcao) {
             case 'i':
@@ -399,7 +402,7 @@ void menuClienteAlterar() {
 }
 
 void menuClienteDeletar() {
-    int codigo = 0;
+    int codigo   = 0;
     int registro = 0;
     
     printarTodosRegistrosCliente();
@@ -426,10 +429,7 @@ void menuFuncionario() {
         printf("\tL) LISTAR\n");
         printf("\tD) DELETAR\n");
         printf("\tX) VOLTAR\n");
-        printf("OPCAO: ");
-        //        scanf("%c", &opcao); fflush(stdin);
-        opcao = getchar();
-        fflush(stdin);
+        opcao = receberValidarOpcaoLetra("ialdx");
         
         switch(opcao) {
             case 'i':
@@ -508,8 +508,6 @@ void menuFuncionarioDeletar() {
 
 
 
-
-
 // #############################################################################
 // PERSISTENCIA EM BINARIOS
 
@@ -572,7 +570,24 @@ void abrirTodosArquivos() {
         }
     }
     
-    //    #define BIN_SER "vibe_pet-persistencia_ser.bin"
+    // ---------------------------------
+    // Abrir arquivo de Servico.
+    ponteiroArquivoSERVICO = fopen(BIN_SER, "r+b"); //tentar abrir
+    
+    if(ponteiroArquivoSERVICO == NULL){
+        ponteiroArquivoSERVICO  = fopen(BIN_SER, "w+b"); // criar o arquivo
+        
+        if(ponteiroArquivoSERVICO == NULL){
+            if(SHOW_DEBUG == 1) {
+                printf("Erro fatal: impossível abrir/criar o arquivo '%s'\n", BIN_SER);
+            }
+            
+            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // ai encerra o programa 🍃
+            exit(1);
+        }
+    }
+    
     //    #define BIN_TEL "vibe_pet-persistencia_tel.bin"
     //    #define BIN_END "vibe_pet-persistencia_end.bin"
 }
@@ -619,14 +634,14 @@ void fecharTodosArquivos() {
     // Atualizar os arquivos.
     fflush(ponteiroArquivoFUNCIONARIO);
     fflush(ponteiroArquivoCLIENTE);
-//    fflush(ponteiroArquivoSERVICO);
+    fflush(ponteiroArquivoSERVICO);
 //    fflush(ponteiroArquivoTELEFONE);
 //    fflush(ponteiroArquivoENDERECO);
     
     // Fechar os arquivos.
     fclose(ponteiroArquivoFUNCIONARIO);
     fclose(ponteiroArquivoCLIENTE);
-//    fclose(ponteiroArquivoSERVICO);
+    fclose(ponteiroArquivoSERVICO);
 //    fclose(ponteiroArquivoTELEFONE);
 //    fclose(ponteiroArquivoENDERECO);
 }
@@ -1122,7 +1137,7 @@ void printarTodosRegistrosFuncionario() {
     // Volta o ponteiro para o inicio.
     rewind(ponteiroArquivoFUNCIONARIO);
     
-    printf("FUNCIONARIOES\n");
+    printf("FUNCIONARIOS\n");
     printf("-----------------------------------------------------------------------------------\n");
     printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
     printf("-----------------------------------------------------------------------------------\n");
@@ -1136,8 +1151,6 @@ void printarTodosRegistrosFuncionario() {
         if(n_Linhas%20 == 0)
             printarMensagem("Pressione <Enter> para continuar .  .  .");
     }
-    //    printf("\n\n\n");
-    
 }
 
 // #################################
@@ -1163,7 +1176,6 @@ void alterarFuncionario(int registro) {
         printarMensagem("Um registro apagado não pode ser alterado!!! \n\n");
         return;
     }
-    
     
     printf("\n\n Dados Atuais \n\n");
     printarFuncionarioTopicos(funcionarioAux);
@@ -1355,13 +1367,13 @@ char *formatarCPF(char *cpf) {
 //    - O cpf se a entrada for valida;
 //    - '*' se erro, ou entrada invalida
 void receberValidarCPF(char *cpf) {
-    char entradaValida = 'x';
+    char entradaValida = 'n';
     int indice = 0;
     int contadorErros = 0;
     
     char entrada[15];
     
-    while(entradaValida == 'x') {
+    while(entradaValida == 'n') {
         
         printf("CPF: ");
         gets(entrada); fflush(stdin);
@@ -1377,7 +1389,7 @@ void receberValidarCPF(char *cpf) {
             if(contadorErros >= 2) {
                 printarMensagem("\nQuantidade de numeros incorreta.\n");
             }
-            entradaValida = 'x';
+            entradaValida = 'n';
         }
         
         
@@ -1388,7 +1400,7 @@ void receberValidarCPF(char *cpf) {
                     if(contadorErros >= 2) {
                         printarMensagem("\nInforme apenas valores numericos.\n");
                     }
-                    entradaValida = 'x';
+                    entradaValida = 'n';
                     break;
                 }
             }
@@ -1408,10 +1420,56 @@ void receberValidarCPF(char *cpf) {
 // PARAMETRO:
 //    - min: o valor minimo que e aceito
 //    - max: o valor maximo que e aceito
-int receberValidarOpcaoNumero(int min, int max)
+int receberValidarOpcaoNumero(int min, int max) {
+    int opcao = min - 1;
+    int contadorErros = 0;
+    
+    while(opcao < min || opcao > max) {
+        if(contadorErros > 2) {
+            printarMensagem("\nNumero invalido, informe de ");
+            printf("%d a %d\n", min, max);
+        }
+        printf("OPCAO: ");
+        scanf("%d", &opcao);
+        
+        contadorErros++;
+    }
+    
+    return opcao;
+}
 
 // #################################
 // VALIDAR OPCOES PARA MENUS DE LETRAS
 // PARAMETRO:
-//    - opcoes: 'string' com as possibilidades de opcoes
-char receberValidarOpcaoLetra(char *opcoes)
+//    - opcoes: 'string' com as possibilidades, as opcoes.
+char receberValidarOpcaoLetra(char *opcoes) {
+    int contadorErros = 0;
+    int indice;
+    char opcao = ' ', entradaValida = 'n';
+    
+    // Pegar a quantidade de caracteres digitado.
+    int contadorCaracteres = (int) strlen(opcoes);
+    
+    while(entradaValida == 'n') {
+        if(contadorErros > 2) {
+            printarMensagem("\nOpcao invalida.\n");
+        }
+        
+        printf("OPCAO: ");
+        opcao = getchar(); fflush(stdin);
+        
+        // Passar pra minuscula.
+        opcao = tolower(opcao);
+
+        for(indice = 0; indice < contadorCaracteres; indice++) {
+            
+            if(tolower(opcoes[indice]) == opcao) {
+                entradaValida = 's';
+            }
+        }
+        
+        contadorErros++;
+    }
+    
+    return opcao;
+}
