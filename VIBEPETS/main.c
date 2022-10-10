@@ -74,7 +74,7 @@ void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
 
 
-void mainMenu(void);
+void menuPrincipal(void);
 
 
 void menuServico(void);
@@ -159,10 +159,8 @@ int main(int argc, char *argv[]) {
     
     
     
-    
-    
     // MENU PRINCIPAL
-    mainMenu();
+    menuPrincipal();
     
     //
     //    // Processamento
@@ -274,7 +272,7 @@ int main(int argc, char *argv[]) {
 
 // #############################################################################
 // MENUS
-void mainMenu() {
+void menuPrincipal() {
     char opcao = 'a';
     
     while(opcao != 'x' && opcao != 'X') {
@@ -283,6 +281,7 @@ void mainMenu() {
         printf("\nMENU PRINCIPAL\n");
         printf("\tA) MENU AGENDAMENTO\n");
         printf("\tP) MENU PRODUTO\n");
+        printf("\tS) MENU SERVICO\n");
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
         printf("\tS) MENU SERVI«OS\n");
@@ -661,6 +660,7 @@ int buscarServicoPorCod(int cod) {
     return codigo;
 }
 
+
 // #################################
 // BUSCAR CODIGO DO ULTIMO REGISTRO
 // Uma fun√ß√£o para ir ate o ultimo registro, ultimo servico cadastrado e
@@ -693,19 +693,30 @@ void printarServicoLista(struct Servico servico) {
     //TODO: criar View de perfil SERVICO.
     
     //    printf("-----------------------------------------------------------------------------------\n");
+<<<<<<< HEAD
     printf("%05d|%-30s|%-15s|%-30s\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
+=======
+    printf("%05d|%-30s|%-15s|%-30s\n", servico.codigo, servico.nome, servico., servico.senha);
+>>>>>>> 67ab037b70dbf46adc8f1097b0081b276dcba348
     //    printf("-----------------------------------------------------------------------------------\n");
 }
 
 void printarServicoTopicos(struct Servico servico) {
     
     if(servico.ativo == ' ') {
-        printf("%-6s: %d\n", "CODIGO", servico.codigo);
+        printf("%-10s: %d\n", "CODIGO", servico.codigo);
         printf("%-6s: %s\n", "NOME", servico.nome);
+<<<<<<< HEAD
         printf("%-6s: %s\n", "DURA«√O", servico.duracao);
         printf("%-6s: %S\n", "VALOR", servico.valor);
         if(servico.duracao == 1) {
             printf("%-6s: %s\n", "DURA«√O", "Servico");
+=======
+        printf("%-6s: %s\n", "CPF", servico.);
+        printf("%-6s: %s\n", "SENHA", servico.senha);
+        if(servico.cargo == 1) {
+            printf("%-6s: %s\n", "CARGO", "Servico");
+>>>>>>> 67ab037b70dbf46adc8f1097b0081b276dcba348
             
         } else if(servico.duracao == 0) {
             printf("%-6s: %s\n", "DURA«√O", "Servico");
@@ -739,8 +750,6 @@ void printarTodosRegistrosServico() {
         if(n_Linhas%20 == 0)
             printarMensagem("Pressione <Enter> para continuar .  .  .");
     }
-    //    printf("\n\n\n");
-    
 }
 
 // #################################
@@ -1244,13 +1253,6 @@ void deletarCliente(int registro) {
     fwrite(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE);
     fflush(ponteiroArquivoCLIENTE); /*despejar os arquivos no disco r√≠gido*/
 }
-
-
-
-
-
-
-
 
 
 
