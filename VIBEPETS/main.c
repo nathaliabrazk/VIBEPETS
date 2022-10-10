@@ -38,7 +38,7 @@ struct Servico {
     int   codigo;
     char  nome[30];
     int   duracao;
-    int   valor;
+    float valor;
     char  ativo;     // '*' = inativo/deletado
 };
 
@@ -69,9 +69,14 @@ struct Cliente {
 // PROTOTIPOS
 
 void abrirTodosArquivos(void);
-void fecharTodosArquivos(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
+void abrirArquivoServico(void);
+
+void fecharTodosArquivos(void);
+void fecharArquivoCliente(void);
+void fecharArquivoFuncionario(void);
+void fecharArquivoServico(void);
 
 
 void menuPrincipal(void);
@@ -284,7 +289,7 @@ void menuPrincipal() {
         printf("\tS) MENU SERVICO\n");
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
-        printf("\tS) MENU SERVIÇOS\n");
+        printf("\tS) MENU SERVICOS\n");
         printf("\tX) SAIR\n");
         printf("OPCAO: ");
         //        scanf("%c", &opcao); fflush(stdin);
@@ -313,7 +318,7 @@ void menuPrincipal() {
                 break;
             case 'S':
         	case 's':
-        		printf("---> FAZER MENU SERVIÇOS <--- ");
+                menuServico();
        			break;  
             case 'x':
             case 'X':
@@ -362,7 +367,7 @@ void abrirTodosArquivos() {
         
         if(ponteiroArquivoFUNCIONARIO == NULL){
             if(SHOW_DEBUG == 1) {
-                printf("Erro fatal: impossÃ­vel abrir/criar o arquivo '%s'\n", BIN_FUN);
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_FUN);
             }
             
             // Se chegar ate aqui, quer dizer que nÃ£o conseguiu abrir de jeito neNhum...
@@ -380,7 +385,7 @@ void abrirTodosArquivos() {
         
         if(ponteiroArquivoCLIENTE == NULL){
             if(SHOW_DEBUG == 1) {
-                printf("Erro fatal: impossÃ­vel abrir/criar o arquivo '%s'\n", BIN_CLI);
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_CLI);
             }
             
             // Se chegar ate aqui, quer dizer que nÃ£o conseguiu abrir de jeito neNhum...
@@ -389,7 +394,24 @@ void abrirTodosArquivos() {
         }
     }
     
-    //    #define BIN_SER "vibe_pet-persistencia_ser.bin"
+    // ---------------------------------
+    // Abrir arquivo de Servico
+    ponteiroArquivoSERVICO = fopen(BIN_SER, "r+b"); //tentar abrir
+    
+    if(ponteiroArquivoSERVICO == NULL){
+        ponteiroArquivoSERVICO  = fopen(BIN_SER, "w+b"); // criar o arquivo
+        
+        if(ponteiroArquivoSERVICO == NULL){
+            if(SHOW_DEBUG == 1) {
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_SER);
+            }
+            
+            // Se chegar ate aqui, quer dizer que nÃ£o conseguiu abrir de jeito neNhum...
+            // ai encerra o programa ðŸƒ
+            exit(1);
+        }
+    }
+    
     //    #define BIN_TEL "vibe_pet-persistencia_tel.bin"
     //    #define BIN_END "vibe_pet-persistencia_end.bin"
 }
@@ -402,7 +424,7 @@ void abrirArquivoFuncionario() {
         
         if(ponteiroArquivoFUNCIONARIO == NULL){
             if(SHOW_DEBUG == 1) {
-                printf("Erro fatal: impossÃ­vel abrir/criar o arquivo '%s'\n", BIN_FUN);
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_FUN);
             }
             
             // Se chegar ate aqui, quer dizer que nÃ£o conseguiu abrir de jeito neNhum...
@@ -420,7 +442,25 @@ void abrirArquivoCliente() {
         
         if(ponteiroArquivoCLIENTE == NULL){
             if(SHOW_DEBUG == 1) {
-                printf("Erro fatal: impossÃ­vel abrir/criar o arquivo '%s'\n", BIN_CLI);
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_CLI);
+            }
+            
+            // Se chegar ate aqui, quer dizer que nÃ£o conseguiu abrir de jeito neNhum...
+            // ai encerra o programa ðŸƒ
+            exit(1);
+        }
+    }
+}
+
+void abrirArquivoServico() {
+    ponteiroArquivoSERVICO = fopen(BIN_SER, "r+b"); //tentar abrir
+    
+    if(ponteiroArquivoSERVICO == NULL){
+        ponteiroArquivoSERVICO  = fopen(BIN_SER, "w+b"); // criar o arquivo
+        
+        if(ponteiroArquivoSERVICO == NULL){
+            if(SHOW_DEBUG == 1) {
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_SER);
             }
             
             // Se chegar ate aqui, quer dizer que nÃ£o conseguiu abrir de jeito neNhum...
@@ -436,14 +476,14 @@ void fecharTodosArquivos() {
     // Atualizar os arquivos.
     fflush(ponteiroArquivoFUNCIONARIO);
     fflush(ponteiroArquivoCLIENTE);
-//    fflush(ponteiroArquivoSERVICO);
+    fflush(ponteiroArquivoSERVICO);
 //    fflush(ponteiroArquivoTELEFONE);
 //    fflush(ponteiroArquivoENDERECO);
     
     // Fechar os arquivos.
     fclose(ponteiroArquivoFUNCIONARIO);
     fclose(ponteiroArquivoCLIENTE);
-//    fclose(ponteiroArquivoSERVICO);
+    fclose(ponteiroArquivoSERVICO);
 //    fclose(ponteiroArquivoTELEFONE);
 //    fclose(ponteiroArquivoENDERECO);
 }
@@ -464,6 +504,14 @@ void fecharArquivoCliente() {
     fclose(ponteiroArquivoCLIENTE);
 }
 
+void fecharArquivoServico() {
+    // Atualizar o arquivo.
+    fflush(ponteiroArquivoSERVICO);
+    
+    // Fechar o arquivo.
+    fclose(ponteiroArquivoSERVICO);
+}
+
 
 
 
@@ -478,7 +526,7 @@ void fecharArquivoCliente() {
 void menuServico() {
     char opcao = 'a';
     
-    while(opcao != 'Z' && opcao != 'z') {
+    while(opcao != 'X' && opcao != 'x') {
         system ("cls");
         
         printf("\n MENU SERVICO\n");
@@ -573,17 +621,14 @@ void menuServicoDeletar() {
 void lerDadosServico(struct Servico *servico) {
     
     fflush(stdin);
-    printf("Nome : ");
-    gets(servico->nome);
-    fflush(stdin);
+    printf("Nome   : ");
+    gets(servico->nome); fflush(stdin);
     
-    printf("Duração  : ");
-    gets(servico->duracao);
-    fflush(stdin);
+    printf("Duracao: ");
+    scanf("%d", servico->duracao);
     
-    printf("Valor : ");
-    gets(servico->valor);
-    fflush(stdin);
+    printf("Valor  : ");
+    scanf("%lf", servico->valor);
     
     servico->ativo = ' '; // Qualquer coisa menos '*' significa ativo
 }
@@ -693,33 +738,23 @@ void printarServicoLista(struct Servico servico) {
     //TODO: criar View de perfil SERVICO.
     
     //    printf("-----------------------------------------------------------------------------------\n");
-<<<<<<< HEAD
-    printf("%05d|%-30s|%-15s|%-30s\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
-=======
-    printf("%05d|%-30s|%-15s|%-30s\n", servico.codigo, servico.nome, servico., servico.senha);
->>>>>>> 67ab037b70dbf46adc8f1097b0081b276dcba348
+    printf("%05d|%-30s|%-15d|R$%-30d\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
     //    printf("-----------------------------------------------------------------------------------\n");
 }
 
 void printarServicoTopicos(struct Servico servico) {
     
-    if(servico.ativo == ' ') {
-        printf("%-10s: %d\n", "CODIGO", servico.codigo);
-        printf("%-6s: %s\n", "NOME", servico.nome);
-<<<<<<< HEAD
-        printf("%-6s: %s\n", "DURAÇÃO", servico.duracao);
-        printf("%-6s: %S\n", "VALOR", servico.valor);
+    if(servico.ativo != '*') {
+        printf("%-7s: %d\n", "CODIGO", servico.codigo);
+        printf("%-7s: %s\n", "NOME", servico.nome);
+
+        printf("%-7s: %d\n", "DURACAO", servico.duracao);
+        printf("%-7s: %d\n", "VALOR", servico.valor);
         if(servico.duracao == 1) {
-            printf("%-6s: %s\n", "DURAÇÃO", "Servico");
-=======
-        printf("%-6s: %s\n", "CPF", servico.);
-        printf("%-6s: %s\n", "SENHA", servico.senha);
-        if(servico.cargo == 1) {
-            printf("%-6s: %s\n", "CARGO", "Servico");
->>>>>>> 67ab037b70dbf46adc8f1097b0081b276dcba348
+            printf("%-7s: %s\n", "DURACAO", "Servico");
             
         } else if(servico.duracao == 0) {
-            printf("%-6s: %s\n", "DURAÇÃO", "Servico");
+            printf("%-7s: %s\n", "DURACAO", "Servico");
         }
         
     } else {
@@ -738,7 +773,7 @@ void printarTodosRegistrosServico() {
     
     printf("SERVICOS\n");
     printf("-----------------------------------------------------------------------------------\n");
-    printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "DURAÇÃO", "VALOR");
+    printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "DURACAO", "VALOR");
     printf("-----------------------------------------------------------------------------------\n");
     
     while(1){
