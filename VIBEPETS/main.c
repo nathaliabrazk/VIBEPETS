@@ -39,8 +39,8 @@ FILE *ponteiroArquivoAGENDAMENTO;
 // #############################################################################
 // DECLARACAO DE TIPOS
 
-// 'typedef' é uma outra forma de declarar um novo tipo de struct.
-// Serve para criar um "apelido" a struct, para quando for declarar uma variável
+// 'typedef' e uma outra forma de declarar um novo tipo de struct.
+// Serve para criar um "apelido" a 'struct NomdoTipo', para quando for declarar uma variável
 // do tipo nao precisar escrever 'struct'antes do tipo.
 
 // #################################
@@ -51,24 +51,6 @@ typedef struct {
     int mes;
     int ano;
 } Data;
-
-// #################################
-// Hora
-typedef struct {
-//    int codigo;
-    int segundo;
-    int minuto;
-    int hora;
-} Hora;
-
-// #################################
-// telefone
-typedef struct {
-//    int codigo;
-    int numero;
-    int ddd;
-    char temWhatsApp;   // 1 = se o número tem WhatApp.
-} Telefone;
 
 // #################################
 // Endereco
@@ -82,6 +64,24 @@ typedef struct {
     char logradouro[20];
     char numero[20];
 } Endereco;
+
+// #################################
+// Hora
+typedef struct {
+//    int codigo;
+    int segundo;
+    int minuto;
+    int hora;
+} Hora;
+
+// #################################
+// Telefone
+typedef struct {
+//    int codigo;
+    int numero;
+    int ddd;
+    char temWhatsApp;   // 1 = se o número tem WhatApp.
+} Telefone;
 
 // #################################
 // Agendamento
@@ -185,7 +185,8 @@ int  salvarRegistroAgendamento(struct Agendamento);
 void printarTodosRegistrosAgendamento(void);
 void printarAgendamentoLista(struct Agendamento);
 void printarAgendamentoTopicos(struct Agendamento);
-int  buscarAgendamentoPorCod(int);
+struct Agendamento buscarAgendamentoPorCod(int);
+int  buscarRegistroAgendamentoPorCod(int);
 void alterarAgendamento(int);
 int  acessarUltimoCodigoAgendamento(void);
 void deletarAgendamento(int);
@@ -195,7 +196,8 @@ int  salvarRegistroServico(struct Servico);
 void printarTodosRegistrosServico(void);
 void printarServicoLista(struct Servico);
 void printarServicoTopicos(struct Servico);
-int  buscarServicoPorCod(int);
+struct Servico buscarServicoPorCod(int);
+int  buscarRegistroServicoPorCod(int);
 void alterarServico(int);
 int  acessarUltimoCodigoServico(void);
 void deletarServico(int);
@@ -206,7 +208,8 @@ int  salvarRegistroCliente(struct Cliente);
 void printarTodosRegistrosCliente(void);
 void printarClienteLista(struct Cliente);
 void printarClienteTopicos(struct Cliente);
-int  buscarClientePorCod(int);
+struct Cliente buscarClientePorCod(int);
+int  buscarRegistroClientePorCod(int);
 void alterarCliente(int);
 int  acessarUltimoCodigoCliente(void);
 void deletarCliente(int);
@@ -216,7 +219,8 @@ int  salvarRegistroFuncionario(struct Funcionario);
 void printarTodosRegistrosFuncionario(void);
 void printarFuncionarioLista(struct Funcionario);
 void printarFuncionarioTopicos(struct Funcionario);
-int  buscarFuncionarioPorCod(int);
+struct Funcionario buscarFuncionarioPorCod(int);
+int  buscarRegistroFuncionarioPorCod(int);
 void alterarFuncionario(int);
 int  acessarUltimoCodigoFuncionario(void);
 void deletarFuncionario(int);
@@ -457,7 +461,7 @@ void menuAgendamentoAlterar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarAgendamentoPorCod(codigo);
+    registro = buscarRegistroAgendamentoPorCod(codigo);
     alterarAgendamento(registro);
     
     printarMensagemContinuar();
@@ -472,7 +476,7 @@ void menuAgendamentoDeletar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarAgendamentoPorCod(codigo);
+    registro = buscarRegistroAgendamentoPorCod(codigo);
     deletarAgendamento(registro);
     printarMensagemContinuar();
 }
@@ -545,7 +549,7 @@ void menuClienteAlterar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarClientePorCod(codigo);
+    registro = buscarRegistroClientePorCod(codigo);
     alterarCliente(registro);
     
     printarMensagemContinuar();
@@ -560,7 +564,7 @@ void menuClienteDeletar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarClientePorCod(codigo);
+    registro = buscarRegistroClientePorCod(codigo);
     deletarCliente(registro);
     printarMensagemContinuar();
 }
@@ -636,7 +640,7 @@ void menuFuncionarioAlterar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarFuncionarioPorCod(codigo);
+    registro = buscarRegistroFuncionarioPorCod(codigo);
     alterarFuncionario(registro);
     
     printarMensagemContinuar();
@@ -651,7 +655,7 @@ void menuFuncionarioDeletar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarFuncionarioPorCod(codigo);
+    registro = buscarRegistroFuncionarioPorCod(codigo);
     deletarFuncionario(registro);
     printarMensagemContinuar();
 }
@@ -731,7 +735,7 @@ void menuServicoAlterar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarServicoPorCod(codigo);
+    registro = buscarRegistroServicoPorCod(codigo);
     alterarServico(registro);
     
     printarMensagemContinuar();
@@ -746,7 +750,7 @@ void menuServicoDeletar() {
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
-    registro = buscarServicoPorCod(codigo);
+    registro = buscarRegistroServicoPorCod(codigo);
     deletarServico(registro);
     printarMensagemContinuar();
 }
@@ -773,7 +777,7 @@ void menuServicoDeletar() {
 
 // #################################
 // ABRIR OS ARQUIVOS
-// Verifica se o arquivo já existe. Se não existir, ele é criado
+// Verifica se o arquivo já existe. Se nao existir, ele e criado
 // se já existir, abre-o em modo de leitura e escrita (r+b)
 void abrirTodosArquivos() {
     
@@ -789,7 +793,7 @@ void abrirTodosArquivos() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_AGE);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -807,7 +811,7 @@ void abrirTodosArquivos() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_SER);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -825,7 +829,7 @@ void abrirTodosArquivos() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_CLI);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -843,7 +847,7 @@ void abrirTodosArquivos() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_FUN);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -864,7 +868,7 @@ void abrirArquivoAgendamento() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_AGE);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -882,7 +886,7 @@ void abrirArquivoServico() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_SER);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -900,7 +904,7 @@ void abrirArquivoFuncionario() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_FUN);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -918,7 +922,7 @@ void abrirArquivoCliente() {
                 printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_CLI);
             }
             
-            // Se chegar ate aqui, quer dizer que não conseguiu abrir de jeito neNhum...
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
             // ai encerra o programa 🍃
             exit(1);
         }
@@ -1043,23 +1047,25 @@ int salvarRegistroAgendamento(struct Agendamento agendamento) {
 
 // #################################
 // BUSCAR AGENDAMENTO POR CODIGO
-// Uma função para retornar o registro (posicao no arquivo) procurando pelo código.
+// Uma funçao para retornar o agendamento procurando pelo codigo.
 // RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarAgendamentoPorCod(int cod) {
-    struct Agendamento adm;
-    int codigo = -1;
+//  - A instancia de Agendamento com os dados encontrados;
+//  - 'agendamento.codigo = -1' caso nao encontre.
+struct Agendamento buscarAgendamentoPorCod(int codigo) {
+    struct Agendamento agendamento;
+    int contadorCodigo = -1;
+    
+    agendamento.codigo = -1;
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ponteiroArquivoAGENDAMENTO != NULL) {
+    if(ponteiroArquivoAGENDAMENTO != NULL) {
         if(MOSTRAR_DEBUG == 1) {
             printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
         }
         
     } else {
         if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_FUN);
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
         }
         system ("pause");
         exit(1);
@@ -1067,29 +1073,74 @@ int buscarAgendamentoPorCod(int cod) {
     
     rewind(ponteiroArquivoAGENDAMENTO);
     // Procura em todos os registros do documento.
-    while(fread(&adm, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
+    while(fread(&agendamento, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
         // Incrementa ++ porque comeca com -1.
-        codigo += 1;
+        contadorCodigo += 1;
         
         // Compara o cod recebido.
-        if(adm.codigo == cod) {
+        if(agendamento.codigo == codigo) {
             // Se encontrar, retorna a poisicao(linha) do registro.
-            return  codigo;
+            return  agendamento;
         }
     }
     
-    // Se não achar o codigo, retorna -1 para indicar que nao achou.
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
     if(MOSTRAR_DEBUG == 1) {
         printf("\n\nERRO: registro nao encontrado.");
     }
-    codigo = -1;
     
-    return codigo;
+    return agendamento;
+}
+
+// #################################
+// BUSCAR REGISTRO AGENDAMENTO POR CODIGO
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
+// RETORNO:
+//  -  O numero do registro, caso encontre;
+//  - -1 caso, nao encontre.
+int buscarRegistroAgendamentoPorCod(int codigo) {
+    struct Agendamento agendamento;
+    int contadorCodigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoAGENDAMENTO != NULL) {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoAGENDAMENTO);
+    // Procura em todos os registros do documento.
+    while(fread(&agendamento, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
+        // Incrementa '++' porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(agendamento.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  contadorCodigo;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(MOSTRAR_DEBUG == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    contadorCodigo = -1;
+    
+    return contadorCodigo;
 }
 
 // #################################
 // BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma função para ir ate o ultimo registro, ultimo agendamento cadastrado e
+// Uma funçao para ir ate o ultimo registro, ultimo agendamento cadastrado e
 // retorna seu respectivo codigo.
 // RETORNO:
 //  - O int do codigo.
@@ -1124,9 +1175,17 @@ void printarAgendamentoLista(struct Agendamento agendamento) {
 }
 
 void printarAgendamentoTopicos(struct Agendamento agendamento) {
+    struct Cliente cliente;
+    struct Funcionario funcionario;
+    
+    cliente = buscarClientePorCod(agendamento.codigoCliente);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
     
     if(agendamento.ativo == ' ') {
         printf("%-6s: %d\n", "CODIGO", agendamento.codigo);
+        printf("%-6s: %d\n", "FUNCIONARIO", funcionario.nome);
+        printf("%-6s: %d\n", "CLIENTE", cliente.nome);
+
         printf("%-6s: %s\n", "NOME", agendamento.nome);
         printf("%-6s: %s\n", "CPF", agendamento.cpf);
         printf("%-6s: %s\n", "SENHA", agendamento.senha);
@@ -1158,7 +1217,7 @@ void printarTodosRegistrosAgendamento() {
     
     while(1){
         if(fread(&agendamento, sizeof(agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1)break; /*Sair do laço*/
-        if(agendamento.ativo == '*') continue; /*Passa ao próximo*/
+        if(agendamento.ativo == '*') continue; /*Passa ao proximo*/
         printarAgendamentoLista(agendamento);
         //        printarAgendamentoTopicos(agendamento);
         n_Linhas++;
@@ -1187,7 +1246,7 @@ void alterarAgendamento(int registro) {
     }
     
     if(agendamentoAux.ativo == '*'){
-        printarMensagem("Um registro apagado não pode ser alterado!!! \n\n");
+        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
         return;
     }
     
@@ -1322,53 +1381,101 @@ int salvarRegistroServico(struct Servico servico) {
 
 // #################################
 // BUSCAR SERVICO POR CODIGO
-// Uma função para retornar o registro (posicao no arquivo) procurando pelo código.
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
 // RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarServicoPorCod(int cod) {
-    struct Servico adm;
-    int codigo = -1;
+//  - A instancia de Servico com os dados encontrados;
+//  - 'servico.codigo = -1' caso nao encontre.
+struct Servico buscarServicoPorCod(int codigo) {
+    struct Servico servico;
+    int contadorCodigo = -1;
+    
+    servico.codigo = -1;
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ponteiroArquivoSERVICO != NULL) {
+    if(ponteiroArquivoSERVICO != NULL) {
         if(MOSTRAR_DEBUG == 1) {
             printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
         }
         
     } else {
         if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_FUN);
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
         }
+        system("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoSERVICO);
+    // Procura em todos os registros do documento.
+    while(fread(&servico, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)) {
+        // Incrementa ++ porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(servico.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  servico;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(MOSTRAR_DEBUG == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    
+    return servico;
+}
+
+// #################################
+// BUSCAR SERVICO POR CODIGO
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
+// RETORNO:
+//  -  O numero do registro, caso encontre;
+//  - -1 caso, nao encontre.
+int buscarServicoPorCod(int codigo) {
+    struct Servico servico;
+    int contadorCodigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoSERVICO != NULL) {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        
         system ("pause");
         exit(1);
     }
     
     rewind(ponteiroArquivoSERVICO);
     // Procura em todos os registros do documento.
-    while(fread(&adm, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)) {
+    while(fread(&servico, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)) {
         // Incrementa ++ porque comeca com -1.
-        codigo += 1;
+        contadorCodigo += 1;
         
         // Compara o cod recebido.
-        if(adm.codigo == cod) {
+        if(servico.codigo == codigo) {
             // Se encontrar, retorna a poisicao(linha) do registro.
-            return  codigo;
+            return  contadorCodigo;
         }
     }
     
-    // Se não achar o codigo, retorna -1 para indicar que nao achou.
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
     if(MOSTRAR_DEBUG == 1) {
         printf("\n\nERRO: registro nao encontrado.");
     }
-    codigo = -1;
+    contadorCodigo = -1;
     
-    return codigo;
+    return contadorCodigo;
 }
 
 // #################################
 // BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma função para ir ate o ultimo registro, ultimo servico cadastrado e
+// Uma funçao para ir ate o ultimo registro, ultimo servico cadastrado e
 // retorna seu respectivo codigo.
 // RETORNO:
 //  - O int do codigo.
@@ -1430,7 +1537,7 @@ void printarTodosRegistrosServico() {
     
     while(1){
         if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/
-        if(servico.ativo == '*') continue; /*Passa ao próximo*/
+        if(servico.ativo == '*') continue; /*Passa ao proximo*/
         printarServicoLista(servico);
         //        printarServicoTopicos(servico);
         n_Linhas++;
@@ -1459,7 +1566,7 @@ void alterarServico(int registro) {
     }
     
     if(servicoAux.ativo == '*'){
-        printarMensagem("Um registro apagado não pode ser alterado!!! \n\n");
+        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
         return;
     }
     
@@ -1605,23 +1712,71 @@ int salvarRegistroCliente(struct Cliente cliente) {
 
 // #################################
 // BUSCAR CLIENTE POR CODIGO
-// Uma função para retornar o registro (posicao no arquivo) procurando pelo código.
+// Uma funçao para retornar o cliente procurando pelo codigo.
 // RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarClientePorCod(int cod) {
-    struct Cliente adm;
-    int codigo = -1;
+//  -  Uma instancia de Cliente com os dados encontrados.
+//  - A instancia de Agendamento com os dados encontrados;
+//  - 'cliente.codigo = -1' caso nao encontre.
+struct Cliente buscarClientePorCod(int codigo) {
+    struct Cliente clienteAuxiliar;
+    int contadorCodigo = -1;
+    
+    clienteAuxiliar.codigo = -1;
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ponteiroArquivoCLIENTE != NULL) {
+    if(ponteiroArquivoCLIENTE != NULL) {
         if(MOSTRAR_DEBUG == 1) {
             printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_CLI);
         }
         
     } else {
         if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_CLI);
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_CLI);
+        }
+        system("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoCLIENTE);
+    // Procura em todos os registros do documento.
+    while(fread(&clienteAuxiliar, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)) {
+        // Incrementa '++' porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(clienteAuxiliar.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  clienteAuxiliar;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(MOSTRAR_DEBUG == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    
+    return clienteAuxiliar;
+}
+
+// #################################
+// BUSCAR REGISTRO DE CLIENTE POR CODIGO
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
+// RETORNO:
+//  -  O numero do registro, caso encontre;
+//  - -1 caso, nao encontre.
+int buscarRegistroClientePorCod(int codigo) {
+    struct Cliente clienteAuxiliar;
+    int contadorCodigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoCLIENTE != NULL) {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_CLI);
+        }
+        
+    } else {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_CLI);
         }
         system ("pause");
         exit(1);
@@ -1629,29 +1784,29 @@ int buscarClientePorCod(int cod) {
     
     rewind(ponteiroArquivoCLIENTE);
     // Procura em todos os registros do documento.
-    while(fread(&adm, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)) {
+    while(fread(&clienteAuxiliar, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)) {
         // Incrementa ++ porque comeca com -1.
-        codigo += 1;
+        contadorCodigo += 1;
         
         // Compara o cod recebido.
-        if(adm.codigo == cod) {
+        if(clienteAuxiliar.codigo == codigo) {
             // Se encontrar, retorna a poisicao(linha) do registro.
-            return  codigo;
+            return  contadorCodigo;
         }
     }
     
-    // Se não achar o codigo, retorna -1 para indicar que nao achou.
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
     if(MOSTRAR_DEBUG == 1) {
         printf("\n\nERRO: registro nao encontrado.");
     }
-    codigo = -1;
+    contadorCodigo = -1;
     
-    return codigo;
+    return contadorCodigo;
 }
 
 // #################################
 // BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma função para ir ate o ultimo registro, ultimo cliente cadastrado e
+// Uma funçao para ir ate o ultimo registro, ultimo cliente cadastrado e
 // retorna seu respectivo codigo.
 // RETORNO:
 //  - O int do codigo.
@@ -1723,7 +1878,7 @@ void printarTodosRegistrosCliente() {
     
     while(1){
         if(fread(&cliente, sizeof(cliente), 1, ponteiroArquivoCLIENTE)!= 1) break; /*Sair do laço*/
-        if(cliente.ativo == '*') continue; /*Passa ao próximo*/
+        if(cliente.ativo == '*') continue; /*Passa ao proximo*/
         printarClienteLista(cliente);
         //        printarClienteTopicos(cliente);
         n_Linhas++;
@@ -1754,7 +1909,7 @@ void alterarCliente(int registro) {
     }
     
     if(clienteAux.ativo == '*'){
-        printarMensagem("Um registro apagado não pode ser alterado!!! \n\n");
+        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
         return;
     }
     
@@ -1886,23 +2041,26 @@ int salvarRegistroFuncionario(struct Funcionario funcionario) {
 
 // #################################
 // BUSCAR FUNCIONARIO POR CODIGO
-// Uma função para retornar o registro (posicao no arquivo) procurando pelo código.
+// Uma funçao para retornar o funcionario procurando pelo codigo.
 // RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarFuncionarioPorCod(int cod) {
-    struct Funcionario adm;
-    int codigo = -1;
+//  - A instancia com os dados encontrados.
+//  - A instancia de Agendamento com os dados encontrados;
+//  - 'funcionario.codigo = -1' caso nao encontre.
+struct Funcionario buscarFuncionarioPorCod(int codigo) {
+    struct Funcionario funcionario;
+    int contadorCodigo = -1;
+    
+    funcionario.codigo = -1;
     
     // Testando se o arquivo foi aberto com sucesso
-    if (ponteiroArquivoFUNCIONARIO != NULL) {
+    if(ponteiroArquivoFUNCIONARIO != NULL) {
         if(MOSTRAR_DEBUG == 1) {
             printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
         }
         
     } else {
         if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nERRO: O arquivo %s não foi aberto e criado\n", BIN_FUN);
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
         }
         system ("pause");
         exit(1);
@@ -1910,29 +2068,74 @@ int buscarFuncionarioPorCod(int cod) {
     
     rewind(ponteiroArquivoFUNCIONARIO);
     // Procura em todos os registros do documento.
-    while(fread(&adm, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
+    while(fread(&funcionario, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
         // Incrementa ++ porque comeca com -1.
-        codigo += 1;
+        contadorCodigo += 1;
         
         // Compara o cod recebido.
-        if(adm.codigo == cod) {
+        if(funcionario.codigo == codigo) {
             // Se encontrar, retorna a poisicao(linha) do registro.
-            return  codigo;
+            return funcionario;
         }
     }
     
-    // Se não achar o codigo, retorna -1 para indicar que nao achou.
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
     if(MOSTRAR_DEBUG == 1) {
         printf("\n\nERRO: registro nao encontrado.");
     }
-    codigo = -1;
     
-    return codigo;
+    return funcionario;
+}
+
+// #################################
+// BUSCAR REGISTRO DE FUNCIONARIO POR CODIGO
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
+// RETORNO:
+//  -  O numero do registro, caso encontre;
+//  - -1 caso, nao encontre.
+int buscarRegistroFuncionarioPorCod(int codigo) {
+    struct Funcionario funcionario;
+    int contadorCodigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoFUNCIONARIO != NULL) {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoFUNCIONARIO);
+    // Procura em todos os registros do documento.
+    while(fread(&funcionario, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
+        // Incrementa ++ porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(funcionario.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  contadorCodigo;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(MOSTRAR_DEBUG == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    contadorCodigo = -1;
+    
+    return contadorCodigo;
 }
 
 // #################################
 // BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma função para ir ate o ultimo registro, ultimo funcionario cadastrado e
+// Uma funçao para ir ate o ultimo registro, ultimo funcionario cadastrado e
 // retorna seu respectivo codigo.
 // RETORNO:
 //  - O int do codigo.
@@ -2001,7 +2204,7 @@ void printarTodosRegistrosFuncionario() {
     
     while(1){
         if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
-        if(funcionario.ativo == '*') continue; /*Passa ao próximo*/
+        if(funcionario.ativo == '*') continue; /*Passa ao proximo*/
         printarFuncionarioLista(funcionario);
         //        printarFuncionarioTopicos(funcionario);
         n_Linhas++;
@@ -2030,7 +2233,7 @@ void alterarFuncionario(int registro) {
     }
     
     if(funcionarioAux.ativo == '*'){
-        printarMensagem("Um registro apagado não pode ser alterado!!! \n\n");
+        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
         return;
     }
     
@@ -2141,8 +2344,8 @@ char *formatarCPF(char *cpf) {
     //Aloca o espaço necessário
     char *cpfFormatado = (char*) malloc(15 * sizeof(char));
     
-    if (!cpfFormatado) {
-        //Se malloc retornar nulo é porque não há memória suficiente para alocar o espaço necessário
+    if(!cpfFormatado) {
+        //Se malloc retornar nulo e porque nao há memoria suficiente para alocar o espaço necessário
         if(MOSTRAR_DEBUG == 1) {
             printarMensagem("Nao ha espaco suficiente na memoria.");
         }
@@ -2284,7 +2487,7 @@ Data receberValidarData() {
         } else {
             entradaValida = 's';
             
-            if (agendamento.data.mes == 1 || agendamento.data.mes == 3 || agendamento.data.mes == 5 || agendamento.data.mes == 7 || agendamento.data.mes == 8 || agendamento.data.mes == 10 || agendamento.data.mes == 12) {
+            if(agendamento.data.mes == 1 || agendamento.data.mes == 3 || agendamento.data.mes == 5 || agendamento.data.mes == 7 || agendamento.data.mes == 8 || agendamento.data.mes == 10 || agendamento.data.mes == 12) {
                 maxDias = 31;
                 
             } else if(agendamento.data.mes == 4 || agendamento.data.mes == 6 || agendamento.data.mes == 9 || agendamento.data.mes == 11) {
@@ -2384,11 +2587,6 @@ char receberValidarOpcaoLetra(char *opcoes) {
     
     return opcao;
 }
-
-if(/*alguma condição*/)
-{
-//algum codigo
-} 
 
 if(contadorErros > 2) {
     printarMensagem("\nNumero invalido, informe de ");
