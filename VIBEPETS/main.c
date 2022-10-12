@@ -233,6 +233,8 @@ void printarMensagem(char *msg);
 void printarMensagemContinuar(void);
 char* formatarCPF(char[]);
 void limparTela(void);
+void printarDataFormatada(Data);
+void printarHoraFormatada(Hora);
 
 // #################################
 // VALIDACOES
@@ -1177,24 +1179,21 @@ void printarAgendamentoLista(struct Agendamento agendamento) {
 void printarAgendamentoTopicos(struct Agendamento agendamento) {
     struct Cliente cliente;
     struct Funcionario funcionario;
-    
-    cliente = buscarClientePorCod(agendamento.codigoCliente);
-    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
-    
-    if(agendamento.ativo == ' ') {
-        printf("%-6s: %d\n", "CODIGO", agendamento.codigo);
-        printf("%-6s: %d\n", "FUNCIONARIO", funcionario.nome);
-        printf("%-6s: %d\n", "CLIENTE", cliente.nome);
+    struct Servico servico;
 
-        printf("%-6s: %s\n", "NOME", agendamento.nome);
-        printf("%-6s: %s\n", "CPF", agendamento.cpf);
-        printf("%-6s: %s\n", "SENHA", agendamento.senha);
-        if(agendamento.cargo == 1) {
-            printf("%-6s: %s\n", "CARGO", "Agendamento");
-            
-        } else if(agendamento.cargo == 0) {
-            printf("%-6s: %s\n", "CARGO", "Agendamento");
-        }
+    cliente     = buscarClientePorCod(agendamento.codigoCliente);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
+    servico     = buscarServicoPorCod(agendamento.codigoServico);
+
+    if(agendamento.ativo == ' ') {
+        printf("%-11s: %d\n", "CODIGO", agendamento.codigo);
+        
+        printf("%-11s: ", "DATA"); printarDataFormatada(agendamento.data); printf("\n");
+        printf("%-11s: ", "HORA"); printarHoraFormatada(agendamento.hora); printf("\n");
+        
+        printf("%-11s: %s\n", "SERVICO", servico.nome);
+        printf("%-11s: %s\n", "CLIENTE", cliente.nome);
+        printf("%-11s: %s\n", "FUNCIONARIO", funcionario.nome);
         
     } else {
         printf("\nAGENDAMENTO DELETADO!\n");
@@ -2333,7 +2332,6 @@ void printarMensagemContinuar() {
     getchar();
 }
 
-
 // #################################
 // FORMATAR CPF
 // Por pontos e hifen. Ex.:
@@ -2386,6 +2384,22 @@ char *formatarCPF(char *cpf) {
     }
     
     return cpfFormatado;
+}
+
+// #################################
+// FORMATAR DATA E PRINTAR
+// Por barras. Ex.:
+//    01/01/2001
+void printarDataFormatada(Data data) {
+    print("%02d/%02d/%d", data.dia, data.mes, data.ano);
+}
+
+// #################################
+// FORMATAR HORA E PRINTAR
+// Por dois pontos. Ex.:
+//    12:59:00
+void printarHoraFormatada(Hora hora) {
+    print("%02d:%02d:%d", hora.hora, hora.minuto, hora.segundo);
 }
 
 
@@ -2499,23 +2513,23 @@ Data receberValidarData() {
                 //TODO: Tratar ano bissexto!
             }
             
-/*
-Ordem dos meses    Mês    Dias
-2       Fevereiro  tem 28 dias (29 dias nos anos bissextos)
+            /* Quantos dias tem cada mes
+            Num     Mes         Dias
+            2       Fevereiro   28 dias (29 dias nos anos bissextos)
 
-4       Abril      tem 30 dias
-6       Junho      tem 30 dias
-9       Setembro   tem 30 dias
-11      Novembro   tem 30 dias
- 
-1       Janeiro    tem 31 dias
-3       Março      tem 31 dias
-5       Maio       tem 31 dias
-7       Julho      tem 31 dias
-8       Agosto     tem 31 dias
-10      Outubro    tem 31 dias
-12      Dezembro   tem 31 dias
-*/
+            4       Abril       30 dias
+            6       Junho       30 dias
+            9       Setembro    30 dias
+            11      Novembro    30 dias
+             
+            1       Janeiro     31 dias
+            3       Março       31 dias
+            5       Maio        31 dias
+            7       Julho       31 dias
+            8       Agosto      31 dias
+            10      Outubro     31 dias
+            12      Dezembro    31 dias
+            */
             
         }
         
@@ -2588,7 +2602,7 @@ char receberValidarOpcaoLetra(char *opcoes) {
     return opcao;
 }
 
-if(contadorErros > 2) {
-    printarMensagem("\nNumero invalido, informe de ");
-    printf("%d a %d\n", min, max);
-}
+//if(contadorErros > 2) {
+//    printarMensagem("\nNumero invalido, informe de ");
+//    printf("%d a %d\n", min, max);
+//}
