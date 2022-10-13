@@ -32,6 +32,7 @@
 FILE *ponteiroArquivoAGENDAMENTO;
 FILE *ponteiroArquivoCLIENTE;
 FILE *ponteiroArquivoFUNCIONARIO;
+FILE *ponteiroArquivoHORARIO;
 FILE *ponteiroArquivoSERVICO;
 //FILE *ponteiroArquivoPRODUTO;
 //FILE *ponteiroArquivoTELEFONE;
@@ -103,12 +104,12 @@ struct Cliente {
     int  codigo;
     char nome[30];
     char email[30];
-    //    Endereco endereco;
+//    Endereco endereco;
     char endereco[30];  // Passar para struct.
     char cpf[12];
     Data nascimento;
     int telefone;
-    //    Telefone telefone;
+//    Telefone telefone;
     char ativo;         // '*' = inativo/deletado.
 };
 
@@ -121,6 +122,14 @@ struct Funcionario {
     char senha[25];
     int  cargo;      // 0 = admin || 1 = funcionario
     char ativo;     // '*' = inativo/deletado
+};
+
+// #################################
+// Horarios
+struct Horario {
+    int  codigo;
+    int  codigoAgendamento;
+    char ocupado; // '*' = ocupado, agendado.
 };
 
 // #################################
@@ -143,11 +152,13 @@ void abrirTodosArquivos(void);
 void abrirArquivoAgendamento(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
+void abrirArquivoHorario(void);
 void abrirArquivoServico(void);
 
 void fecharTodosArquivos(void);
 void fecharArquivoAgendamento(void);
 void fecharArquivoCliente(void);
+void fecharArquivoHorario(void);
 void fecharArquivoFuncionario(void);
 void fecharArquivoServico(void);
 
@@ -173,6 +184,12 @@ void menuFuncionarioListarTodos(void);
 void menuFuncionarioInserir(void);
 void menuFuncionarioAlterar(void);
 void menuFuncionarioDeletar(void);
+
+void menuHorario(void);
+void menuHorarioListarTodos(void);
+void menuHorarioInserir(void);
+void menuHorarioAlterar(void);
+void menuHorarioDeletar(void);
 
 void menuServico(void);
 void menuServicoListarTodos(void);
@@ -219,6 +236,17 @@ int  acessarUltimoCodigoFuncionario(void);
 void deletarFuncionario(int);
 void lerDadosFuncionario(struct Funcionario*);
 struct Funcionario buscarFuncionarioPorCPF(char[]);
+
+int  salvarRegistroHorario(struct Horario);
+void printarTodosRegistrosHorario(void);
+void printarHorarioLista(struct Horario);
+void printarHorarioTopicos(struct Horario);
+struct Horario buscarHorarioPorCod(int);
+int  buscarRegistroHorarioPorCod(int);
+void alterarHorario(int);
+int  acessarUltimoCodigoHorario(void);
+void deletarHorario(int);
+void lerDadosHorario(struct Horario*);
 
 int  salvarRegistroServico(struct Servico);
 void printarTodosRegistrosServico(void);
@@ -306,10 +334,10 @@ void menuPrincipal() {
         printf("\tA) MENU AGENDAMENTO\n");
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
-        printf("\tP) MENU PRODUTO\n");
+//        printf("\tP) MENU PRODUTO\n");
         printf("\tS) MENU SERVICOS\n");
         printf("\tX) SAIR\n");
-        opcao = receberValidarOpcaoLetra("apcfxs");
+        opcao = receberValidarOpcaoLetra("acfxs"); // add p depois.
         
         switch(opcao) {
             case 'a':
@@ -323,10 +351,10 @@ void menuPrincipal() {
             case 'f':
                 menuFuncionario();
                 break;
-                
-            case 'p':
-                printf("---> FAZER MENU PRODUTO <--- ");
-                break;
+//
+//            case 'p':
+//                printf("---> FAZER MENU PRODUTO <--- ");
+//                break;
                 
             case 's':
                 menuServico();
@@ -354,9 +382,10 @@ void menuAgendamento() {
         printf("\tI) INSERIR NOVO\n");
         printf("\tA) ALTERAR\n");
         printf("\tL) LISTAR\n");
+        printf("\tH) HORARIOS\n");
         printf("\tD) DELETAR\n");
         printf("\tX) VOLTAR\n");
-        opcao = receberValidarOpcaoLetra("ialdx");
+        opcao = receberValidarOpcaoLetra("iahldx");
         
         switch(opcao) {
             case 'a':
@@ -369,6 +398,10 @@ void menuAgendamento() {
                 
             case 'i':
                 menuAgendamentoInserir();
+                break;
+                
+            case 'h':
+                menuAgendamentoHorarios();
                 break;
                 
             case 'l':
