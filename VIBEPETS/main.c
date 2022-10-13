@@ -1615,7 +1615,7 @@ int acessarUltimoCodigoCliente() {
 void printarClienteLista(struct Cliente cliente) {
     //TODO: criar View de perfil CLIENTE.
     
-    printf("%05d|%-30s|%-15s|%-30s|%-30s|%-15d|%02d/%02d/%d\n", cliente.codigo, cliente.nome, cliente.cpf, cliente.email, cliente.endereco, cliente.telefone, cliente.nascimento.dia, cliente.nascimento.mes, cliente.nascimento.ano);
+    printf("%05d|%-30s|%-15s|%-30s|%-30s|%-15d|%02d/%02d/%d\n", cliente.codigo, cliente.nome, formatarCPF(cliente.cpf), cliente.email, cliente.endereco, cliente.telefone, cliente.nascimento.dia, cliente.nascimento.mes, cliente.nascimento.ano);
 }
 
 void printarClienteTopicos(struct Cliente cliente) {
@@ -1625,7 +1625,7 @@ void printarClienteTopicos(struct Cliente cliente) {
     if(cliente.ativo != '*') {
         printf("%-10s: %d\n", "CODIGO", cliente.codigo);
         printf("%-10s: %s\n", "NOME", cliente.nome);
-        printf("%-10s: %s\n", "CPF", cliente.cpf);
+        printf("%-10s: %s\n", "CPF", formatarCPF(cliente.cpf));
         printf("%-10s: %s\n", "EMAIL", cliente.email);
         printf("%-10s: %s\n", "ENDERECO", cliente.endereco);
         printf("%-10s: %d\n", "TELEFONE", cliente.telefone);
@@ -1982,7 +1982,7 @@ int acessarUltimoCodigoFuncionario() {
 void printarFuncionarioLista(struct Funcionario funcionario) {
     //TODO: criar View de perfil FUNCIONARIO.
     
-    printf("%05d|%-30s|%-15s|%-30s\n", funcionario.codigo, funcionario.nome, funcionario.cpf, funcionario.senha);
+    printf("%05d|%-30s|%-15s|%-30s\n", funcionario.codigo, funcionario.nome, formatarCPF(funcionario.cpf), funcionario.senha);
 }
 
 void printarFuncionarioTopicos(struct Funcionario funcionario) {
@@ -1990,7 +1990,7 @@ void printarFuncionarioTopicos(struct Funcionario funcionario) {
     if(funcionario.ativo == ' ') {
         printf("%-6s: %d\n", "CODIGO", funcionario.codigo);
         printf("%-6s: %s\n", "NOME", funcionario.nome);
-        printf("%-6s: %s\n", "CPF", funcionario.cpf);
+        printf("%-6s: %s\n", "CPF", formatarCPF(funcionario.cpf));
         printf("%-6s: %s\n", "SENHA", funcionario.senha);
         if(funcionario.cargo == 1) {
             printf("%-6s: %s\n", "CARGO", "Funcionario");
@@ -2620,6 +2620,65 @@ char* stringHoraFormatada(Hora hora) {
 // VALIDACOES
 
 // #################################
+// VALIDAR OPCOES PARA MENUS NUMERICOS
+// PARAMETRO:
+//    - min: o valor minimo que e aceito
+//    - max: o valor maximo que e aceito
+int receberValidarOpcaoNumero(int min, int max) {
+    int opcao = min - 1;
+    int contadorErros = 0;
+    
+    while(opcao < min || opcao > max) {
+        if(contadorErros > 2) {
+            printarMensagem("\nNumero invalido, informe de ");
+            printf("%d a %d\n", min, max);
+        }
+        printf("OPCAO: ");
+        scanf("%d", &opcao);
+        
+        contadorErros++;
+    }
+    
+    return opcao;
+}
+
+// #################################
+// VALIDAR OPCOES PARA MENUS DE LETRAS
+// PARAMETRO:
+//    - opcoes: 'string' com as possibilidades, as opcoes.
+char receberValidarOpcaoLetra(char *opcoes) {
+    int contadorErros = 0;
+    int indice;
+    char opcao = ' ', entradaValida = 'n';
+    
+    // Pegar a quantidade de caracteres digitado.
+    int contadorCaracteres = (int) strlen(opcoes);
+    
+    while(entradaValida == 'n') {
+        if(contadorErros > 2) {
+            printarMensagem("\nOpcao invalida.\n");
+        }
+        
+        printf("OPCAO: ");
+        opcao = getchar(); fflush(stdin);
+        
+        // Passar pra minuscula.
+        opcao = tolower(opcao);
+        
+        for(indice = 0; indice < contadorCaracteres; indice++) {
+            
+            if(tolower(opcoes[indice]) == opcao) {
+                entradaValida = 's';
+            }
+        }
+        
+        contadorErros++;
+    }
+    
+    return opcao;
+}
+
+// #################################
 // VALIDAR CPF
 // Recebe e valida a entrade de CPF.
 // RETORNOS:
@@ -2746,65 +2805,6 @@ Data receberValidarData() {
     }
     
     return data;
-}
-
-// #################################
-// VALIDAR OPCOES PARA MENUS NUMERICOS
-// PARAMETRO:
-//    - min: o valor minimo que e aceito
-//    - max: o valor maximo que e aceito
-int receberValidarOpcaoNumero(int min, int max) {
-    int opcao = min - 1;
-    int contadorErros = 0;
-    
-    while(opcao < min || opcao > max) {
-        if(contadorErros > 2) {
-            printarMensagem("\nNumero invalido, informe de ");
-            printf("%d a %d\n", min, max);
-        }
-        printf("OPCAO: ");
-        scanf("%d", &opcao);
-        
-        contadorErros++;
-    }
-    
-    return opcao;
-}
-
-// #################################
-// VALIDAR OPCOES PARA MENUS DE LETRAS
-// PARAMETRO:
-//    - opcoes: 'string' com as possibilidades, as opcoes.
-char receberValidarOpcaoLetra(char *opcoes) {
-    int contadorErros = 0;
-    int indice;
-    char opcao = ' ', entradaValida = 'n';
-    
-    // Pegar a quantidade de caracteres digitado.
-    int contadorCaracteres = (int) strlen(opcoes);
-    
-    while(entradaValida == 'n') {
-        if(contadorErros > 2) {
-            printarMensagem("\nOpcao invalida.\n");
-        }
-        
-        printf("OPCAO: ");
-        opcao = getchar(); fflush(stdin);
-        
-        // Passar pra minuscula.
-        opcao = tolower(opcao);
-        
-        for(indice = 0; indice < contadorCaracteres; indice++) {
-            
-            if(tolower(opcoes[indice]) == opcao) {
-                entradaValida = 's';
-            }
-        }
-        
-        contadorErros++;
-    }
-    
-    return opcao;
 }
 
 
