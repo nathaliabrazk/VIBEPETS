@@ -21,9 +21,10 @@
 //#define BIN_TEL "vibe_pet-persistencia_tel.bin"
 //#define BIN_END "vibe_pet-persistencia_end.bin"
 
-#define MOSTRAR_DEBUG 1 // 1 = Mostra coisas na tela, msg de erro e etc.
+#define MOSTRAR_DEBUG 0 // 1 = Mostra coisas na tela, msg de erro e etc.
 #define LIMPAR_TELA 0   // 1 = limpa a tela, habilita o clear screen system("cls").
 #define LIMPAR_BD 0     // 1 = Apaga os arquivos ao iniciar o sistema(zera o BD)
+#define TEMA 0          // Cada numero representa um tema para a interface.
 
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
@@ -46,7 +47,7 @@ FILE *ponteiroArquivoAGENDAMENTO;
 // #################################
 // Data
 typedef struct {
-//    int codigo;
+    //    int codigo;
     int dia;
     int mes;
     int ano;
@@ -55,7 +56,7 @@ typedef struct {
 // #################################
 // Endereco
 typedef struct {
-//    int codigo;
+    //    int codigo;
     char cep[10];
     char pais[20];
     char estado[20];
@@ -68,7 +69,7 @@ typedef struct {
 // #################################
 // Hora
 typedef struct {
-//    int codigo;
+    //    int codigo;
     int segundo;
     int minuto;
     int hora;
@@ -77,7 +78,7 @@ typedef struct {
 // #################################
 // Telefone
 typedef struct {
-//    int codigo;
+    //    int codigo;
     int numero;
     int ddd;
     char temWhatsApp;   // 1 = se o número tem WhatApp.
@@ -122,12 +123,12 @@ struct Cliente {
     int  codigo;
     char nome[30];
     char email[30];
-//    Endereco endereco;
+    //    Endereco endereco;
     char endereco[30];  // Passar para struct.
     char cpf[12];
     Data nascimento;
     int telefone;
-//    Telefone telefone;
+    //    Telefone telefone;
     char ativo;         // '*' = inativo/deletado.
 };
 
@@ -182,6 +183,7 @@ void menuFuncionarioDeletar(void);
 // #################################
 // FUNCOES CRUD
 int  salvarRegistroAgendamento(struct Agendamento);
+void printarCabecalhoListaAgendamento(void);
 void printarTodosRegistrosAgendamento(void);
 void printarAgendamentoLista(struct Agendamento);
 void printarAgendamentoTopicos(struct Agendamento);
@@ -214,6 +216,7 @@ void alterarCliente(int);
 int  acessarUltimoCodigoCliente(void);
 void deletarCliente(int);
 void lerDadosCliente(struct Cliente*);
+struct Cliente buscarClientePorCPF(char[]);
 
 int  salvarRegistroFuncionario(struct Funcionario);
 void printarTodosRegistrosFuncionario(void);
@@ -225,7 +228,7 @@ void alterarFuncionario(int);
 int  acessarUltimoCodigoFuncionario(void);
 void deletarFuncionario(int);
 void lerDadosFuncionario(struct Funcionario*);
-
+struct Funcionario buscarFuncionarioPorCPF(char[]);
 
 // #################################
 // FUNCOES AUXILIARES
@@ -234,13 +237,23 @@ void printarMensagemContinuar(void);
 char* formatarCPF(char[]);
 void limparTela(void);
 void printarDataFormatada(Data);
+char* stringDataFormatada(Data);
 void printarHoraFormatada(Hora);
+char* stringHoraFormatada(Hora);
 
 // #################################
 // VALIDACOES
 void receberValidarCPF(char*);
 int  receberValidarOpcaoNumero(int, int);
 char receberValidarOpcaoLetra(char*);
+Data receberValidarData(void);
+Hora  receberValidarHora(void);
+
+// #################################
+// ELEMENTOS DE INTERFACE
+void interfaceLinhaSeparadoraGrande(void);
+void interfaceLinhaSeparadoraMedia(void);
+void interfaceLinhaSeparadoraPequena(void);
 
 
 int main(int argc, char *argv[]) {
@@ -250,7 +263,7 @@ int main(int argc, char *argv[]) {
     // INICIALIZACOES
     // Cuidado, esta acao apaga todo o Banco de Dados.
     if(LIMPAR_BD == 1) {
-        printarMensagem("-----------------------------------------------------------\n");
+        interfaceLinhaSeparadoraMedia();
         printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
         fflush(stdin); opcao = getchar();
         if(opcao == 's' || opcao == 'S') {
@@ -258,9 +271,12 @@ int main(int argc, char *argv[]) {
         }
     }
     abrirTodosArquivos();
-
+    
     // MENU PRINCIPAL
     menuPrincipal();
+    
+    
+    fecharTodosArquivos();
     
     // Propriedades
     //    char opcao;
@@ -340,7 +356,6 @@ int main(int argc, char *argv[]) {
     //            printf("Opcao invalida");
     //    }
     
-    fecharTodosArquivos();
     
     printf("\n\n\n");
     system("pause");
@@ -383,14 +398,14 @@ void menuPrincipal() {
                 printf("---> FAZER MENU PRODUTO <--- ");
                 break;
                 
-        	case 's':
+            case 's':
                 menuServico();
-       			break;
+                break;
                 
             case 'x':
                 printf("SAINDO!");
                 break;
-           
+                
             default:
                 printf("OPCAO INVALIDA!");
         }
@@ -706,8 +721,8 @@ void menuServico() {
             case 'X':
                 printf("VOLTANDO!");
                 break;
-              
-
+                
+                
             default:
                 printf("OPCAO INVALIDA!");
         }
@@ -786,7 +801,7 @@ void abrirTodosArquivos() {
     // ---------------------------------
     // Abrir arquivo de Agendamento.
     ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
-
+    
     if(ponteiroArquivoAGENDAMENTO == NULL){
         ponteiroArquivoAGENDAMENTO  = fopen(BIN_AGE, "w+b"); // criar o arquivo
         
@@ -861,7 +876,7 @@ void abrirTodosArquivos() {
 
 void abrirArquivoAgendamento() {
     ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
-
+    
     if(ponteiroArquivoAGENDAMENTO == NULL){
         ponteiroArquivoAGENDAMENTO  = fopen(BIN_AGE, "w+b"); // criar o arquivo
         
@@ -939,16 +954,16 @@ void fecharTodosArquivos() {
     fflush(ponteiroArquivoSERVICO);
     fflush(ponteiroArquivoCLIENTE);
     fflush(ponteiroArquivoFUNCIONARIO);
-//    fflush(ponteiroArquivoTELEFONE);
-//    fflush(ponteiroArquivoENDERECO);
+    //    fflush(ponteiroArquivoTELEFONE);
+    //    fflush(ponteiroArquivoENDERECO);
     
     // Fechar os arquivos.
     fclose(ponteiroArquivoAGENDAMENTO);
     fclose(ponteiroArquivoSERVICO);
     fclose(ponteiroArquivoCLIENTE);
     fclose(ponteiroArquivoFUNCIONARIO);
-//    fclose(ponteiroArquivoTELEFONE);
-//    fclose(ponteiroArquivoENDERECO);
+    //    fclose(ponteiroArquivoTELEFONE);
+    //    fclose(ponteiroArquivoENDERECO);
 }
 
 void fecharArquivoAgendamento() {
@@ -986,39 +1001,144 @@ void fecharArquivoFuncionario() {
 
 
 
-
-
-
-
-
-
-
-
-
 // #############################################################################
 // AGENDAMENTO
 
 // #################################
 // LER OS DADOS DE AGENDAMENTO
 void lerDadosAgendamento(struct Agendamento *agendamento) {
+    char entradaValida = 'n', opcao = ' ';
+    char pesquisaCPF[12];
+    int pesquisaCodigo = -1;
     
-    fflush(stdin);
-    printf("Data (xx/xx/2022) : ");
-    scanf("%d/%d/%d", agendamento->data.dia, agendamento->data.mes, agendamento->data.ano);
-    
-//    printf("CPF  : ");
-//    gets(agendamento->cpf); fflush(stdin);
-    //TODO: Testar depois
-    receberValidarCPF(agendamento->cpf);
-    
-    printf("Senha: ");
-    gets(agendamento->senha); fflush(stdin);
-    
-    printf("Cargo: ");
-    scanf("%d", &agendamento->cargo); // Agendamento 0 = adm
-    fflush(stdin);
     
     agendamento->ativo = ' '; // Qualquer coisa menos '*' significa ativo
+    
+    //----------------------------------
+    // Receber a data do agendamento.
+    fflush(stdin);
+    printf("Data (DD/MM/AAAA)\n");
+    printf("%s: ", "Dia");
+    scanf("%d", &agendamento->data.dia);
+    
+    printf("%s: ", "Mes");
+    scanf("%d", &agendamento->data.mes);
+    
+    printf("%s: ", "Ano");
+    scanf("%d", &agendamento->data.ano);
+    
+    //----------------------------------
+    // Receber a hora do agendamento.
+    fflush(stdin);
+    printf("Hora (hh:mm:ss)\n");
+    printf("%s: ", "Hora");
+    scanf("%d", &agendamento->hora.hora);
+    
+    printf("%s: ", "Minuto");
+    scanf("%d", &agendamento->hora.minuto);
+    
+    //    printf("%s: ", "Segundo");
+    //    scanf("%d", &agendamento->hora.segundo);
+    agendamento->hora.segundo = 0;
+    
+    //----------------------------------
+    // Pegar codigo Cliente.
+    entradaValida = 'n';
+    while(entradaValida == 'n') {
+        printf("\nINSERIR CLIENTE POR:\n");
+        printf("\t1) CODIGO\n");
+        printf("\t2) CPF\n");
+        printf("\t3) LISTAR CLIENTES\n");
+        //        printf("\tX) SAIR\n");
+        opcao = receberValidarOpcaoLetra("123");
+        
+        switch(opcao) {
+            case '1':
+                while(pesquisaCodigo <= -1) {
+                    printf("%s: ", "Codigo do cliente");
+                    scanf("%d", &pesquisaCodigo);
+                    
+                    pesquisaCodigo = buscarClientePorCod(pesquisaCodigo).codigo;
+                    
+                    if(pesquisaCodigo == -1) {
+                        if(MOSTRAR_DEBUG == 1) {
+                            printarMensagem("\nCodigo nao encontrado!\n");
+                        }
+                        
+                    } else {
+                        agendamento->codigoCliente = pesquisaCodigo;
+                        entradaValida = 's';
+                    }
+                }
+                break;
+                
+            case '2':
+                while(pesquisaCodigo <= -1) {
+                    printf("%s: ", "CPF do cliente");
+                    fflush(stdin); gets(pesquisaCPF); fflush(stdin);
+                    
+                    pesquisaCodigo = buscarClientePorCPF(pesquisaCPF).codigo;
+                    
+                    if(pesquisaCodigo == -1) {
+                        if(MOSTRAR_DEBUG == 1) {
+                            printarMensagem("\nCodigo nao encontrado!\n");
+                        }
+                        
+                    } else {
+                        agendamento->codigoCliente = pesquisaCodigo;
+                        entradaValida = 's';
+                    }
+                }
+                break;
+                
+            case '3':
+                menuClienteListarTodos();
+                entradaValida = 'n';
+                break;
+                
+                //            case 'x':
+                //                printf("SAINDO!");
+                //                entradaValida = 's';
+                //                break;
+                
+            default:
+                printf("OPCAO INVALIDA!");
+        }
+        
+        
+        if(agendamento->codigoCliente >= 0) {
+            entradaValida = 's';
+        }
+    }
+    
+    //----------------------------------
+    // Pegar codigo Servico.
+    entradaValida = 'n';
+    while(entradaValida == 'n') {
+        menuServicoListarTodos();
+        printf("\nCODIGO DO SERVICO\n");
+        scanf("%d", &pesquisaCodigo);
+        
+        pesquisaCodigo = buscarServicoPorCod(pesquisaCodigo).codigo;
+        
+        if(pesquisaCodigo == -1) {
+            if(MOSTRAR_DEBUG == 1) {
+                printarMensagem("\nCodigo nao encontrado!\n");
+            }
+            
+        } else {
+            agendamento->codigoServico = pesquisaCodigo;
+        }
+        
+        if(agendamento->codigoServico >= 0) {
+            entradaValida = 's';
+        }
+    }
+    
+    //----------------------------------
+    // Pegar codigo Funcionario.
+    //TODO: Pegar o id do funcionario que estiver logado no momento
+    agendamento->codigoFuncionario = 0;
 }
 
 // #################################
@@ -1152,7 +1272,7 @@ int acessarUltimoCodigoAgendamento() {
     fseek(ponteiroArquivoAGENDAMENTO, -1 * sizeof(struct Agendamento), SEEK_END);
     if(fread(&agendamento, sizeof(struct Agendamento), -1, ponteiroArquivoAGENDAMENTO)!= 1){
         if(MOSTRAR_DEBUG == 1) {
-            printarMensagem("Problemas na leitura do registro!!!");
+            printarMensagem("01 - Problemas na leitura do registro!!!");
         }
         return -1;
     }
@@ -1165,26 +1285,43 @@ int acessarUltimoCodigoAgendamento() {
     }
 }
 
+
+// #################################
+// PRINTAR O CABECALHO DA LISTA DE AGENDAMENTO
+// Mostra na tela os nomes dos 'campos'.
+void printarCabecalhoListaAgendamento() {
+    printf("AGENDAMENTOS\n");
+    interfaceLinhaSeparadoraGrande();
+    printf("%-5s|%-10s|%-5s|%-30s|%-30s|%-30s\n", "COD", "DATA", "HORA", "SERVICO", "CLIENTE", "FUNCIONARIO");
+    interfaceLinhaSeparadoraGrande();
+}
+
 // #################################
 // PRINTAR UM PERFIL DE AGENDAMENTO:
 // mostra na tela os dados existentes no registro
 void printarAgendamentoLista(struct Agendamento agendamento) {
     //TODO: criar View de perfil AGENDAMENTO.
+    struct Cliente cliente;
+    struct Funcionario funcionario;
+    struct Servico servico;
     
-    //    printf("-----------------------------------------------------------------------------------\n");
-    printf("%05d|%-30s|%-15s|%-30s\n", agendamento.codigo, agendamento.nome, agendamento.cpf, agendamento.senha);
-    //    printf("-----------------------------------------------------------------------------------\n");
+    cliente     = buscarClientePorCod(agendamento.codigoCliente);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
+    servico     = buscarServicoPorCod(agendamento.codigoServico);
+    
+    printf("%05d|%-10s|%5s", agendamento.codigo, stringDataFormatada(agendamento.data), stringHoraFormatada(agendamento.hora));
+    printf("|%-30s|%-30s|%-30s\n", servico.nome, cliente.nome, funcionario.nome);
 }
 
 void printarAgendamentoTopicos(struct Agendamento agendamento) {
     struct Cliente cliente;
     struct Funcionario funcionario;
     struct Servico servico;
-
+    
     cliente     = buscarClientePorCod(agendamento.codigoCliente);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
     servico     = buscarServicoPorCod(agendamento.codigoServico);
-
+    
     if(agendamento.ativo == ' ') {
         printf("%-11s: %d\n", "CODIGO", agendamento.codigo);
         
@@ -1204,15 +1341,20 @@ void printarAgendamentoTopicos(struct Agendamento agendamento) {
 // LER TODOS PERFIS DE AGENDAMENTO
 void printarTodosRegistrosAgendamento() {
     struct Agendamento agendamento;
+    struct Cliente cliente;
+    struct Funcionario funcionario;
+    struct Servico servico;
+    
+    cliente     = buscarClientePorCod(agendamento.codigoCliente);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
+    servico     = buscarServicoPorCod(agendamento.codigoServico);
+    
     int n_Linhas = 0;
     
     // Volta o ponteiro para o inicio.
     rewind(ponteiroArquivoAGENDAMENTO);
     
-    printf("AGENDAMENTOS\n");
-    printf("-----------------------------------------------------------------------------------\n");
-    printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
-    printf("-----------------------------------------------------------------------------------\n");
+    printarCabecalhoListaAgendamento();
     
     while(1){
         if(fread(&agendamento, sizeof(agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1)break; /*Sair do laço*/
@@ -1240,7 +1382,7 @@ void alterarAgendamento(int registro) {
     }
     
     if(fread(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("02 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -1277,7 +1419,7 @@ void deletarAgendamento(int registro) {
     }
     
     if(fread(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("03 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -1348,7 +1490,10 @@ void lerDadosServico(struct Servico *servico) {
     printf("Valor  : ");
     scanf("%f", &servico->valor);
     
-    printf("🤔 VALOR INSERIDO: %f", servico->valor);
+    if(MOSTRAR_DEBUG == 1) {
+        printf("🤔 VALOR INSERIDO: %f", servico->valor);
+    }
+    
     servico->ativo = ' '; // Qualquer coisa menos '*' significa ativo
 }
 
@@ -1431,7 +1576,7 @@ struct Servico buscarServicoPorCod(int codigo) {
 // RETORNO:
 //  -  O numero do registro, caso encontre;
 //  - -1 caso, nao encontre.
-int buscarServicoPorCod(int codigo) {
+int buscarRegistroServicoPorCod(int codigo) {
     struct Servico servico;
     int contadorCodigo = -1;
     
@@ -1484,7 +1629,7 @@ int acessarUltimoCodigoServico() {
     fseek(ponteiroArquivoSERVICO, -1 * sizeof(struct Servico), SEEK_END);
     if(fread(&servico, sizeof(struct Servico), -1, ponteiroArquivoSERVICO)!= 1){
         if(MOSTRAR_DEBUG == 1) {
-            printarMensagem("Problemas na leitura do registro!!!");
+            printarMensagem("04 - Problemas na leitura do registro!!!");
         }
         return -1;
     }
@@ -1503,7 +1648,7 @@ int acessarUltimoCodigoServico() {
 void printarServicoLista(struct Servico servico) {
     //TODO: criar View de perfil SERVICO.
     
-    printf("%05d|%-30s|%5d min |R$ %5.2f\n", servico.codigo, servico.nome, servico.duracao, servico.valor);
+    printf("%05d|%-30s|%-3d%-7s|R$ %5.2f\n", servico.codigo, servico.nome, servico.duracao, "min", servico.valor);
 }
 
 void printarServicoTopicos(struct Servico servico) {
@@ -1511,7 +1656,7 @@ void printarServicoTopicos(struct Servico servico) {
     if(servico.ativo != '*') {
         printf("%-7s: %d\n", "CODIGO", servico.codigo);
         printf("%-7s: %s\n", "NOME", servico.nome);
-
+        
         printf("%-7s: %d\n", "DURACAO", servico.duracao);
         printf("%-7s: %f\n", "VALOR", servico.valor);
         
@@ -1530,9 +1675,9 @@ void printarTodosRegistrosServico() {
     rewind(ponteiroArquivoSERVICO);
     
     printf("SERVICOS\n");
-    printf("-----------------------------------------------------------------------------------\n");
+    interfaceLinhaSeparadoraGrande();
     printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
-    printf("-----------------------------------------------------------------------------------\n");
+    interfaceLinhaSeparadoraGrande();
     
     while(1){
         if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/
@@ -1560,7 +1705,7 @@ void alterarServico(int registro) {
     }
     
     if(fread(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("05 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -1598,7 +1743,7 @@ void deletarServico(int registro) {
     }
     
     if(fread(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("06 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -1655,8 +1800,8 @@ void lerDadosCliente(struct Cliente *cliente) {
     printf("Nome : "); fflush(stdin);
     gets(cliente->nome); fflush(stdin);
     
-//    printf("CPF:");
-//    gets(cliente->cpf); fflush(stdin);
+    //    printf("CPF:");
+    //    gets(cliente->cpf); fflush(stdin);
     //TODO: Testar depois
     receberValidarCPF(cliente->cpf);
     
@@ -1758,6 +1903,54 @@ struct Cliente buscarClientePorCod(int codigo) {
 }
 
 // #################################
+// BUSCAR CLIENTE POR CODIGO
+// Uma funçao para retornar o cliente procurando pelo codigo.
+// RETORNO:
+//  -  Uma instancia de Cliente com os dados encontrados.
+//  - A instancia de Agendamento com os dados encontrados;
+//  - 'cliente.codigo = -1' caso nao encontre.
+struct Cliente buscarClientePorCPF(char cpf[12]) {
+    struct Cliente clienteAuxiliar;
+    int contadorCodigo = -1;
+    
+    clienteAuxiliar.codigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoCLIENTE != NULL) {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_CLI);
+        }
+        
+    } else {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_CLI);
+        }
+        system("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoCLIENTE);
+    // Procura em todos os registros do documento.
+    while(fread(&clienteAuxiliar, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)) {
+        // Incrementa '++' porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(clienteAuxiliar.cpf == cpf) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  clienteAuxiliar;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(MOSTRAR_DEBUG == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    
+    return clienteAuxiliar;
+}
+
+// #################################
 // BUSCAR REGISTRO DE CLIENTE POR CODIGO
 // Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
 // RETORNO:
@@ -1815,7 +2008,7 @@ int acessarUltimoCodigoCliente() {
     fseek(ponteiroArquivoCLIENTE, -1 * sizeof(struct Cliente), SEEK_END);
     if(fread(&cliente, sizeof(struct Cliente), -1, ponteiroArquivoCLIENTE)!= 1){
         if(MOSTRAR_DEBUG == 1) {
-            printarMensagem("Problemas na leitura do registro!!!");
+            printarMensagem("07 - Problemas na leitura do registro!!!");
         }
         return -1;
     }
@@ -1834,9 +2027,7 @@ int acessarUltimoCodigoCliente() {
 void printarClienteLista(struct Cliente cliente) {
     //TODO: criar View de perfil CLIENTE.
     
-    //    printf("-----------------------------------------------------------------------------------\n");
     printf("%05d|%-30s|%-15s|%-30s|%-30s|%-15d|%02d/%02d/%d\n", cliente.codigo, cliente.nome, cliente.cpf, cliente.email, cliente.endereco, cliente.telefone, cliente.nascimento.dia, cliente.nascimento.mes, cliente.nascimento.ano);
-    //    printf("-----------------------------------------------------------------------------------\n");
 }
 
 void printarClienteTopicos(struct Cliente cliente) {
@@ -1859,9 +2050,9 @@ void printarClienteTopicos(struct Cliente cliente) {
 
 void printarCabecalhoTodosClientes() {
     printf("CLIENTES\n");
-    printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    interfaceLinhaSeparadoraGrande();
     printf("%-5s|%-30s|%-15s|%-30s|%-30s|%-15s|%-10s|\n", "COD", "NOME", "CPF", "EMAIL", "ENDERECO","TELEFONE", "NASC");
-    printf("----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    interfaceLinhaSeparadoraGrande();
 }
 
 // #################################
@@ -1903,7 +2094,7 @@ void alterarCliente(int registro) {
     }
     
     if(fread(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("08 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -1940,7 +2131,7 @@ void deletarCliente(int registro) {
     }
     
     if(fread(&clienteAux, sizeof(struct Cliente), 1, ponteiroArquivoCLIENTE)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("09 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -1997,8 +2188,8 @@ void lerDadosFuncionario(struct Funcionario *funcionario) {
     printf("Nome : ");
     gets(funcionario->nome); fflush(stdin);
     
-//    printf("CPF  : ");
-//    gets(funcionario->cpf); fflush(stdin);
+    //    printf("CPF  : ");
+    //    gets(funcionario->cpf); fflush(stdin);
     //TODO: Testar depois
     receberValidarCPF(funcionario->cpf);
     
@@ -2087,6 +2278,54 @@ struct Funcionario buscarFuncionarioPorCod(int codigo) {
 }
 
 // #################################
+// BUSCAR FUNCIONARIO POR CODIGO
+// Uma funçao para retornar o funcionario procurando pelo codigo.
+// RETORNO:
+//  - A instancia com os dados encontrados.
+//  - A instancia de Agendamento com os dados encontrados;
+//  - 'funcionario.codigo = -1' caso nao encontre.
+struct Funcionario buscarFuncionarioPorCPF(char cpf[12]) {
+    struct Funcionario funcionario;
+    int contadorCodigo = -1;
+    
+    funcionario.codigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoFUNCIONARIO != NULL) {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(MOSTRAR_DEBUG == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoFUNCIONARIO);
+    // Procura em todos os registros do documento.
+    while(fread(&funcionario, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
+        // Incrementa ++ porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(funcionario.cpf == cpf) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return funcionario;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(MOSTRAR_DEBUG == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    
+    return funcionario;
+}
+
+// #################################
 // BUSCAR REGISTRO DE FUNCIONARIO POR CODIGO
 // Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
 // RETORNO:
@@ -2144,7 +2383,7 @@ int acessarUltimoCodigoFuncionario() {
     fseek(ponteiroArquivoFUNCIONARIO, -1 * sizeof(struct Funcionario), SEEK_END);
     if(fread(&funcionario, sizeof(struct Funcionario), -1, ponteiroArquivoFUNCIONARIO)!= 1){
         if(MOSTRAR_DEBUG == 1) {
-            printarMensagem("Problemas na leitura do registro!!!");
+            printarMensagem("10 - Problemas na leitura do registro!!!");
         }
         return -1;
     }
@@ -2163,9 +2402,7 @@ int acessarUltimoCodigoFuncionario() {
 void printarFuncionarioLista(struct Funcionario funcionario) {
     //TODO: criar View de perfil FUNCIONARIO.
     
-    //    printf("-----------------------------------------------------------------------------------\n");
     printf("%05d|%-30s|%-15s|%-30s\n", funcionario.codigo, funcionario.nome, funcionario.cpf, funcionario.senha);
-    //    printf("-----------------------------------------------------------------------------------\n");
 }
 
 void printarFuncionarioTopicos(struct Funcionario funcionario) {
@@ -2197,9 +2434,9 @@ void printarTodosRegistrosFuncionario() {
     rewind(ponteiroArquivoFUNCIONARIO);
     
     printf("FUNCIONARIOS\n");
-    printf("-----------------------------------------------------------------------------------\n");
+    interfaceLinhaSeparadoraGrande();
     printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
-    printf("-----------------------------------------------------------------------------------\n");
+    interfaceLinhaSeparadoraGrande();
     
     while(1){
         if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
@@ -2227,7 +2464,7 @@ void alterarFuncionario(int registro) {
     }
     
     if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("11 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -2264,7 +2501,7 @@ void deletarFuncionario(int registro) {
     }
     
     if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
-        printarMensagem("Problemas na leitura do registro!!!");
+        printarMensagem("12 - Problemas na leitura do registro!!!");
         return;
     }
     
@@ -2351,20 +2588,20 @@ char *formatarCPF(char *cpf) {
     }
     
     // Uma forma de acrescentar os '.' e o '-'
-//    cpfFormatado[0] = cpf[0];
-//    cpfFormatado[1] = cpf[1];
-//    cpfFormatado[2] = cpf[2];
-//    cpfFormatado[3] = '.';
-//    cpfFormatado[4] = cpf[3];
-//    cpfFormatado[5] = cpf[4];
-//    cpfFormatado[6] = cpf[5];
-//    cpfFormatado[7] = '.';
-//    cpfFormatado[8] = cpf[6];
-//    cpfFormatado[9] = cpf[7];
-//    cpfFormatado[10] = cpf[8];
-//    cpfFormatado[11] = '-';
-//    cpfFormatado[12] = cpf[9];
-//    cpfFormatado[13] = cpf[10];
+    //    cpfFormatado[0] = cpf[0];
+    //    cpfFormatado[1] = cpf[1];
+    //    cpfFormatado[2] = cpf[2];
+    //    cpfFormatado[3] = '.';
+    //    cpfFormatado[4] = cpf[3];
+    //    cpfFormatado[5] = cpf[4];
+    //    cpfFormatado[6] = cpf[5];
+    //    cpfFormatado[7] = '.';
+    //    cpfFormatado[8] = cpf[6];
+    //    cpfFormatado[9] = cpf[7];
+    //    cpfFormatado[10] = cpf[8];
+    //    cpfFormatado[11] = '-';
+    //    cpfFormatado[12] = cpf[9];
+    //    cpfFormatado[13] = cpf[10];
     
     
     // Outra forma de acrescentar
@@ -2378,7 +2615,7 @@ char *formatarCPF(char *cpf) {
             cpfFormatado[i] = '-';
             i++;
         }
-
+        
         cpfFormatado[i] = cpf[j];
         j++;
     }
@@ -2386,12 +2623,80 @@ char *formatarCPF(char *cpf) {
     return cpfFormatado;
 }
 
+char* itoa(int val, int base){
+    
+    static char buf[32] = {0};
+    
+    int i = 30;
+    
+    for(; val && i ; --i, val /= base)
+        
+        buf[i] = "0123456789abcdef"[val % base];
+    
+    return &buf[i+1];
+    
+}
+
 // #################################
 // FORMATAR DATA E PRINTAR
 // Por barras. Ex.:
 //    01/01/2001
 void printarDataFormatada(Data data) {
-    print("%02d/%02d/%d", data.dia, data.mes, data.ano);
+    printf("%02d/%02d/%d", data.dia, data.mes, data.ano);
+}
+
+// #################################
+// FORMATAR DATA E RETORNAR A STRING
+// Por barras. Ex.:
+//    01/01/2001
+char* stringDataFormatada(Data data) {
+    char* resultado = (char*)calloc(11,sizeof(char));
+    char diaAux[3];
+    char mesAux[3];
+    char anoAux[5];
+    
+    strcpy(resultado, "00-00-0000");
+    
+    strcpy(diaAux, itoa(data.dia, 10));
+    strcpy(mesAux, itoa(data.mes, 10));
+    strcpy(anoAux, itoa(data.ano, 10));
+    
+    if(data.dia <= 9) {
+        resultado[0] = '0';
+        resultado[1] = diaAux[0];
+    } else {
+        resultado[0] = diaAux[0];
+        resultado[1] = diaAux[1];
+    }
+    resultado[2] = '/';
+    
+    if(data.mes <= 9) {
+        resultado[3] = '0';
+        resultado[4] = mesAux[0];
+    } else {
+        resultado[3] = mesAux[0];
+        resultado[4] = mesAux[1];
+    }
+    
+    resultado[5] = '/';
+    
+    if(data.ano <= 9) {
+        resultado[6] = '0';
+        resultado[7] = mesAux[0];
+        resultado[8] = mesAux[1];
+        resultado[9] = mesAux[2];
+    } else {
+        resultado[6] = anoAux[0];
+        resultado[7] = anoAux[1];
+        resultado[8] = anoAux[2];
+        resultado[9] = anoAux[3];
+    }
+    //    resultado[6] = anoAux[0];
+    //    resultado[7] = anoAux[1];
+    //    resultado[8] = anoAux[2];
+    //    resultado[9] = anoAux[3];
+    
+    return resultado;
 }
 
 // #################################
@@ -2399,9 +2704,36 @@ void printarDataFormatada(Data data) {
 // Por dois pontos. Ex.:
 //    12:59:00
 void printarHoraFormatada(Hora hora) {
-    print("%02d:%02d:%d", hora.hora, hora.minuto, hora.segundo);
+    printf("%02d:%02d:%d", hora.hora, hora.minuto, hora.segundo);
 }
 
+// #################################
+// FORMATAR HORA E RETORNAR A STRING
+// Por dois pontos. Ex.:
+//    12:59:00
+char* stringHoraFormatada(Hora hora) {
+    char* resultado = (char*)calloc(6,sizeof(char));
+    char horaAux[3];
+    char minutoAux[3];
+    //    char segundoAux[3];
+    
+    strcpy(resultado, "00:00:00");
+    
+    //    strcpy(segundoAux, itoa(hora.segundo, 10));
+    strcpy(minutoAux, itoa(hora.minuto, 10));
+    strcpy(horaAux, itoa(hora.hora, 10));
+    
+    resultado[0] = horaAux[0];
+    resultado[1] = horaAux[1];
+    resultado[2] = ':';
+    resultado[3] = minutoAux[0];
+    resultado[4] = minutoAux[1];
+    resultado[5] = '\0';
+    //    resultado[6] = segundoAux[0];
+    //    resultado[7] = segundoAux[1];
+    
+    return resultado;
+}
 
 
 
@@ -2479,34 +2811,34 @@ Data receberValidarData() {
     int contadorErros = 0, maxDias = 31;
     char entradaValida =  'n';
     
-    
-    
+    data.dia = 00;
+    data.mes = 00;
+    data.ano = 0000;
     
     while(entradaValida != 's') {
         if(contadorErros > 2) {
             printarMensagem("\nData invalida, informe de ");
-            printf("%d a %d\n", min, max);
         }
         
         printf("Data (xx/xx/2022): \n");
-        scanf("%d", agendamento.data.dia);
+        scanf("%d", &data.dia);
         printf("/");
-        scanf("%d", agendamento.data.mes);
+        scanf("%d", &data.mes);
         printf("/");
-        scanf("%d", agendamento.data.ano);
+        scanf("%d", &data.ano);
         
-        if((agendamento.data.mes < 1) || (agendamento.data.mes > 12)) {
+        if((data.mes < 1) || (data.mes > 12)) {
             entradaValida = 'n';
             
         } else {
             entradaValida = 's';
             
-            if(agendamento.data.mes == 1 || agendamento.data.mes == 3 || agendamento.data.mes == 5 || agendamento.data.mes == 7 || agendamento.data.mes == 8 || agendamento.data.mes == 10 || agendamento.data.mes == 12) {
+            if(data.mes == 1 || data.mes == 3 || data.mes == 5 || data.mes == 7 || data.mes == 8 || data.mes == 10 || data.mes == 12) {
                 maxDias = 31;
                 
-            } else if(agendamento.data.mes == 4 || agendamento.data.mes == 6 || agendamento.data.mes == 9 || agendamento.data.mes == 11) {
+            } else if(data.mes == 4 || data.mes == 6 || data.mes == 9 || data.mes == 11) {
                 maxDias = 30;
-
+                
             } else {
                 maxDias = 28;
                 
@@ -2514,29 +2846,29 @@ Data receberValidarData() {
             }
             
             /* Quantos dias tem cada mes
-            Num     Mes         Dias
-            2       Fevereiro   28 dias (29 dias nos anos bissextos)
-
-            4       Abril       30 dias
-            6       Junho       30 dias
-            9       Setembro    30 dias
-            11      Novembro    30 dias
+             Num     Mes         Dias
+             2       Fevereiro   28 dias (29 dias nos anos bissextos)
              
-            1       Janeiro     31 dias
-            3       Março       31 dias
-            5       Maio        31 dias
-            7       Julho       31 dias
-            8       Agosto      31 dias
-            10      Outubro     31 dias
-            12      Dezembro    31 dias
-            */
+             4       Abril       30 dias
+             6       Junho       30 dias
+             9       Setembro    30 dias
+             11      Novembro    30 dias
+             
+             1       Janeiro     31 dias
+             3       Março       31 dias
+             5       Maio        31 dias
+             7       Julho       31 dias
+             8       Agosto      31 dias
+             10      Outubro     31 dias
+             12      Dezembro    31 dias
+             */
             
         }
         
-        if((agendamento.data. < 1) || (agendamento.data. > maxDias)) {
-            entradaValida = 'n';
-
-        }
+        //        if((agendamento.data. < 1) || (agendamento.data. > maxDias)) {
+        //            entradaValida = 'n';
+        //
+        //        }
         contadorErros++;
     }
     
@@ -2588,7 +2920,7 @@ char receberValidarOpcaoLetra(char *opcoes) {
         
         // Passar pra minuscula.
         opcao = tolower(opcao);
-
+        
         for(indice = 0; indice < contadorCaracteres; indice++) {
             
             if(tolower(opcoes[indice]) == opcao) {
@@ -2602,7 +2934,29 @@ char receberValidarOpcaoLetra(char *opcoes) {
     return opcao;
 }
 
-//if(contadorErros > 2) {
-//    printarMensagem("\nNumero invalido, informe de ");
-//    printf("%d a %d\n", min, max);
-//}
+
+// #############################################################################
+// ELEMENTOS DE INTERFACE
+
+// #################################
+// LINHA SEPARADORA
+void interfaceLinhaSeparadoraGrande() {
+    switch(TEMA) {
+        default:
+            printf("-------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    }
+}
+
+void interfaceLinhaSeparadoraMedia() {
+    switch(TEMA) {
+        default:
+            printf("-------------------------------------------------------------------------\n");
+    }
+}
+
+void interfaceLinhaSeparadoraPequena() {
+    switch(TEMA) {
+        default:
+            printf("------------------------------------\n");
+    }
+}
