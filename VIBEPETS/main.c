@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // #############################################################################
 // CONSTANTES
@@ -233,6 +234,7 @@ void lerDadosServico(struct Servico*);
 
 // #################################
 // FUNCOES AUXILIARES
+void listarCaracteresASCII(void);
 void printarMensagem(char *msg);
 void printarMensagemContinuar(void);
 char* formatarCPF(char[]);
@@ -241,6 +243,8 @@ void printarDataFormatada(Data);
 char* stringDataFormatada(Data);
 void printarHoraFormatada(Hora);
 char* stringHoraFormatada(Hora);
+Data pegarDataDoSistema(void);
+Hora pegarHoraDoSistema(void);
 
 
 // #################################
@@ -251,6 +255,9 @@ char receberValidarOpcaoLetra(char*);
 Data receberValidarData(void);
 Hora receberValidarHora(void);
 void receberValidarEmail(char*);
+int verificarTempoAteData(Data);
+char verificarHoraDentroExpediente(Hora);
+
 
 // #################################
 // ELEMENTOS DE INTERFACE
@@ -932,35 +939,48 @@ void lerDadosAgendamento(struct Agendamento *agendamento) {
     char pesquisaCPF[12];
     int pesquisaCodigo = -1;
     
-    
     agendamento->ativo = ' '; // Qualquer coisa menos '*' significa ativo
     
     //----------------------------------
     // Receber a data do agendamento.
-    fflush(stdin);
-    printf("Data (DD/MM/AAAA)\n");
-    printf("%s: ", "Dia");
-    scanf("%d", &agendamento->data.dia);
-    
-    printf("%s: ", "Mes");
-    scanf("%d", &agendamento->data.mes);
-    
-    printf("%s: ", "Ano");
-    scanf("%d", &agendamento->data.ano);
+    while(entradaValida == 'n') {
+        fflush(stdin);
+        printf("Data (DD/MM/AAAA)\n");
+        printf("%s: ", "Dia");
+        scanf("%d", &agendamento->data.dia);
+        
+        printf("%s: ", "Mes");
+        scanf("%d", &agendamento->data.mes);
+        
+        printf("%s: ", "Ano");
+        scanf("%d", &agendamento->data.ano);
+        
+        if(verificarTempoAteData(agendamento->data) <= 1) {
+            printarMensagem("\nAgendamento somente com 48h de antecedencia!\n");
+            
+        } else {
+            entradaValida = 's';
+        }
+    }
     
     //----------------------------------
     // Receber a hora do agendamento.
-    fflush(stdin);
-    printf("Hora (hh:mm:ss)\n");
-    printf("%s: ", "Hora");
-    scanf("%d", &agendamento->hora.hora);
-    
-    printf("%s: ", "Minuto");
-    scanf("%d", &agendamento->hora.minuto);
-    
-    //    printf("%s: ", "Segundo");
-    //    scanf("%d", &agendamento->hora.segundo);
-    agendamento->hora.segundo = 0;
+    entradaValida = 'n';
+    while(entradaValida == 'n') {
+        fflush(stdin);
+        printf("\nHora (hh:mm:ss)\n");
+        printf("%s: ", "Hora");
+        scanf("%d", &agendamento->hora.hora);
+        
+        printf("%s: ", "Minuto");
+        scanf("%d", &agendamento->hora.minuto);
+        
+        //    printf("%s: ", "Segundo");
+        //    scanf("%d", &agendamento->hora.segundo);
+        agendamento->hora.segundo = 0;
+        
+        entradaValida = verificarHoraDentroExpediente(agendamento->hora);
+    }
     
     //----------------------------------
     // Pegar codigo Cliente.
@@ -2433,6 +2453,7 @@ void deletarServico(int registro) {
 // #############################################################################
 // FUNCOES AUXILIARES
 
+// #################################
 // Dá um system cls, limpa a tela.
 void limparTela() {
     if(LIMPAR_TELA == 1) {
@@ -2440,7 +2461,24 @@ void limparTela() {
     }
 }
 
-/*Colocar uma mensagem na tela*/
+// #################################
+// Dá um system cls, limpa a tela.
+void listarCaracteresASCII() {
+    int indice;
+    
+//    printf("%c\n\n\n\n", 187);
+    
+    for(indice = -255; indice <= 255; indice++) {
+        printf("CHAR %3d: %-3c\t", indice, indice);
+        
+        if(indice % 10 == 0) {
+            printf("\n");
+        }
+    }
+}
+
+// #################################
+// Colocar uma mensagem na tela
 //TODO: COLOCAR ALINHAMENTO: esq, dir, centralizado.
 void printarMensagem(char *msg){
     printf("%s", msg);
@@ -2505,19 +2543,238 @@ char *formatarCPF(char *cpf) {
     return cpfFormatado;
 }
 
-char* itoa(int val, int base){
-    
+// #################################
+// PEGA INT E TRANSFORMA EM STRING
+char* intParaString(int val, int base){
     static char buf[32] = {0};
-    
     int i = 30;
     
     for(; val && i ; --i, val /= base)
-        
         buf[i] = "0123456789abcdef"[val % base];
     
     return &buf[i+1];
     
 }
+
+// #################################
+// PEGA A DATA ATUAL DO SISTEMA
+Data pegarDataDoSistema() {
+    Data dataAtual;
+    struct tm *p;
+    time_t seconds;
+
+    time(&seconds);
+    p = localtime(&seconds);
+
+    if(MOSTRAR_DEBUG == 1) {
+        printf("Dia do ano: %d\n", p->tm_yday);
+        printf("Data: %d/%02d/%d\n", p->tm_mday, p->tm_mon + 1, p->tm_year + 1900);
+        
+        printf("\nGeral: %s\n", ctime(&seconds));
+    }
+    
+    dataAtual.dia = p->tm_mday;
+    dataAtual.mes = p->tm_mon + 1;
+    dataAtual.ano = p->tm_year + 1900;
+    
+    return dataAtual;
+}
+
+// #################################
+// PEGA A HORA ATUAL DO SISTEMA
+Hora pegarHoraDoSistema() {
+    Hora horaAtual;
+    struct tm *p;
+    time_t seconds;
+
+    time(&seconds);
+    p = localtime(&seconds);
+
+    if(MOSTRAR_DEBUG == 1) {
+        printf("Dia do ano: %d\n", p->tm_yday);
+        printf("Hora: %02d:%02d:%d\n", p->tm_hour, p->tm_min, p->tm_sec);
+        
+        printf("\nGeral: %s\n", ctime(&seconds));
+    }
+    
+    horaAtual.segundo = p->tm_sec;
+    horaAtual.minuto  = p->tm_min;
+    horaAtual.hora    = p->tm_hour;
+    
+    return horaAtual;
+}
+
+// #################################
+// VERIFICAR QUANTOS DIAS FALTAM PARA A DATA RECEBIDA
+// PARAMETRO:
+//   - Uma instancia de Data
+// RETORNO:
+//   - -1: data passada;
+//   -  0: é hoje!;
+//   -  1: é amanha;
+//   -  2: falta dois ou mais dias.
+int verificarTempoAteData(Data dataEscolhida) {
+    Data dataAtual, resultado;
+    
+    //----------------------------------
+    // Pegar a data atual.
+    dataAtual = pegarDataDoSistema();
+    
+    //----------------------------------
+    // Comparar ano.
+    if(dataEscolhida.ano < dataAtual.ano) {
+        return -1;
+        
+    } else if(dataEscolhida.ano == dataAtual.ano) {
+        resultado.ano = 0;
+        
+    } else if(dataEscolhida.ano > dataAtual.ano) {
+        resultado.ano = 1;
+    }
+    
+    //----------------------------------
+    // Comparar mes.
+    if(dataEscolhida.mes < dataAtual.mes) {
+        resultado.mes = -1;
+        
+    } else if(dataEscolhida.mes == dataAtual.mes) {
+        resultado.mes = 0;
+        
+    } else if(dataEscolhida.mes > dataAtual.mes) {
+        resultado.mes = 1;
+    }
+    
+    //----------------------------------
+    // Comparar dia.
+    if(dataEscolhida.dia < dataAtual.dia) {
+        resultado.dia = -1;
+        
+    } else if(dataEscolhida.dia == dataAtual.dia) {
+        resultado.dia = 0;
+        
+    } else if(dataEscolhida.dia > dataAtual.dia) {
+        resultado.dia = 1;
+    }
+    
+    
+    //----------------------------------
+    // Se ano atual
+    if(resultado.ano == 0) {
+        //------------------------------
+        // Se mes passado.
+        if(resultado.mes == -1) {
+            return -1;
+        }
+        
+        //------------------------------
+        // Se mesmo ano e mes.
+        if(resultado.mes == 0) {
+            // Dia passado.
+            if(resultado.dia == -1) {
+                return  -1;
+            }
+            
+            //--------------------------
+            // Se mesmo dia, mes, ano.
+            // HOJE!
+            if(resultado.dia == 0) {
+                return 0;
+            }
+            
+            //--------------------------
+            // Se mesmo mes e ano, mas dia superior.
+            if(resultado.dia == 1) {
+                //----------------------
+                // Ver se é amanha.
+                if(dataEscolhida.dia == dataAtual.dia + 1) {
+                    return  1;
+                }
+                
+                //----------------------
+                // 2 dias ou mais
+                if(dataEscolhida.dia > dataAtual.dia + 1) {
+                    return  2;
+                }
+            }
+        }
+        
+        //------------------------------
+        // Se mesmo ano, mas mes seguinte.
+        if(resultado.mes == 1) {
+            //--------------------------
+            // Se dia 2 ou mais
+            if(dataEscolhida.dia >= 2) {
+                return 2;
+            }
+            
+            if(dataEscolhida.dia == 1) {
+                return 1;
+            }
+        }
+    }
+    
+    //----------------------------------
+    // Se ano seguinte
+    if(resultado.ano == 1) {
+        //------------------------------
+        // Se pula 1 ano.
+        if(dataEscolhida.ano > dataAtual.ano + 1) {
+            return 2;
+        }
+        
+        //------------------------------
+        // Se ano seguinte.
+        if(dataEscolhida.ano == dataAtual.ano + 1) {
+            //--------------------------
+            // Se primeiro dia do ano.
+            if(dataEscolhida.dia == 1) {
+                return 1;
+            }
+            
+            //--------------------------
+            // Se primeiro dia do ano.
+            if(dataEscolhida.dia > 1) {
+                return 2;
+            }
+        }
+    }
+
+    printarMensagem("\n\nERRO (func verificarTempoAteData): CHEGOU ONDE NAO DEVERIA\n\n");
+    printf("\nDATA RESULTADO");
+    printf("\nDIA: %d", resultado.dia);
+    printf("\nMES: %d", resultado.mes);
+    printf("\nANO: %d", resultado.ano);
+    printf("\nDATA ATUAL");
+    printf("\nDIA: %d", dataAtual.dia);
+    printf("\nMES: %d", dataAtual.mes);
+    printf("\nANO: %d", dataAtual.ano);
+    printf("\nDATA ESCOLHIDA");
+    printf("\nDIA: %d", dataEscolhida.dia);
+    printf("\nMES: %d", dataEscolhida.mes);
+    printf("\nANO: %d", dataEscolhida.ano);
+    
+    return -404;
+}
+
+// #################################
+// VERIFICAR SE A HORA RECEBIDA ESTA DENTRO DO EXPEDIENTE DA LOJA
+// PARAMETRO:
+//   - Uma instancia de Hora
+// RETORNO:
+//   - 'n': caso esteja fora do expediente;
+//   - 's': tah safe.
+char verificarHoraDentroExpediente(Hora horaEscolhida) {
+    char dentroExpediente = 's';
+    int inicioExpediente = 8, fimExpediente = 18;
+    
+    if((horaEscolhida.hora < inicioExpediente) || (horaEscolhida.hora > fimExpediente)) {
+        printarMensagem("\nFora do horario de funcionamento!(8h as 18h)\n");
+        return 'n';
+    }
+    
+    return dentroExpediente;
+}
+
 
 // #################################
 // FORMATAR DATA E PRINTAR
@@ -2539,9 +2796,9 @@ char* stringDataFormatada(Data data) {
     
     strcpy(resultado, "00-00-0000");
     
-    strcpy(diaAux, itoa(data.dia, 10));
-    strcpy(mesAux, itoa(data.mes, 10));
-    strcpy(anoAux, itoa(data.ano, 10));
+    strcpy(diaAux, intParaString(data.dia, 10));
+    strcpy(mesAux, intParaString(data.mes, 10));
+    strcpy(anoAux, intParaString(data.ano, 10));
     
     if(data.dia <= 9) {
         resultado[0] = '0';
@@ -2602,8 +2859,8 @@ char* stringHoraFormatada(Hora hora) {
     strcpy(resultado, "00:00:00");
     
     //    strcpy(segundoAux, itoa(hora.segundo, 10));
-    strcpy(minutoAux, itoa(hora.minuto, 10));
-    strcpy(horaAux, itoa(hora.hora, 10));
+    strcpy(minutoAux, intParaString(hora.minuto, 10));
+    strcpy(horaAux, intParaString(hora.hora, 10));
     
     resultado[0] = horaAux[0];
     resultado[1] = horaAux[1];
@@ -2802,10 +3059,7 @@ void receberValidarEmail(char *email) {
 }
 
 // #################################
-// VALIDAR OPCOES PARA MENUS NUMERICOS
-// PARAMETRO:
-//    - min: o valor minimo que e aceito
-//    - max: o valor maximo que e aceito
+// VALIDAR DATA
 Data receberValidarData() {
     Data data;
     int contadorErros = 0, maxDias = 31;
@@ -2820,7 +3074,7 @@ Data receberValidarData() {
             printarMensagem("\nData invalida");
         }
         
-        printf("Data (xx/xx/2022): \n");
+        printf("Data (dd/mm/aaaa): \n");
         scanf("%d", &data.dia);
         printf("/");
         scanf("%d", &data.mes);
