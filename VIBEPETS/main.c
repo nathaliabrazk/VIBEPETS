@@ -1393,8 +1393,9 @@ void lerDadosCliente(struct Cliente *cliente) {
     //TODO: Testar depois
     receberValidarCPF(cliente->cpf);
     
-    printf("Email: ");
-    gets(cliente->email); fflush(stdin);
+//    printf("Email: ");
+//    gets(cliente->email); fflush(stdin);
+    receberValidarCPF(cliente->email);
     
     printf("Endereco:");
     gets(cliente->endereco); fflush (stdin);
@@ -1403,14 +1404,15 @@ void lerDadosCliente(struct Cliente *cliente) {
     scanf("%d", &cliente->telefone); fflush (stdin);
     
     printf("DATA DE NASCIMENTO\n");
-    printf("Dia: ");
-    scanf("%d", &cliente->nascimento.dia);
-    
-    printf("Mes: ");
-    scanf("%d", &cliente->nascimento.mes);
-    
-    printf("Ano: ");
-    scanf("%d", &cliente->nascimento.ano);
+//    printf("Dia: ");
+//    scanf("%d", &cliente->nascimento.dia);
+//
+//    printf("Mes: ");
+//    scanf("%d", &cliente->nascimento.mes);
+//
+//    printf("Ano: ");
+//    scanf("%d", &cliente->nascimento.ano);
+    cliente->nascimento = receberValidarData();
     
     cliente->ativo = ' '; // Qualquer coisa menos '*' significa ativo
 }
@@ -2815,7 +2817,7 @@ Data receberValidarData() {
     
     while(entradaValida != 's') {
         if(contadorErros > 2) {
-            printarMensagem("\nData invalida, informe de ");
+            printarMensagem("\nData invalida");
         }
         
         printf("Data (xx/xx/2022): \n");
