@@ -249,8 +249,8 @@ void receberValidarCPF(char*);
 int  receberValidarOpcaoNumero(int, int);
 char receberValidarOpcaoLetra(char*);
 Data receberValidarData(void);
-Hora  receberValidarHora(void);
-
+Hora receberValidarHora(void);
+void receberValidarEmail(char*);
 
 // #################################
 // ELEMENTOS DE INTERFACE
@@ -274,10 +274,10 @@ int main(int argc, char *argv[]) {
         }
     }
     abrirTodosArquivos();
-    
+
     // MENU PRINCIPAL
     menuPrincipal();
-    
+
     fecharTodosArquivos();
     
     printf("\n\n\n");
@@ -2680,7 +2680,7 @@ char receberValidarOpcaoLetra(char *opcoes) {
 
 // #################################
 // VALIDAR CPF
-// Recebe e valida a entrade de CPF.
+// Recebe e valida a entrada de CPF.
 // RETORNOS:
 //    - O cpf se a entrada for valida;
 //    - '*' se erro, ou entrada invalida
@@ -2730,6 +2730,72 @@ void receberValidarCPF(char *cpf) {
     // Passar a entrada por parametro.
     if(entradaValida == 's') {
         strcpy(cpf, entrada);
+    }
+}
+
+// #################################
+// VALIDAR EMAIL
+// Recebe e valida a entrada de EMAIL.
+// RETORNOS:
+//    - O email validado;
+void receberValidarEmail(char *email) {
+    char entradaValida = 'n';
+    int indice = 0, contadorErros = 0;
+    int contadorArroba = 0, contadorPonto = 0;
+    char entrada[30];
+    
+    while(entradaValida == 'n') {
+        
+        printf("Email: ");
+        gets(entrada); fflush(stdin);
+        
+        //----------------------------------
+        // Pegar a quantidade de caracteres digitado.
+        int contadorCaracteres = (int) strlen(entrada);
+        
+        //----------------------------------
+        // Checar quantidade inserida.
+        if(contadorCaracteres >= 5) {
+            entradaValida = 's';
+            
+        } else {
+            entradaValida = 'n';
+        }
+        
+        //----------------------------------
+        // Checar se tem '@' e '.'.
+        if(entradaValida == 's') {
+            contadorPonto = contadorArroba = 0;
+            
+            for(indice = 0; indice < contadorCaracteres; indice++){
+                if(email[indice] == '@'){
+                    contadorArroba++;
+                }
+                
+                if(email[indice] == '.'){
+                    contadorPonto++;
+                }
+            }
+            
+            if(contadorArroba != 1) {
+                entradaValida = 'n';
+            }
+            
+            if(contadorPonto <= 0) {
+                entradaValida = 'n';
+            }
+        }
+        
+        if(contadorErros >= 2) {
+            printarMensagem("\nEmail invalido.\n");
+        }
+        
+        contadorErros++;
+    }
+    
+    // Passar a entrada por parametro.
+    if(entradaValida == 's') {
+        strcpy(email, entrada);
     }
 }
 
