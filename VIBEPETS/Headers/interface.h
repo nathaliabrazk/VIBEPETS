@@ -9,6 +9,13 @@
 #define interface_h
 
 
+
+// #############################################################################
+// ELEMENTOS DE INTERFACE
+
+void interfaceLinhaSeparadora(int, int);
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int, int);
+
 void printarCabecalhoQuadroHorarios(void);
 void printarDataFormatada(Data);
 void printarHoraFormatada(Hora);
@@ -84,6 +91,44 @@ void printarStringCentralizada(char *string, int tamanhoLinha) {
 }
 
 
+
+// #################################
+// LINHA SEPARADORA
+void interfaceLinhaSeparadora(int tamanho, int tema) {
+    char caracter = ' ';
+    
+    switch(tema) {
+        case 1:
+            caracter = '=';
+            
+        default:
+            caracter = '-';
+    }
+    
+    printf("\n");
+    for(int indice = 0; indice < tamanho; indice++) {
+        printf("%c", caracter);
+    }
+    printf("\n");
+}
+
+// #################################
+// LINHA SEPARADORA SEM QUEBRA DE LINHA
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int tamanho, int tema) {
+    char caracter = ' ';
+    
+    switch(tema) {
+        case 1:
+            caracter = '=';
+            
+        default:
+            caracter = '-';
+    }
+    
+    for(int indice = 0; indice < tamanho; indice++) {
+        printf("%c", caracter);
+    }
+}
 
 
 
