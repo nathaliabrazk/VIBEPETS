@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     // INICIALIZACOES
     // Cuidado, esta acao apaga todo o Banco de Dados.
     if(LIMPAR_BD == 1) {
-        interfaceLinhaSeparadora(100);
+        interfaceLinhaSeparadora(100, TEMA);
         printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
         fflush(stdin); opcao = getchar();
         if(opcao == 's' || opcao == 'S') {
@@ -983,9 +983,9 @@ int acessarUltimoCodigoAgendamento() {
 // Mostra na tela os nomes dos 'campos'.
 void printarCabecalhoListaAgendamento() {
     printf("AGENDAMENTOS\n");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
     printf("%-5s|%-10s|%-5s|%-30s|%-30s|%-30s\n", "COD", "DATA", "HORA", "SERVICO", "CLIENTE", "FUNCIONARIO");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
 }
 
 // #################################
@@ -1411,9 +1411,9 @@ void printarClienteTopicos(struct Cliente cliente) {
 
 void printarCabecalhoTodosClientes() {
     printf("CLIENTES\n");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
     printf("%-5s|%-30s|%-15s|%-30s|%-30s|%-15s|%-10s|\n", "COD", "NOME", "CPF", "EMAIL", "ENDERECO","TELEFONE", "NASC");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
 }
 
 // #################################
@@ -1787,9 +1787,9 @@ void printarTodosRegistrosFuncionario() {
     rewind(ponteiroArquivoFUNCIONARIO);
     
     printf("FUNCIONARIOS\n");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
     printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
     
     while(1){
         if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
@@ -1917,12 +1917,12 @@ void mostrarQuadroHorarios() {
     
     for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
         sprintf(anoString, "%d", indiceAno);
-        interfaceLinhaSeparadora(larguraDaTabela);
+        interfaceLinhaSeparadora(larguraDaTabela, TEMA);
         printarStringCentralizada(anoString, larguraDaTabela);
-        interfaceLinhaSeparadora(larguraDaTabela);
+        interfaceLinhaSeparadora(larguraDaTabela, TEMA);
         
         printarCabecalhoQuadroHorarios(); printf("\n");
-        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela);
+        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, TEMA);
 
         for(indiceMes = 1; indiceMes <= 12; indiceMes++){
             
@@ -1933,7 +1933,7 @@ void mostrarQuadroHorarios() {
                     printf("|%5s|%5s", " ", " ");
                 }
                 printf("\n");
-                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela);
+                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, TEMA);
 //                printf("\n");
             }
         }
@@ -2162,9 +2162,9 @@ void printarTodosRegistrosServico() {
     rewind(ponteiroArquivoSERVICO);
     
     printf("SERVICOS\n");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
     printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
-    interfaceLinhaSeparadora(150);
+    interfaceLinhaSeparadora(150, TEMA);
     
     while(1){
         if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/
@@ -2506,47 +2506,6 @@ Data receberValidarData() {
     return data;
 }
 
-
-// #############################################################################
-// ELEMENTOS DE INTERFACE
-
-// #################################
-// LINHA SEPARADORA
-void interfaceLinhaSeparadora(int tamanho) {
-    char caracter = ' ';
-    
-    switch(TEMA) {
-        case 1:
-            caracter = '=';
-            
-        default:
-            caracter = '-';
-    }
-    
-    printf("\n");
-    for(int indice = 0; indice < tamanho; indice++) {
-        printf("%c", caracter);
-    }
-    printf("\n");
-}
-
-// #################################
-// LINHA SEPARADORA SEM QUEBRA DE LINHA
-void interfaceLinhaSeparadoraSemQuebraDeLinha(int tamanho) {
-    char caracter = ' ';
-    
-    switch(TEMA) {
-        case 1:
-            caracter = '=';
-            
-        default:
-            caracter = '-';
-    }
-    
-    for(int indice = 0; indice < tamanho; indice++) {
-        printf("%c", caracter);
-    }
-}
 
 /* PODE SER UTIL DEPOIS
  

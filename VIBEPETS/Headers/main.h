@@ -190,9 +190,4 @@ Data receberValidarData(void);
 Hora receberValidarHora(void);
 void receberValidarEmail(char*);
 
-
-// #################################
-// ELEMENTOS DE INTERFACE
-void interfaceLinhaSeparadora(int);
-void interfaceLinhaSeparadoraSemQuebraDeLinha(int);
 #endif /* main_h */
