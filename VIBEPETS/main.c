@@ -5,7 +5,8 @@
 //  Created by Nathelia Braz on 24/09/22.
 //
 
-#include "main.h"
+//#include "main.h"
+#include "Headers/main.h"
 
 int main(int argc, char *argv[]) {
     //    struct Funcionario funcionario;
