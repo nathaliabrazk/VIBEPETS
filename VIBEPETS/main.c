@@ -192,7 +192,7 @@ void menuHorarioListarTodos(void);
 void menuHorarioInserir(void);
 void menuHorarioAlterar(void);
 void menuHorarioDeletar(void);
-
+void menuAgendamentoHorarios(void);
 void menuServico(void);
 void menuServicoListarTodos(void);
 void menuServicoInserir(void);
@@ -478,6 +478,10 @@ void menuAgendamentoDeletar() {
     registro = buscarRegistroAgendamentoPorCod(codigo);
     deletarAgendamento(registro);
     printarMensagemContinuar();
+}
+
+void menuAgendamentoHorarios() {
+    mostrarQuadroHorarios();
 }
 
 
