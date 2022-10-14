@@ -22,6 +22,7 @@
 #include "validacoes.h"
 #include "Servico.h"
 #include "Agendamento.h"
+#include "Cliente.h"
 
 // #############################################################################
 // CONSTANTES
@@ -40,7 +41,6 @@
 
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
-FILE *ponteiroArquivoCLIENTE;
 FILE *ponteiroArquivoFUNCIONARIO;
 FILE *ponteiroArquivoHORARIO;
 //FILE *ponteiroArquivoPRODUTO;
@@ -56,12 +56,10 @@ FILE *ponteiroArquivoHORARIO;
 // #################################
 // ARQUIVOS
 void abrirTodosArquivos(void);
-void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
 void abrirArquivoHorario(void);
 
 void fecharTodosArquivos(void);
-void fecharArquivoCliente(void);
 void fecharArquivoHorario(void);
 void fecharArquivoFuncionario(void);
 
@@ -71,11 +69,6 @@ void fecharArquivoFuncionario(void);
 void menuPrincipal(void);
 
 
-void menuCliente(void);
-void menuClienteListarTodos(void);
-void menuClienteInserir(void);
-void menuClienteAlterar(void);
-void menuClienteDeletar(void);
 
 void menuFuncionario(void);
 void menuFuncionarioListarTodos(void);
@@ -89,20 +82,6 @@ void menuHorarioListarTodos(void);
 void menuHorarioInserir(void);
 void menuHorarioAlterar(void);
 void menuHorarioDeletar(void);
-
-
-void printarCabecalhoTodosClientes(void);
-int  salvarRegistroCliente(struct Cliente);
-void printarTodosRegistrosCliente(void);
-void printarClienteLista(struct Cliente);
-void printarClienteTopicos(struct Cliente);
-struct Cliente buscarClientePorCod(int);
-int  buscarRegistroClientePorCod(int);
-void alterarCliente(int);
-int  acessarUltimoCodigoCliente(void);
-void deletarCliente(int);
-void lerDadosCliente(struct Cliente*);
-struct Cliente buscarClientePorCPF(char[]);
 
 int  salvarRegistroFuncionario(struct Funcionario);
 void printarTodosRegistrosFuncionario(void);

@@ -17,22 +17,22 @@
 #ifndef Agendamento_h
 #define Agendamento_h
 
-#include "main.h"//por depois Cliente.h
+#include "Cliente.h"
 
 FILE *ponteiroArquivoAGENDAMENTO;
 
 void menuAgendamento(int, int);
-void menuAgendamentoListarTodos(int);
+void menuAgendamentoListarTodos(int, int);
 void menuAgendamentoInserir(int, int);
 void menuAgendamentoAlterar(int, int);
 void menuAgendamentoDeletar(int, int);
-void menuAgendamentoHorarios(int, int);
+void menuAgendamentoHorarios(int);
 
 void abrirArquivoAgendamento(int);
 void fecharArquivoAgendamento(void);
 
 
-void mostrarQuadroHorarios(void);
+void mostrarQuadroHorarios(int);
 
 
 
@@ -73,14 +73,14 @@ void fecharArquivoAgendamento() {
 // FUNCOES CRUD
 int  salvarRegistroAgendamento(struct Agendamento, int);
 void printarCabecalhoListaAgendamento(int);
-void printarTodosRegistrosAgendamento(int);
+void printarTodosRegistrosAgendamento(int, int);
 void printarAgendamentoLista(struct Agendamento, int);
-void printarAgendamentoTopicos(struct Agendamento);
+void printarAgendamentoTopicos(struct Agendamento, int);
 struct Agendamento buscarAgendamentoPorCod(int, int);
 int  buscarRegistroAgendamentoPorCod(int, int);
-void alterarAgendamento(int);
+void alterarAgendamento(int, int, int);
 int  acessarUltimoCodigoAgendamento(int);
-void deletarAgendamento(int);
+void deletarAgendamento(int, int);
 void lerDadosAgendamento(struct Agendamento*, int, int);
 
 
@@ -124,11 +124,11 @@ void menuAgendamento(int mostrar_debug, int tema) {
                 break;
                 
             case 'h':
-                menuAgendamentoHorarios(mostrar_debug, tema);
+                menuAgendamentoHorarios(tema);
                 break;
                 
             case 'l':
-                menuAgendamentoListarTodos(tema);
+                menuAgendamentoListarTodos(mostrar_debug,tema);
                 break;
                 
             case 'x':
@@ -141,8 +141,8 @@ void menuAgendamento(int mostrar_debug, int tema) {
     }
 }
 
-void menuAgendamentoListarTodos(int mostrar_debug) {
-    printarTodosRegistrosAgendamento(mostrar_debug);
+void menuAgendamentoListarTodos(int mostrar_debug, int tema) {
+    printarTodosRegistrosAgendamento(mostrar_debug, tema);
     printarMensagemContinuar();
 }
 
@@ -152,20 +152,20 @@ void menuAgendamentoInserir(int mostrar_debug, int tema) {
     lerDadosAgendamento(&agendamento, mostrar_debug, tema);
     salvarRegistroAgendamento(agendamento, mostrar_debug);
     printarAgendamentoLista(agendamento, mostrar_debug);
-    printarAgendamentoTopicos(agendamento);
+    printarAgendamentoTopicos(agendamento, mostrar_debug);
 }
 
 void menuAgendamentoAlterar(int mostrar_debug, int tema) {
     int codigo = 0;
     int registro = 0;
     
-    printarTodosRegistrosAgendamento(mostrar_debug);
+    printarTodosRegistrosAgendamento(mostrar_debug, tema);
     
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
     registro = buscarRegistroAgendamentoPorCod(codigo, mostrar_debug);
-    alterarAgendamento(registro);
+    alterarAgendamento(registro, mostrar_debug, tema);
     
     printarMensagemContinuar();
 }
@@ -174,18 +174,18 @@ void menuAgendamentoDeletar(int mostrar_debug, int tema) {
     int codigo   = 0;
     int registro = 0;
     
-    printarTodosRegistrosAgendamento(mostrar_debug);
+    printarTodosRegistrosAgendamento(mostrar_debug, tema);
     
     printf("INFORME O CODIGO PARA ALTERAR: ");
     scanf("%d", &codigo);
     
     registro = buscarRegistroAgendamentoPorCod(codigo, mostrar_debug);
-    deletarAgendamento(registro);
+    deletarAgendamento(registro, mostrar_debug);
     printarMensagemContinuar();
 }
 
-void menuAgendamentoHorarios() {
-    mostrarQuadroHorarios();
+void menuAgendamentoHorarios(int tema) {
+    mostrarQuadroHorarios(tema);
 }
 
 
@@ -259,7 +259,7 @@ void lerDadosAgendamento(struct Agendamento *agendamento, int mostrar_debug, int
                     printf("%s: ", "Codigo do cliente");
                     scanf("%d", &pesquisaCodigo);
                     
-                    pesquisaCodigo = buscarClientePorCod(pesquisaCodigo).codigo;
+                    pesquisaCodigo = buscarClientePorCod(pesquisaCodigo, mostrar_debug).codigo;
                     
                     if(pesquisaCodigo == -1) {
                         if(mostrar_debug == 1) {
@@ -278,7 +278,7 @@ void lerDadosAgendamento(struct Agendamento *agendamento, int mostrar_debug, int
                     printf("%s: ", "CPF do cliente");
                     fflush(stdin); gets(pesquisaCPF); fflush(stdin);
                     
-                    pesquisaCodigo = buscarClientePorCPF(pesquisaCPF).codigo;
+                    pesquisaCodigo = buscarClientePorCPF(pesquisaCPF, mostrar_debug).codigo;
                     
                     if(pesquisaCodigo == -1) {
                         if(mostrar_debug == 1) {
@@ -293,7 +293,7 @@ void lerDadosAgendamento(struct Agendamento *agendamento, int mostrar_debug, int
                 break;
                 
             case '3':
-                menuClienteListarTodos();
+                menuClienteListarTodos(mostrar_debug, tema);
                 entradaValida = 'n';
                 break;
                 
@@ -506,7 +506,7 @@ void printarAgendamentoLista(struct Agendamento agendamento, int mostrar_debug) 
     struct Funcionario funcionario;
     struct Servico servico;
     
-    cliente     = buscarClientePorCod(agendamento.codigoCliente);
+    cliente     = buscarClientePorCod(agendamento.codigoCliente, mostrar_debug);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
     servico     = buscarServicoPorCod(agendamento.codigoServico, mostrar_debug);
     
@@ -514,14 +514,14 @@ void printarAgendamentoLista(struct Agendamento agendamento, int mostrar_debug) 
     printf("|%-30s|%-30s|%-30s\n", servico.nome, cliente.nome, funcionario.nome);
 }
 
-void printarAgendamentoTopicos(struct Agendamento agendamento) {
+void printarAgendamentoTopicos(struct Agendamento agendamento, int mostrar_debug) {
     struct Cliente cliente;
     struct Funcionario funcionario;
     struct Servico servico;
     
-    cliente     = buscarClientePorCod(agendamento.codigoCliente);
+    cliente     = buscarClientePorCod(agendamento.codigoCliente, mostrar_debug);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
-    servico     = buscarServicoPorCod(agendamento.codigoServico, MOSTRAR_DEBUG);
+    servico     = buscarServicoPorCod(agendamento.codigoServico, mostrar_debug);
     
     if(agendamento.ativo == ' ') {
         printf("%-11s: %d\n", "CODIGO", agendamento.codigo);
@@ -540,13 +540,13 @@ void printarAgendamentoTopicos(struct Agendamento agendamento) {
 
 // #################################
 // LER TODOS PERFIS DE AGENDAMENTO
-void printarTodosRegistrosAgendamento(int mostrar_debug) {
+void printarTodosRegistrosAgendamento(int mostrar_debug, int tema) {
     struct Agendamento agendamento;
     struct Cliente cliente;
     struct Funcionario funcionario;
     struct Servico servico;
     
-    cliente     = buscarClientePorCod(agendamento.codigoCliente);
+    cliente     = buscarClientePorCod(agendamento.codigoCliente, mostrar_debug);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
     servico     = buscarServicoPorCod(agendamento.codigoServico, mostrar_debug);
     
@@ -555,13 +555,13 @@ void printarTodosRegistrosAgendamento(int mostrar_debug) {
     // Volta o ponteiro para o inicio.
     rewind(ponteiroArquivoAGENDAMENTO);
     
-    printarCabecalhoListaAgendamento();
+    printarCabecalhoListaAgendamento(tema);
     
     while(1){
         if(fread(&agendamento, sizeof(agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1)break; /*Sair do laço*/
         if(agendamento.ativo == '*') continue; /*Passa ao proximo*/
         printarAgendamentoLista(agendamento, mostrar_debug);
-        //        printarAgendamentoTopicos(agendamento);
+        //        printarAgendamentoTopicos(agendamento, mostrar_debug);
         n_Linhas++;
         if(n_Linhas%20 == 0)
             printarMensagem("Pressione <Enter> para continuar .  .  .");
@@ -593,7 +593,7 @@ void alterarAgendamento(int registro, int mostrar_debug, int tema) {
     }
     
     printf("\n\n Dados Atuais \n\n");
-    printarAgendamentoTopicos(agendamentoAux);
+    printarAgendamentoTopicos(agendamentoAux, mostrar_debug);
     
     printf("\n\n Novos dados \n\n");
     lerDadosAgendamento(&agendamentoAux, mostrar_debug, tema);
@@ -611,7 +611,7 @@ void alterarAgendamento(int registro, int mostrar_debug, int tema) {
 // e apaga logicamente (deixa invisivel);
 // PARAMETRO:
 //   - registro: int da 'linha' que está o referido registro.
-void deletarAgendamento(int registro) {
+void deletarAgendamento(int registro, int mostrar_debug) {
     struct Agendamento agendamentoAux;
     
     if(fseek(ponteiroArquivoAGENDAMENTO, (registro)*sizeof(agendamentoAux), SEEK_SET) != 0){
@@ -630,7 +630,7 @@ void deletarAgendamento(int registro) {
     }
     
     printf("\n\n Dados Atuais \n\n");
-    printarAgendamentoTopicos(agendamentoAux);
+    printarAgendamentoTopicos(agendamentoAux, mostrar_debug);
     
     fflush(stdin);
     printf("\n\n Apagar o registro (s/n)???: ");
@@ -663,7 +663,7 @@ void deletarAgendamento(int registro) {
 // #################################
 // MOSTRAR HORARIOS POR ANO
 // Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
-void mostrarQuadroHorarios() {
+void mostrarQuadroHorarios(int tema) {
     int larguraDaTabela = 125;
     int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
     char anoString[5] = "2022";//, mesString[3] = "12";
@@ -679,12 +679,12 @@ void mostrarQuadroHorarios() {
     
     for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
         sprintf(anoString, "%d", indiceAno);
-        interfaceLinhaSeparadora(larguraDaTabela, TEMA);
+        interfaceLinhaSeparadora(larguraDaTabela, tema);
         printarStringCentralizada(anoString, larguraDaTabela);
-        interfaceLinhaSeparadora(larguraDaTabela, TEMA);
+        interfaceLinhaSeparadora(larguraDaTabela, tema);
         
         printarCabecalhoQuadroHorarios(); printf("\n");
-        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, TEMA);
+        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
 
         for(indiceMes = 1; indiceMes <= 12; indiceMes++){
             
@@ -695,7 +695,7 @@ void mostrarQuadroHorarios() {
                     printf("|%5s|%5s", " ", " ");
                 }
                 printf("\n");
-                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, TEMA);
+                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
 //                printf("\n");
             }
         }
