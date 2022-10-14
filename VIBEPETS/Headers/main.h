@@ -23,6 +23,7 @@
 #include "Servico.h"
 #include "Agendamento.h"
 #include "Cliente.h"
+#include "Funcionario.h"
 
 // #############################################################################
 // CONSTANTES
@@ -41,7 +42,6 @@
 
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
-FILE *ponteiroArquivoFUNCIONARIO;
 FILE *ponteiroArquivoHORARIO;
 //FILE *ponteiroArquivoPRODUTO;
 //FILE *ponteiroArquivoTELEFONE;
@@ -56,12 +56,10 @@ FILE *ponteiroArquivoHORARIO;
 // #################################
 // ARQUIVOS
 void abrirTodosArquivos(void);
-void abrirArquivoFuncionario(void);
 void abrirArquivoHorario(void);
 
 void fecharTodosArquivos(void);
 void fecharArquivoHorario(void);
-void fecharArquivoFuncionario(void);
 
 
 // #################################
@@ -70,30 +68,15 @@ void menuPrincipal(void);
 
 
 
-void menuFuncionario(void);
-void menuFuncionarioListarTodos(void);
-void menuFuncionarioInserir(void);
-void menuFuncionarioAlterar(void);
-void menuFuncionarioDeletar(void);
-
-
 void menuHorario(void);
 void menuHorarioListarTodos(void);
 void menuHorarioInserir(void);
 void menuHorarioAlterar(void);
 void menuHorarioDeletar(void);
 
-int  salvarRegistroFuncionario(struct Funcionario);
-void printarTodosRegistrosFuncionario(void);
-void printarFuncionarioLista(struct Funcionario);
-void printarFuncionarioTopicos(struct Funcionario);
-struct Funcionario buscarFuncionarioPorCod(int);
-int  buscarRegistroFuncionarioPorCod(int);
-void alterarFuncionario(int);
-int  acessarUltimoCodigoFuncionario(void);
-void deletarFuncionario(int);
-void lerDadosFuncionario(struct Funcionario*);
-struct Funcionario buscarFuncionarioPorCPF(char[]);
+
+
+
 
 int  salvarRegistroHorario(struct Horario);
 void printarTodosRegistrosHorario(void);

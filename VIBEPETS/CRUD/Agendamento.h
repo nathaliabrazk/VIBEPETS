@@ -18,6 +18,7 @@
 #define Agendamento_h
 
 #include "Cliente.h"
+#include "Funcionario.h"
 
 FILE *ponteiroArquivoAGENDAMENTO;
 
@@ -507,7 +508,7 @@ void printarAgendamentoLista(struct Agendamento agendamento, int mostrar_debug) 
     struct Servico servico;
     
     cliente     = buscarClientePorCod(agendamento.codigoCliente, mostrar_debug);
-    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario, mostrar_debug);
     servico     = buscarServicoPorCod(agendamento.codigoServico, mostrar_debug);
     
     printf("%05d|%-10s|%5s", agendamento.codigo, stringDataFormatada(agendamento.data), stringHoraFormatada(agendamento.hora));
@@ -520,7 +521,7 @@ void printarAgendamentoTopicos(struct Agendamento agendamento, int mostrar_debug
     struct Servico servico;
     
     cliente     = buscarClientePorCod(agendamento.codigoCliente, mostrar_debug);
-    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario, mostrar_debug);
     servico     = buscarServicoPorCod(agendamento.codigoServico, mostrar_debug);
     
     if(agendamento.ativo == ' ') {
@@ -547,7 +548,7 @@ void printarTodosRegistrosAgendamento(int mostrar_debug, int tema) {
     struct Servico servico;
     
     cliente     = buscarClientePorCod(agendamento.codigoCliente, mostrar_debug);
-    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
+    funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario, mostrar_debug);
     servico     = buscarServicoPorCod(agendamento.codigoServico, mostrar_debug);
     
     int n_Linhas = 0;
