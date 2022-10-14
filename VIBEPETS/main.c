@@ -2184,7 +2184,7 @@ void printarCabecalhoQuadroHorarios() {
 // MOSTRAR HORARIOS POR ANO
 // Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
 void mostrarQuadroHorarios() {
-    int larguraDaTabela = 130;
+    int larguraDaTabela = 125;
     int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
     char anoString[5] = "2022", mesString[3] = "12";
     
