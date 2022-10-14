@@ -5,25 +5,27 @@
 //  Created by Luiz Araujo on 14/10/22.
 //
 
+// #############################################################################
+// FUNCIONARIO
+
 #ifndef Funcionario_h
 #define Funcionario_h
 
-
+// #################################
+// CONSTANTES
 FILE *ponteiroArquivoFUNCIONARIO;
 
+
+// #################################
+// PROTOTIPOS
 void abrirArquivoFuncionario(int);
 void fecharArquivoFuncionario(void);
-
-
-
-
 
 void menuFuncionario(int, int);
 void menuFuncionarioListarTodos(int, int);
 void menuFuncionarioInserir(int);
 void menuFuncionarioAlterar(int, int);
 void menuFuncionarioDeletar(int, int);
-
 
 int  salvarRegistroFuncionario(struct Funcionario, int);
 void printarTodosRegistrosFuncionario(int, int);
@@ -38,12 +40,8 @@ void lerDadosFuncionario(struct Funcionario*);
 struct Funcionario buscarFuncionarioPorCPF(char[], int);
 
 
-
-
-
-
 // #################################
-// MENU FUNCIONARIO
+// FUNCOES
 void menuFuncionario(int mostrar_debug, int tema) {
     char opcao = 'a';
     
@@ -90,20 +88,6 @@ void menuFuncionario(int mostrar_debug, int tema) {
     }
 }
 
-void menuFuncionarioListarTodos(int mostrar_debug, int tema) {
-    printarTodosRegistrosFuncionario(mostrar_debug, tema);
-    printarMensagemContinuar();
-}
-
-void menuFuncionarioInserir(int mostrar_debug) {
-    struct Funcionario funcionario;
-    
-    lerDadosFuncionario(&funcionario);
-    salvarRegistroFuncionario(funcionario, mostrar_debug);
-    printarFuncionarioLista(funcionario, mostrar_debug);
-    printarFuncionarioTopicos(funcionario, mostrar_debug);
-}
-
 void menuFuncionarioAlterar(int mostrar_debug, int tema) {
     int codigo = 0;
     int registro = 0;
@@ -133,9 +117,19 @@ void menuFuncionarioDeletar(int mostrar_debug, int tema) {
     printarMensagemContinuar();
 }
 
+void menuFuncionarioInserir(int mostrar_debug) {
+    struct Funcionario funcionario;
+    
+    lerDadosFuncionario(&funcionario);
+    salvarRegistroFuncionario(funcionario, mostrar_debug);
+    printarFuncionarioLista(funcionario, mostrar_debug);
+    printarFuncionarioTopicos(funcionario, mostrar_debug);
+}
 
-
-
+void menuFuncionarioListarTodos(int mostrar_debug, int tema) {
+    printarTodosRegistrosFuncionario(mostrar_debug, tema);
+    printarMensagemContinuar();
+}
 
 
 void abrirArquivoFuncionario(int mostrar_debug) {
@@ -156,9 +150,6 @@ void abrirArquivoFuncionario(int mostrar_debug) {
     }
 }
 
-
-
-
 void fecharArquivoFuncionario() {
     // Atualizar o arquivo.
     fflush(ponteiroArquivoFUNCIONARIO);
@@ -168,66 +159,112 @@ void fecharArquivoFuncionario() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-// #############################################################################
-// FUNCIONARIO
-
 // #################################
-// LER OS DADOS DE FUNCIONARIO
-void lerDadosFuncionario(struct Funcionario *funcionario) {
+// ALTERAR UM PERFIL DE FUNCIONARIO
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e mostra como está momento antes da alteracao, apos isso rece novos dados e atualiza.
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
+void alterarFuncionario(int registro, int mostrar_debug) {
+    struct Funcionario funcionarioAux;
     
-    fflush(stdin);
-    printf("Nome : ");
-    gets(funcionario->nome); fflush(stdin);
+    if(fseek(ponteiroArquivoFUNCIONARIO, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
+        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
+        return;
+    }
     
-    //    printf("CPF  : ");
-    //    gets(funcionario->cpf); fflush(stdin);
-    //TODO: Testar depois
-    receberValidarCPF(funcionario->cpf);
+    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
+        printarMensagem("11 - Problemas na leitura do registro!!!");
+        return;
+    }
     
-    printf("Senha: ");
-    gets(funcionario->senha); fflush(stdin);
+    if(funcionarioAux.ativo == '*'){
+        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
+        return;
+    }
     
-    printf("Cargo: ");
-    scanf("%d", &funcionario->cargo); // Funcionario 0 = adm
-    fflush(stdin);
+    printf("\n\n Dados Atuais \n\n");
+    printarFuncionarioTopicos(funcionarioAux, mostrar_debug);
     
-    funcionario->ativo = ' '; // Qualquer coisa menos '*' significa ativo
+    printf("\n\n Novos dados \n\n");
+    lerDadosFuncionario(&funcionarioAux);
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
 
 // #################################
-// SALVAR DADOS DE FUNCIONARIO
+// BUSCAR CODIGO DO ULTIMO REGISTRO
+// Uma funçao para ir ate o ultimo registro, ultimo funcionario cadastrado e
+// retorna seu respectivo codigo.
 // RETORNO:
-//  -    0: se nao houve erros;
-//  - != 0: se houve erro(s);
-int salvarRegistroFuncionario(struct Funcionario funcionario, int mostrar_debug) {
-    int resultado = 0;
+//  - O int do codigo.
+int acessarUltimoCodigoFuncionario(int mostrar_debug) {
+    struct Funcionario funcionario;
     
-    // Adicionar codigo, auto-incrementando,
-    // pega o codigo do ultimo registro e incrementa.
-    funcionario.codigo = acessarUltimoCodigoFuncionario(mostrar_debug) + 1;
-    
-    // Poe o novo funcionario no final do arquivo.
-    fseek(ponteiroArquivoFUNCIONARIO, 0L, SEEK_END);
-    if(fwrite(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1) {
+    fseek(ponteiroArquivoFUNCIONARIO, -1 * sizeof(struct Funcionario), SEEK_END);
+    if(fread(&funcionario, sizeof(struct Funcionario), -1, ponteiroArquivoFUNCIONARIO)!= 1){
         if(mostrar_debug == 1) {
-            printarMensagem("Adicionar funcionario: Falhou a escrita do registro");
+            printarMensagem("10 - Problemas na leitura do registro!!!");
         }
-        
-        resultado = 1;
+        return -1;
     }
     
-    // Retornando o valor do resultado.
-    return(resultado);
+    if(funcionario.codigo <= -1){
+        return 0;
+        
+    } else {
+        return funcionario.codigo;
+    }
+}
+
+// #################################
+// BUSCAR REGISTRO DE FUNCIONARIO POR CODIGO
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
+// RETORNO:
+//  -  O numero do registro, caso encontre;
+//  - -1 caso, nao encontre.
+int buscarRegistroFuncionarioPorCod(int codigo, int mostrar_debug) {
+    struct Funcionario funcionario;
+    int contadorCodigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoFUNCIONARIO != NULL) {
+        if(mostrar_debug == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(mostrar_debug == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoFUNCIONARIO);
+    // Procura em todos os registros do documento.
+    while(fread(&funcionario, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
+        // Incrementa ++ porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(funcionario.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  contadorCodigo;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(mostrar_debug == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    contadorCodigo = -1;
+    
+    return contadorCodigo;
 }
 
 // #################################
@@ -327,74 +364,78 @@ struct Funcionario buscarFuncionarioPorCPF(char cpf[12], int mostrar_debug) {
 }
 
 // #################################
-// BUSCAR REGISTRO DE FUNCIONARIO POR CODIGO
-// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
-// RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarRegistroFuncionarioPorCod(int codigo, int mostrar_debug) {
-    struct Funcionario funcionario;
-    int contadorCodigo = -1;
+// DELETAR UM PERFIL DE FUNCIONARIO
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e apaga logicamente (deixa invisivel);
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
+void deletarFuncionario(int registro, int mostrar_debug) {
+    struct Funcionario funcionarioAux;
     
-    // Testando se o arquivo foi aberto com sucesso
-    if(ponteiroArquivoFUNCIONARIO != NULL) {
-        if(mostrar_debug == 1) {
-            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
-        }
-        
-    } else {
-        if(mostrar_debug == 1) {
-            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
-        }
-        system ("pause");
-        exit(1);
+    if(fseek(ponteiroArquivoFUNCIONARIO, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
+        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
+        return;
     }
     
-    rewind(ponteiroArquivoFUNCIONARIO);
-    // Procura em todos os registros do documento.
-    while(fread(&funcionario, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
-        // Incrementa ++ porque comeca com -1.
-        contadorCodigo += 1;
-        
-        // Compara o cod recebido.
-        if(funcionario.codigo == codigo) {
-            // Se encontrar, retorna a poisicao(linha) do registro.
-            return  contadorCodigo;
-        }
+    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
+        printarMensagem("12 - Problemas na leitura do registro!!!");
+        return;
     }
     
-    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
-    if(mostrar_debug == 1) {
-        printf("\n\nERRO: registro nao encontrado.");
+    if(funcionarioAux.ativo == '*'){
+        printarMensagem("Registro já está apagado!!!\n\n");
+        return;
     }
-    contadorCodigo = -1;
     
-    return contadorCodigo;
+    printf("\n\n Dados Atuais \n\n");
+    printarFuncionarioTopicos(funcionarioAux, mostrar_debug);
+    
+    fflush(stdin);
+    printf("\n\n Apagar o registro (s/n)???: ");
+    char resp = getchar();
+    
+    if(resp != 's' && resp != 'S') {
+        return;
+    }
+    
+    fflush(stdin);
+    funcionarioAux.ativo = '*';
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
+    
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
+    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
 
 // #################################
-// BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma funçao para ir ate o ultimo registro, ultimo funcionario cadastrado e
-// retorna seu respectivo codigo.
-// RETORNO:
-//  - O int do codigo.
-int acessarUltimoCodigoFuncionario(int mostrar_debug) {
-    struct Funcionario funcionario;
+// LER OS DADOS DE FUNCIONARIO
+void lerDadosFuncionario(struct Funcionario *funcionario) {
     
-    fseek(ponteiroArquivoFUNCIONARIO, -1 * sizeof(struct Funcionario), SEEK_END);
-    if(fread(&funcionario, sizeof(struct Funcionario), -1, ponteiroArquivoFUNCIONARIO)!= 1){
-        if(mostrar_debug == 1) {
-            printarMensagem("10 - Problemas na leitura do registro!!!");
-        }
-        return -1;
-    }
+    fflush(stdin);
+    printf("Nome : ");
+    gets(funcionario->nome); fflush(stdin);
     
-    if(funcionario.codigo <= -1){
-        return 0;
-        
-    } else {
-        return funcionario.codigo;
-    }
+    //    printf("CPF  : ");
+    //    gets(funcionario->cpf); fflush(stdin);
+    //TODO: Testar depois
+    receberValidarCPF(funcionario->cpf);
+    
+    printf("Senha: ");
+    gets(funcionario->senha); fflush(stdin);
+    
+    printf("Cargo: ");
+    scanf("%d", &funcionario->cargo); // Funcionario 0 = adm
+    fflush(stdin);
+    
+    funcionario->ativo = ' '; // Qualquer coisa menos '*' significa ativo
 }
 
 // #################################
@@ -451,113 +492,29 @@ void printarTodosRegistrosFuncionario(int mostrar_debug, int tema) {
 }
 
 // #################################
-// ALTERAR UM PERFIL DE FUNCIONARIO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e mostra como está momento antes da alteracao, apos isso rece novos dados e atualiza.
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
-void alterarFuncionario(int registro, int mostrar_debug) {
-    struct Funcionario funcionarioAux;
+// SALVAR DADOS DE FUNCIONARIO
+// RETORNO:
+//  -    0: se nao houve erros;
+//  - != 0: se houve erro(s);
+int salvarRegistroFuncionario(struct Funcionario funcionario, int mostrar_debug) {
+    int resultado = 0;
     
-    if(fseek(ponteiroArquivoFUNCIONARIO, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
-        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
-        return;
+    // Adicionar codigo, auto-incrementando,
+    // pega o codigo do ultimo registro e incrementa.
+    funcionario.codigo = acessarUltimoCodigoFuncionario(mostrar_debug) + 1;
+    
+    // Poe o novo funcionario no final do arquivo.
+    fseek(ponteiroArquivoFUNCIONARIO, 0L, SEEK_END);
+    if(fwrite(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1) {
+        if(mostrar_debug == 1) {
+            printarMensagem("Adicionar funcionario: Falhou a escrita do registro");
+        }
+        
+        resultado = 1;
     }
     
-    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
-        printarMensagem("11 - Problemas na leitura do registro!!!");
-        return;
-    }
-    
-    if(funcionarioAux.ativo == '*'){
-        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
-        return;
-    }
-    
-    printf("\n\n Dados Atuais \n\n");
-    printarFuncionarioTopicos(funcionarioAux, mostrar_debug);
-    
-    printf("\n\n Novos dados \n\n");
-    lerDadosFuncionario(&funcionarioAux);
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
-    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
+    // Retornando o valor do resultado.
+    return(resultado);
 }
-
-// #################################
-// DELETAR UM PERFIL DE FUNCIONARIO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e apaga logicamente (deixa invisivel);
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
-void deletarFuncionario(int registro, int mostrar_debug) {
-    struct Funcionario funcionarioAux;
-    
-    if(fseek(ponteiroArquivoFUNCIONARIO, (registro)*sizeof(funcionarioAux), SEEK_SET) != 0){
-        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
-        return;
-    }
-    
-    if(fread(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1){
-        printarMensagem("12 - Problemas na leitura do registro!!!");
-        return;
-    }
-    
-    if(funcionarioAux.ativo == '*'){
-        printarMensagem("Registro já está apagado!!!\n\n");
-        return;
-    }
-    
-    printf("\n\n Dados Atuais \n\n");
-    printarFuncionarioTopicos(funcionarioAux, mostrar_debug);
-    
-    fflush(stdin);
-    printf("\n\n Apagar o registro (s/n)???: ");
-    char resp = getchar();
-    
-    if(resp != 's' && resp != 'S') {
-        return;
-    }
-    
-    fflush(stdin);
-    funcionarioAux.ativo = '*';
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
-    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
-    
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoFUNCIONARIO, -(int) sizeof(struct Funcionario), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
-    fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif /* Funcionario_h */

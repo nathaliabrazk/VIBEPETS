@@ -17,6 +17,7 @@
 
 // #################################
 // PROTOTIPOS
+
 char* formatarCPF(char[], int);
 char* intParaString(int, int);
 void limparTela(int);

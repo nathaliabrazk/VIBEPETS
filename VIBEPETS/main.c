@@ -86,9 +86,6 @@ void menuPrincipal() {
 }
 
 
-
-
-
 // #############################################################################
 // PERSISTENCIA EM BINARIOS
 
@@ -211,10 +208,6 @@ void fecharTodosArquivos() {
     //    fclose(ponteiroArquivoTELEFONE);
     //    fclose(ponteiroArquivoENDERECO);
 }
-
-
-
-
 
 
 /* PODE SER UTIL DEPOIS

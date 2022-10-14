@@ -5,14 +5,8 @@
 //  Created by Luiz Araujo on 14/10/22.
 //
 
-
-
-
-
 // #############################################################################
 // AGENDAMENTO
-
-
 
 #ifndef Agendamento_h
 #define Agendamento_h
@@ -20,82 +14,40 @@
 #include "Cliente.h"
 #include "Funcionario.h"
 
+// #################################
+// CONSTANTES
 FILE *ponteiroArquivoAGENDAMENTO;
 
+
+// #################################
+// PROTOTIPOS
 void menuAgendamento(int, int);
-void menuAgendamentoListarTodos(int, int);
-void menuAgendamentoInserir(int, int);
 void menuAgendamentoAlterar(int, int);
 void menuAgendamentoDeletar(int, int);
 void menuAgendamentoHorarios(int);
+void menuAgendamentoInserir(int, int);
+void menuAgendamentoListarTodos(int, int);
+void mostrarQuadroHorarios(int);
 
 void abrirArquivoAgendamento(int);
 void fecharArquivoAgendamento(void);
 
-
-void mostrarQuadroHorarios(int);
-
-
-
-
-void abrirArquivoAgendamento(int mostrar_debug) {
-    ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
-    
-    if(ponteiroArquivoAGENDAMENTO == NULL){
-        ponteiroArquivoAGENDAMENTO  = fopen(BIN_AGE, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoAGENDAMENTO == NULL){
-            if(mostrar_debug == 1) {
-                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_AGE);
-            }
-            
-            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
-}
-
-void fecharArquivoAgendamento() {
-    // Atualizar o arquivo.
-    fflush(ponteiroArquivoAGENDAMENTO);
-    
-    // Fechar o arquivo.
-    fclose(ponteiroArquivoAGENDAMENTO);
-}
-
-
-
-
-
-
-
-// #################################
-// FUNCOES CRUD
-int  salvarRegistroAgendamento(struct Agendamento, int);
-void printarCabecalhoListaAgendamento(int);
-void printarTodosRegistrosAgendamento(int, int);
-void printarAgendamentoLista(struct Agendamento, int);
-void printarAgendamentoTopicos(struct Agendamento, int);
-struct Agendamento buscarAgendamentoPorCod(int, int);
-int  buscarRegistroAgendamentoPorCod(int, int);
-void alterarAgendamento(int, int, int);
 int  acessarUltimoCodigoAgendamento(int);
+void alterarAgendamento(int, int, int);
+int  buscarRegistroAgendamentoPorCod(int, int);
+struct Agendamento buscarAgendamentoPorCod(int, int);
 void deletarAgendamento(int, int);
 void lerDadosAgendamento(struct Agendamento*, int, int);
-
-
-
-
-
-
-
-
-
+void printarCabecalhoListaAgendamento(int);
+void printarAgendamentoLista(struct Agendamento, int);
+void printarAgendamentoTopicos(struct Agendamento, int);
+void printarTodosRegistrosAgendamento(int, int);
+int  salvarRegistroAgendamento(struct Agendamento, int);
 
 
 // #################################
-// MENU AGENDAMENTO
+// FUNCOES
+
 void menuAgendamento(int mostrar_debug, int tema) {
     char opcao = 'a';
     
@@ -190,8 +142,239 @@ void menuAgendamentoHorarios(int tema) {
 }
 
 
+void abrirArquivoAgendamento(int mostrar_debug) {
+    ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
+    
+    if(ponteiroArquivoAGENDAMENTO == NULL){
+        ponteiroArquivoAGENDAMENTO  = fopen(BIN_AGE, "w+b"); // criar o arquivo
+        
+        if(ponteiroArquivoAGENDAMENTO == NULL){
+            if(mostrar_debug == 1) {
+                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_AGE);
+            }
+            
+            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
+            // ai encerra o programa 🍃
+            exit(1);
+        }
+    }
+}
+
+void fecharArquivoAgendamento() {
+    // Atualizar o arquivo.
+    fflush(ponteiroArquivoAGENDAMENTO);
+    
+    // Fechar o arquivo.
+    fclose(ponteiroArquivoAGENDAMENTO);
+}
 
 
+// #################################
+// BUSCAR CODIGO DO ULTIMO REGISTRO
+// Uma funçao para ir ate o ultimo registro, ultimo agendamento cadastrado e
+// retorna seu respectivo codigo.
+// RETORNO:
+//  - O int do codigo.
+int acessarUltimoCodigoAgendamento(int mostrar_debug) {
+    struct Agendamento agendamento;
+    
+    fseek(ponteiroArquivoAGENDAMENTO, -1 * sizeof(struct Agendamento), SEEK_END);
+    if(fread(&agendamento, sizeof(struct Agendamento), -1, ponteiroArquivoAGENDAMENTO)!= 1){
+        if(mostrar_debug == 1) {
+            printarMensagem("01 - Problemas na leitura do registro!!!");
+        }
+        return -1;
+    }
+    
+    if(agendamento.codigo <= -1){
+        return 0;
+        
+    } else {
+        return agendamento.codigo;
+    }
+}
+
+// #################################
+// ALTERAR UM PERFIL DE AGENDAMENTO
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e mostra como está momento antes da alteracao, apos isso rece novos dados e atualiza.
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
+void alterarAgendamento(int registro, int mostrar_debug, int tema) {
+    struct Agendamento agendamentoAux;
+    
+    if(fseek(ponteiroArquivoAGENDAMENTO, (registro)*sizeof(agendamentoAux), SEEK_SET) != 0){
+        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
+        return;
+    }
+    
+    if(fread(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1){
+        printarMensagem("02 - Problemas na leitura do registro!!!");
+        return;
+    }
+    
+    if(agendamentoAux.ativo == '*'){
+        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
+        return;
+    }
+    
+    printf("\n\n Dados Atuais \n\n");
+    printarAgendamentoTopicos(agendamentoAux, mostrar_debug);
+    
+    printf("\n\n Novos dados \n\n");
+    lerDadosAgendamento(&agendamentoAux, mostrar_debug, tema);
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoAGENDAMENTO, -(int) sizeof(struct Agendamento), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO);
+    fflush(ponteiroArquivoAGENDAMENTO); /*despejar os arquivos no disco rígido*/
+}
+
+// #################################
+// BUSCAR AGENDAMENTO POR CODIGO
+// Uma funçao para retornar o agendamento procurando pelo codigo.
+// RETORNO:
+//  - A instancia de Agendamento com os dados encontrados;
+//  - 'agendamento.codigo = -1' caso nao encontre.
+struct Agendamento buscarAgendamentoPorCod(int codigo, int mostrar_debug) {
+    struct Agendamento agendamento;
+    int contadorCodigo = -1;
+    
+    agendamento.codigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoAGENDAMENTO != NULL) {
+        if(mostrar_debug == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(mostrar_debug == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoAGENDAMENTO);
+    // Procura em todos os registros do documento.
+    while(fread(&agendamento, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
+        // Incrementa ++ porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(agendamento.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  agendamento;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(mostrar_debug == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    
+    return agendamento;
+}
+
+// #################################
+// BUSCAR REGISTRO AGENDAMENTO POR CODIGO
+// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
+// RETORNO:
+//  -  O numero do registro, caso encontre;
+//  - -1 caso, nao encontre.
+int buscarRegistroAgendamentoPorCod(int codigo, int mostrar_debug) {
+    struct Agendamento agendamento;
+    int contadorCodigo = -1;
+    
+    // Testando se o arquivo foi aberto com sucesso
+    if(ponteiroArquivoAGENDAMENTO != NULL) {
+        if(mostrar_debug == 1) {
+            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        }
+        
+    } else {
+        if(mostrar_debug == 1) {
+            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+        }
+        system ("pause");
+        exit(1);
+    }
+    
+    rewind(ponteiroArquivoAGENDAMENTO);
+    // Procura em todos os registros do documento.
+    while(fread(&agendamento, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
+        // Incrementa '++' porque comeca com -1.
+        contadorCodigo += 1;
+        
+        // Compara o cod recebido.
+        if(agendamento.codigo == codigo) {
+            // Se encontrar, retorna a poisicao(linha) do registro.
+            return  contadorCodigo;
+        }
+    }
+    
+    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+    if(mostrar_debug == 1) {
+        printf("\n\nERRO: registro nao encontrado.");
+    }
+    contadorCodigo = -1;
+    
+    return contadorCodigo;
+}
+
+// #################################
+// DELETAR UM PERFIL DE AGENDAMENTO
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e apaga logicamente (deixa invisivel);
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
+void deletarAgendamento(int registro, int mostrar_debug) {
+    struct Agendamento agendamentoAux;
+    
+    if(fseek(ponteiroArquivoAGENDAMENTO, (registro)*sizeof(agendamentoAux), SEEK_SET) != 0){
+        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
+        return;
+    }
+    
+    if(fread(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1){
+        printarMensagem("03 - Problemas na leitura do registro!!!");
+        return;
+    }
+    
+    if(agendamentoAux.ativo == '*'){
+        printarMensagem("Registro já está apagado!!!\n\n");
+        return;
+    }
+    
+    printf("\n\n Dados Atuais \n\n");
+    printarAgendamentoTopicos(agendamentoAux, mostrar_debug);
+    
+    fflush(stdin);
+    printf("\n\n Apagar o registro (s/n)???: ");
+    char resp = getchar();
+    
+    if(resp != 's' && resp != 'S') {
+        return;
+    }
+    
+    fflush(stdin);
+    agendamentoAux.ativo = '*';
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoAGENDAMENTO, -(int) sizeof(struct Agendamento), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO);
+    fflush(ponteiroArquivoAGENDAMENTO); /*despejar os arquivos no disco rígido*/
+    
+    
+    // recuar um registro no arquivo
+    fseek(ponteiroArquivoAGENDAMENTO, -(int) sizeof(struct Agendamento), SEEK_CUR);
+    // reescrever o registro;
+    fwrite(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO);
+    fflush(ponteiroArquivoAGENDAMENTO); /*despejar os arquivos no disco rígido*/
+}
 
 // #################################
 // LER OS DADOS DE AGENDAMENTO
@@ -344,158 +527,46 @@ void lerDadosAgendamento(struct Agendamento *agendamento, int mostrar_debug, int
 }
 
 // #################################
-// SALVAR DADOS DE AGENDAMENTO
-// RETORNO:
-//  -    0: se nao houve erros;
-//  - != 0: se houve erro(s);
-int salvarRegistroAgendamento(struct Agendamento agendamento, int mostrar_debug) {
-    int resultado = 0;
+// MOSTRAR HORARIOS POR ANO
+// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
+void mostrarQuadroHorarios(int tema) {
+    int larguraDaTabela = 125;
+    int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
+    char anoString[5] = "2022";//, mesString[3] = "12";
     
-    // Adicionar codigo, auto-incrementando,
-    // pega o codigo do ultimo registro e incrementa.
-    agendamento.codigo = acessarUltimoCodigoAgendamento(mostrar_debug) + 1;
+    int indice, inicioExpediente = 8, fimExpediente = 18;
     
-    // Poe o novo agendamento no final do arquivo.
-    fseek(ponteiroArquivoAGENDAMENTO, 0L, SEEK_END);
-    if(fwrite(&agendamento, sizeof(agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1) {
-        if(mostrar_debug == 1) {
-            printarMensagem("Adicionar agendamento: Falhou a escrita do registro");
-        }
+    Data dataEscolhida;
+    dataEscolhida.dia = 1;
+    dataEscolhida.mes = 10;
+    dataEscolhida.ano = 2022;
+    
+//    char stringMesAno;
+    
+    for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
+        sprintf(anoString, "%d", indiceAno);
+        interfaceLinhaSeparadora(larguraDaTabela, tema);
+        printarStringCentralizada(anoString, larguraDaTabela);
+        interfaceLinhaSeparadora(larguraDaTabela, tema);
         
-        resultado = 1;
-    }
-    
-    // Retornando o valor do resultado.
-    return(resultado);
-}
+        printarCabecalhoQuadroHorarios(); printf("\n");
+        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
 
-// #################################
-// BUSCAR AGENDAMENTO POR CODIGO
-// Uma funçao para retornar o agendamento procurando pelo codigo.
-// RETORNO:
-//  - A instancia de Agendamento com os dados encontrados;
-//  - 'agendamento.codigo = -1' caso nao encontre.
-struct Agendamento buscarAgendamentoPorCod(int codigo, int mostrar_debug) {
-    struct Agendamento agendamento;
-    int contadorCodigo = -1;
-    
-    agendamento.codigo = -1;
-    
-    // Testando se o arquivo foi aberto com sucesso
-    if(ponteiroArquivoAGENDAMENTO != NULL) {
-        if(mostrar_debug == 1) {
-            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+        for(indiceMes = 1; indiceMes <= 12; indiceMes++){
+            
+            for(indiceDia = 1; indiceDia <= quantidadeDiaMes(indiceMes); indiceDia++){
+                printf("\n%02d/%02d", indiceDia, indiceMes);
+                
+                for(indice = inicioExpediente; indice < fimExpediente; indice++) {
+                    printf("|%5s|%5s", " ", " ");
+                }
+                printf("\n");
+                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
+//                printf("\n");
+            }
         }
         
-    } else {
-        if(mostrar_debug == 1) {
-            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
-        }
-        system ("pause");
-        exit(1);
     }
-    
-    rewind(ponteiroArquivoAGENDAMENTO);
-    // Procura em todos os registros do documento.
-    while(fread(&agendamento, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
-        // Incrementa ++ porque comeca com -1.
-        contadorCodigo += 1;
-        
-        // Compara o cod recebido.
-        if(agendamento.codigo == codigo) {
-            // Se encontrar, retorna a poisicao(linha) do registro.
-            return  agendamento;
-        }
-    }
-    
-    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
-    if(mostrar_debug == 1) {
-        printf("\n\nERRO: registro nao encontrado.");
-    }
-    
-    return agendamento;
-}
-
-// #################################
-// BUSCAR REGISTRO AGENDAMENTO POR CODIGO
-// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
-// RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarRegistroAgendamentoPorCod(int codigo, int mostrar_debug) {
-    struct Agendamento agendamento;
-    int contadorCodigo = -1;
-    
-    // Testando se o arquivo foi aberto com sucesso
-    if(ponteiroArquivoAGENDAMENTO != NULL) {
-        if(mostrar_debug == 1) {
-            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
-        }
-        
-    } else {
-        if(mostrar_debug == 1) {
-            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
-        }
-        system ("pause");
-        exit(1);
-    }
-    
-    rewind(ponteiroArquivoAGENDAMENTO);
-    // Procura em todos os registros do documento.
-    while(fread(&agendamento, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)) {
-        // Incrementa '++' porque comeca com -1.
-        contadorCodigo += 1;
-        
-        // Compara o cod recebido.
-        if(agendamento.codigo == codigo) {
-            // Se encontrar, retorna a poisicao(linha) do registro.
-            return  contadorCodigo;
-        }
-    }
-    
-    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
-    if(mostrar_debug == 1) {
-        printf("\n\nERRO: registro nao encontrado.");
-    }
-    contadorCodigo = -1;
-    
-    return contadorCodigo;
-}
-
-// #################################
-// BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma funçao para ir ate o ultimo registro, ultimo agendamento cadastrado e
-// retorna seu respectivo codigo.
-// RETORNO:
-//  - O int do codigo.
-int acessarUltimoCodigoAgendamento(int mostrar_debug) {
-    struct Agendamento agendamento;
-    
-    fseek(ponteiroArquivoAGENDAMENTO, -1 * sizeof(struct Agendamento), SEEK_END);
-    if(fread(&agendamento, sizeof(struct Agendamento), -1, ponteiroArquivoAGENDAMENTO)!= 1){
-        if(mostrar_debug == 1) {
-            printarMensagem("01 - Problemas na leitura do registro!!!");
-        }
-        return -1;
-    }
-    
-    if(agendamento.codigo <= -1){
-        return 0;
-        
-    } else {
-        return agendamento.codigo;
-    }
-}
-
-
-// #################################
-// PRINTAR O CABECALHO DA LISTA DE AGENDAMENTO
-// Mostra na tela os nomes dos 'campos'.
-void printarCabecalhoListaAgendamento(int tema) {
-    printf("AGENDAMENTOS\n");
-    interfaceLinhaSeparadora(150, tema);
-    printf("%-5s|%-10s|%-5s|%-30s|%-30s|%-30s\n", "COD", "DATA", "HORA", "SERVICO", "CLIENTE", "FUNCIONARIO");
-    interfaceLinhaSeparadora(150, tema);
 }
 
 // #################################
@@ -540,6 +611,16 @@ void printarAgendamentoTopicos(struct Agendamento agendamento, int mostrar_debug
 }
 
 // #################################
+// PRINTAR O CABECALHO DA LISTA DE AGENDAMENTO
+// Mostra na tela os nomes dos 'campos'.
+void printarCabecalhoListaAgendamento(int tema) {
+    printf("AGENDAMENTOS\n");
+    interfaceLinhaSeparadora(150, tema);
+    printf("%-5s|%-10s|%-5s|%-30s|%-30s|%-30s\n", "COD", "DATA", "HORA", "SERVICO", "CLIENTE", "FUNCIONARIO");
+    interfaceLinhaSeparadora(150, tema);
+}
+
+// #################################
 // LER TODOS PERFIS DE AGENDAMENTO
 void printarTodosRegistrosAgendamento(int mostrar_debug, int tema) {
     struct Agendamento agendamento;
@@ -570,141 +651,29 @@ void printarTodosRegistrosAgendamento(int mostrar_debug, int tema) {
 }
 
 // #################################
-// ALTERAR UM PERFIL DE AGENDAMENTO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e mostra como está momento antes da alteracao, apos isso rece novos dados e atualiza.
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
-void alterarAgendamento(int registro, int mostrar_debug, int tema) {
-    struct Agendamento agendamentoAux;
+// SALVAR DADOS DE AGENDAMENTO
+// RETORNO:
+//  -    0: se nao houve erros;
+//  - != 0: se houve erro(s);
+int salvarRegistroAgendamento(struct Agendamento agendamento, int mostrar_debug) {
+    int resultado = 0;
     
-    if(fseek(ponteiroArquivoAGENDAMENTO, (registro)*sizeof(agendamentoAux), SEEK_SET) != 0){
-        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
-        return;
-    }
+    // Adicionar codigo, auto-incrementando,
+    // pega o codigo do ultimo registro e incrementa.
+    agendamento.codigo = acessarUltimoCodigoAgendamento(mostrar_debug) + 1;
     
-    if(fread(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1){
-        printarMensagem("02 - Problemas na leitura do registro!!!");
-        return;
-    }
-    
-    if(agendamentoAux.ativo == '*'){
-        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
-        return;
-    }
-    
-    printf("\n\n Dados Atuais \n\n");
-    printarAgendamentoTopicos(agendamentoAux, mostrar_debug);
-    
-    printf("\n\n Novos dados \n\n");
-    lerDadosAgendamento(&agendamentoAux, mostrar_debug, tema);
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoAGENDAMENTO, -(int) sizeof(struct Agendamento), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO);
-    fflush(ponteiroArquivoAGENDAMENTO); /*despejar os arquivos no disco rígido*/
-}
-
-// #################################
-// DELETAR UM PERFIL DE AGENDAMENTO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e apaga logicamente (deixa invisivel);
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
-void deletarAgendamento(int registro, int mostrar_debug) {
-    struct Agendamento agendamentoAux;
-    
-    if(fseek(ponteiroArquivoAGENDAMENTO, (registro)*sizeof(agendamentoAux), SEEK_SET) != 0){
-        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
-        return;
-    }
-    
-    if(fread(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1){
-        printarMensagem("03 - Problemas na leitura do registro!!!");
-        return;
-    }
-    
-    if(agendamentoAux.ativo == '*'){
-        printarMensagem("Registro já está apagado!!!\n\n");
-        return;
-    }
-    
-    printf("\n\n Dados Atuais \n\n");
-    printarAgendamentoTopicos(agendamentoAux, mostrar_debug);
-    
-    fflush(stdin);
-    printf("\n\n Apagar o registro (s/n)???: ");
-    char resp = getchar();
-    
-    if(resp != 's' && resp != 'S') {
-        return;
-    }
-    
-    fflush(stdin);
-    agendamentoAux.ativo = '*';
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoAGENDAMENTO, -(int) sizeof(struct Agendamento), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO);
-    fflush(ponteiroArquivoAGENDAMENTO); /*despejar os arquivos no disco rígido*/
-    
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoAGENDAMENTO, -(int) sizeof(struct Agendamento), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&agendamentoAux, sizeof(struct Agendamento), 1, ponteiroArquivoAGENDAMENTO);
-    fflush(ponteiroArquivoAGENDAMENTO); /*despejar os arquivos no disco rígido*/
-}
-
-
-
-
-// #################################
-// MOSTRAR HORARIOS POR ANO
-// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
-void mostrarQuadroHorarios(int tema) {
-    int larguraDaTabela = 125;
-    int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
-    char anoString[5] = "2022";//, mesString[3] = "12";
-    
-    int indice, inicioExpediente = 8, fimExpediente = 18;
-    
-    Data dataEscolhida;
-    dataEscolhida.dia = 1;
-    dataEscolhida.mes = 10;
-    dataEscolhida.ano = 2022;
-    
-//    char stringMesAno;
-    
-    for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
-        sprintf(anoString, "%d", indiceAno);
-        interfaceLinhaSeparadora(larguraDaTabela, tema);
-        printarStringCentralizada(anoString, larguraDaTabela);
-        interfaceLinhaSeparadora(larguraDaTabela, tema);
-        
-        printarCabecalhoQuadroHorarios(); printf("\n");
-        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
-
-        for(indiceMes = 1; indiceMes <= 12; indiceMes++){
-            
-            for(indiceDia = 1; indiceDia <= quantidadeDiaMes(indiceMes); indiceDia++){
-                printf("\n%02d/%02d", indiceDia, indiceMes);
-                
-                for(indice = inicioExpediente; indice < fimExpediente; indice++) {
-                    printf("|%5s|%5s", " ", " ");
-                }
-                printf("\n");
-                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
-//                printf("\n");
-            }
+    // Poe o novo agendamento no final do arquivo.
+    fseek(ponteiroArquivoAGENDAMENTO, 0L, SEEK_END);
+    if(fwrite(&agendamento, sizeof(agendamento), 1, ponteiroArquivoAGENDAMENTO)!= 1) {
+        if(mostrar_debug == 1) {
+            printarMensagem("Adicionar agendamento: Falhou a escrita do registro");
         }
         
+        resultado = 1;
     }
+    
+    // Retornando o valor do resultado.
+    return(resultado);
 }
-
-
-
 
 #endif /* Agendamento_h */

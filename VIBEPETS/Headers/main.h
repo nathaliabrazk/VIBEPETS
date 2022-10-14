@@ -18,12 +18,12 @@
 #include <time.h>
 #include <unistd.h>     // usleep
 
-#include "utilidades.h"
-#include "validacoes.h"
-#include "Servico.h"
 #include "Agendamento.h"
 #include "Cliente.h"
 #include "Funcionario.h"
+#include "Servico.h"
+#include "validacoes.h"
+#include "utilidades.h
 
 // #############################################################################
 // CONSTANTES
@@ -35,9 +35,9 @@
 //#define BIN_TEL "vibe_pet-persistencia_tel.bin"
 //#define BIN_END "vibe_pet-persistencia_end.bin"
 
-#define MOSTRAR_DEBUG 0 // 1 = Mostra coisas na tela, msg de erro e etc.
-#define LIMPAR_TELA 0   // 1 = limpa a tela, habilita o clear screen system("cls").
 #define LIMPAR_BD 0     // 1 = Apaga os arquivos ao iniciar o sistema(zera o BD)
+#define LIMPAR_TELA 0   // 1 = limpa a tela, habilita o clear screen system("cls").
+#define MOSTRAR_DEBUG 0 // 1 = Mostra coisas na tela, msg de erro e etc.
 #define TEMA 0          // Cada numero representa um tema para a interface.
 
 
@@ -46,8 +46,6 @@ FILE *ponteiroArquivoHORARIO;
 //FILE *ponteiroArquivoPRODUTO;
 //FILE *ponteiroArquivoTELEFONE;
 //FILE *ponteiroArquivoENDERECO;
-
-
 
 
 // #############################################################################
@@ -67,15 +65,11 @@ void fecharArquivoHorario(void);
 void menuPrincipal(void);
 
 
-
 void menuHorario(void);
 void menuHorarioListarTodos(void);
 void menuHorarioInserir(void);
 void menuHorarioAlterar(void);
 void menuHorarioDeletar(void);
-
-
-
 
 
 int  salvarRegistroHorario(struct Horario);
@@ -88,10 +82,5 @@ void alterarHorario(int);
 int  acessarUltimoCodigoHorario(void);
 void deletarHorario(int);
 void lerDadosHorario(struct Horario*);
-
-
-
-
-
 
 #endif /* main_h */

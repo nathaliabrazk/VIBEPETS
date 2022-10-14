@@ -5,17 +5,15 @@
 //  Created by Luiz Araujo on 14/10/22.
 //
 
+// #############################################################################
+// ELEMENTOS DE INTERFACE
+
 #ifndef interface_h
 #define interface_h
 
 
-
-// #############################################################################
-// ELEMENTOS DE INTERFACE
-
-void interfaceLinhaSeparadora(int, int);
-void interfaceLinhaSeparadoraSemQuebraDeLinha(int, int);
-
+// #################################
+// PROTOTIPOS
 void printarCabecalhoQuadroHorarios(void);
 void printarDataFormatada(Data);
 void printarHoraFormatada(Hora);
@@ -23,6 +21,8 @@ void printarMensagem(char *msg);
 void printarMensagemContinuar(void);
 void printarStringCentralizada(char*, int);
 
+void interfaceLinhaSeparadora(int, int);
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int, int);
 
 // #################################
 // MOSTRAR HORARIOS POR ANO
@@ -91,7 +91,6 @@ void printarStringCentralizada(char *string, int tamanhoLinha) {
 }
 
 
-
 // #################################
 // LINHA SEPARADORA
 void interfaceLinhaSeparadora(int tamanho, int tema) {
@@ -129,8 +128,5 @@ void interfaceLinhaSeparadoraSemQuebraDeLinha(int tamanho, int tema) {
         printf("%c", caracter);
     }
 }
-
-
-
 
 #endif /* interface_h */
