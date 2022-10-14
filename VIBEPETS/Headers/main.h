@@ -18,12 +18,14 @@
 #include <time.h>
 #include <unistd.h>     // usleep
 
-#include "Agendamento.h"
+// Neste caso a ordem importa...
+#include "utilidades.h"
+#include "validacoes.h"
 #include "Cliente.h"
 #include "Funcionario.h"
 #include "Servico.h"
-#include "validacoes.h"
-#include "utilidades.h
+#include "Agendamento.h"
+
 
 // #############################################################################
 // CONSTANTES
