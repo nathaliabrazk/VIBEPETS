@@ -3157,88 +3157,82 @@ void interfaceLinhaSeparadoraPequena() {
 }
 
 
-/* PODE SER UTIL DEPOIS
+ PODE SER UTIL DEPOIS
  
  
  
  
- // Propriedades
- //    char opcao;
- //    struct Cliente cliente;
- //
- //    printf("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
- //    printf("Escolha o Shampoo para seu pet:\n");
- //    printf("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Peloncio \nC- Shampoo Pelos Escuros Peloncio \nFragrancias:    Avela - Melancia - Dove - Morango\n");
- //    printf("Opcao:\n");
- //    scanf ("%s", &opcao);
- //    fflush (stdin);
- //    sho
- //
- //    switch (opcao) {
- //        case 'A':
- //        case 'a':
- //            printf("Voce escolheu  Shampoo Pro-Banho Peloncio\n");
- //            break;
- //        case 'B':
- //        case 'b':
- //            printf("Voc escolheu Shampoo Pelos Claros Peloncio\n");
- //            break;
- //        case 'C':
- //        case 'c':
- //            printf("Voce escolheu Shampoo Pelos Escuros Peloncio\n");
- //            break;
- //        default:
- //            printf("Opcao invalida");
- //    }
- //
- //    printf("Escolha a fragrancia do Condicionador para seu pet:\n");
- //    printf("A-Avela \nB- Melancia \nC- Morango\n");
- //    printf("Opcao:\n");
- //    scanf ("%c", &opcao);
- //    fflush (stdin);
- //    limparTela();
- //
- //    switch (opcao) {
- //        case 'A':
- //        case 'a':
- //            printf("Voce escolheu Avela\n");
- //            break;
- //        case 'B':
- //        case 'b':
- //            printf("Voce escolheu Melancia\n");
- //            break;
- //        case 'C':
- //        case 'c':
- //            printf("Voce escolheu Morango\n");
- //            break;
- //        default:
- //
- //            printf("Opcao invalida");
- //    }
- //    printf("Escolha a colonia Perfume Pet Clean Max para seu pet:\n");
- //    printf("A-  Amendoas e Ameixa \nB- Avela e Cereja \nC- Melancia\n");
- //    printf("Opcao:\n");
- //    scanf ("%c", &opcao);
- //    fflush (stdin);
- //    limparTela();
- //
- //    switch (opcao)
- //    {
- //        case 'A':
- //        case 'a':
- //            printf("Voce escolheu Amendoas e Ameixa\n");
- //            break;
- //        case 'B':
- //        case 'b':
- //            printf("Voce escolheu Avela e Cereja\n");
- //            break;
- //        case 'C':
- //        case 'c':
- //            printf("Voce escolheu Melancia\n");
- //            break;
- //        default:
- //            printf("Opcao invalida");
- //    }
+  Propriedade
+   char opcao;
+ struct Cliente cliente;
+ printf("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
+    printf("Escolha o Shampoo para seu pet:\n");
+     printf("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Peloncio \nC- Shampoo Pelos Escuros Peloncio \nFragrancias:    Avela - Melancia - Dove - Morango\n");
+     printf("Opcao:\n");
+     scanf ("%s", &opcao);
+     fflush (stdin);
+    sho
+ 
+   switch (opcao) {
+        case 'A':
+       case 'a':
+            printf("Voce escolheu  Shampoo Pro-Banho Peloncio\n");
+             break;
+       case 'B':
+        case 'b':
+            printf("Voc escolheu Shampoo Pelos Claros Peloncio\n");
+           break;
+       case 'c':
+            printf("Voce escolheu Shampoo Pelos Escuros Peloncio\n");
+             break;
+       default:
+             printf("Opcao invalida");
+    }
+ 
+   printf("Escolha a fragrancia do Condicionador para seu pet:\n");
+    printf("A-Avela \nB- Melancia \nC- Morango\n");
+   printf("Opcao:\n");
+    scanf ("%c", &opcao);
+    fflush (stdin);/    limparTela();
+
+    switch (opcao) {
+         case 'A':
+             printf("Voce escolheu Avela\n");
+            break;
+       case 'b':
+           printf("Voce escolheu Melancia\n");
+             break;
+        case 'C':
+       case 'c':
+             printf("Voce escolheu Morango\n");
+            break;
+         default:
+ 
+          printf("Opcao invalida");
+     }
+     printf("Escolha a colonia Perfume Pet Clean Max para seu pet:\n");
+   printf("A-  Amendoas e Ameixa \nB- Avela e Cereja \nC- Melancia\n");
+    printf("Opcao:\n");
+     scanf ("%c", &opcao);
+     fflush (stdin);
+     limparTela();
+ 
+     switch (opcao)
+    {
+         case 'A':
+      case 'a':
+            printf("Voce escolheu Amendoas e Ameixa\n");
+             break;
+      case 'B':
+        case 'b':
+            printf("Voce escolheu Avela e Cereja\n");
+             break;
+        case 'C':
+        case 'c':
+            printf("Voce escolheu Melancia\n");
+             break;
+              printf("Opcao invalida");
+    }
  
  
  
