@@ -1904,7 +1904,7 @@ void deletarFuncionario(int registro) {
 void mostrarQuadroHorarios() {
     int larguraDaTabela = 125;
     int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
-    char anoString[5] = "2022", mesString[3] = "12";
+    char anoString[5] = "2022";//, mesString[3] = "12";
     
     int indice, inicioExpediente = 8, fimExpediente = 18;
     

@@ -189,7 +189,6 @@ char receberValidarOpcaoLetra(char*);
 Data receberValidarData(void);
 Hora receberValidarHora(void);
 void receberValidarEmail(char*);
-char verificarHoraDentroExpediente(Hora);
 
 
 // #################################

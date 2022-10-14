@@ -11,44 +11,27 @@
 #include "tipos.h"
 #include "interface.h"
 
-// #################################
-// FUNCOES AUXILIARES
-void listarCaracteresASCII(void);
-char* formatarCPF(char[], int);
-void limparTela(int);
-char* stringDataFormatada(Data);
-char* stringHoraFormatada(Hora);
-Data pegarDataDoSistema(int);
-Hora pegarHoraDoSistema(int);
-int quantidadeDiaMes(int);
-int verificarTempoAteData(Data, int);
 
 // #############################################################################
 // FUNCOES AUXILIARES
 
 // #################################
-// Dá um system cls, limpa a tela.
-void limparTela(int limpar_tela) {
-    if(limpar_tela == 1) {
-        system("cls");
-    }
-}
+// PROTOTIPOS
+char* formatarCPF(char[], int);
+char* intParaString(int, int);
+void limparTela(int);
+void listarCaracteresASCII(void);
+Data pegarDataDoSistema(int);
+Hora pegarHoraDoSistema(int);
+int quantidadeDiaMes(int);
+char* stringDataFormatada(Data);
+char* stringHoraFormatada(Hora);
+char verificarHoraDentroExpediente(Hora);
+int verificarTempoAteData(Data, int);
+
 
 // #################################
-// Dá um system cls, limpa a tela.
-void listarCaracteresASCII() {
-    int indice;
-    
-//    printf("%c\n\n\n\n", 187);
-    
-    for(indice = 0; indice <= 255; indice++) {
-        printf("CHAR %3d: %-3c\t", indice, indice);
-        
-        if(indice % 10 == 0) {
-            printf("\n");
-        }
-    }
-}
+// FUNCOES
 
 // #################################
 // FORMATAR CPF
@@ -117,6 +100,30 @@ char* intParaString(int val, int base){
 }
 
 // #################################
+// Dá um system cls, limpa a tela.
+void limparTela(int limpar_tela) {
+    if(limpar_tela == 1) {
+        system("cls");
+    }
+}
+
+// #################################
+// Dá um system cls, limpa a tela.
+void listarCaracteresASCII() {
+    int indice;
+    
+//    printf("%c\n\n\n\n", 187);
+    
+    for(indice = 0; indice <= 255; indice++) {
+        printf("CHAR %3d: %-3c\t", indice, indice);
+        
+        if(indice % 10 == 0) {
+            printf("\n");
+        }
+    }
+}
+
+// #################################
 // PEGA STRING E TRANSFORMA EM INT
 //char* stringParaInt(int val, int base){
 //}
@@ -167,6 +174,155 @@ Hora pegarHoraDoSistema(int mostrar_debug) {
     horaAtual.hora    = p->tm_hour;
     
     return horaAtual;
+}
+
+// #################################
+// QUANTIDADE DE DIAS NO MES
+// RETORNO:
+//   - Retorna a quantidade de dias no mes/ultimo dia
+//   - -1 caso o mes seja invalido
+/*
+     Quantos dias tem cada mes
+     Num     Mes         Dias
+     2       Fevereiro   28 dias (29 dias nos anos bissextos)
+     
+     4       Abril       30 dias
+     6       Junho       30 dias
+     9       Setembro    30 dias
+     11      Novembro    30 dias
+     
+     1       Janeiro     31 dias
+     3       Março       31 dias
+     5       Maio        31 dias
+     7       Julho       31 dias
+     8       Agosto      31 dias
+     10      Outubro     31 dias
+     12      Dezembro    31 dias
+ */
+int quantidadeDiaMes(int mes) {
+    switch(mes) {
+        case 2:
+            return 28;
+            
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            return 30;
+            
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            return 31;
+            
+        default:
+            return -1;
+    }
+}
+
+// #################################
+// FORMATAR DATA E RETORNAR A STRING
+// Por barras. Ex.:
+//    01/01/2001
+char* stringDataFormatada(Data data) {
+    char* resultado = (char*)calloc(11,sizeof(char));
+    char diaAux[3];
+    char mesAux[3];
+    char anoAux[5];
+    
+    strcpy(resultado, "00-00-0000");
+    
+    strcpy(diaAux, intParaString(data.dia, 10));
+    strcpy(mesAux, intParaString(data.mes, 10));
+    strcpy(anoAux, intParaString(data.ano, 10));
+    
+    if(data.dia <= 9) {
+        resultado[0] = '0';
+        resultado[1] = diaAux[0];
+    } else {
+        resultado[0] = diaAux[0];
+        resultado[1] = diaAux[1];
+    }
+    resultado[2] = '/';
+    
+    if(data.mes <= 9) {
+        resultado[3] = '0';
+        resultado[4] = mesAux[0];
+    } else {
+        resultado[3] = mesAux[0];
+        resultado[4] = mesAux[1];
+    }
+    
+    resultado[5] = '/';
+    
+    if(data.ano <= 9) {
+        resultado[6] = '0';
+        resultado[7] = mesAux[0];
+        resultado[8] = mesAux[1];
+        resultado[9] = mesAux[2];
+    } else {
+        resultado[6] = anoAux[0];
+        resultado[7] = anoAux[1];
+        resultado[8] = anoAux[2];
+        resultado[9] = anoAux[3];
+    }
+    //    resultado[6] = anoAux[0];
+    //    resultado[7] = anoAux[1];
+    //    resultado[8] = anoAux[2];
+    //    resultado[9] = anoAux[3];
+    
+    return resultado;
+}
+
+// #################################
+// FORMATAR HORA E RETORNAR A STRING
+// Por dois pontos. Ex.:
+//    12:59:00
+char* stringHoraFormatada(Hora hora) {
+    char* resultado = (char*)calloc(6,sizeof(char));
+    char horaAux[3];
+    char minutoAux[3];
+    //    char segundoAux[3];
+    
+    strcpy(resultado, "00:00:00");
+    
+    //    strcpy(segundoAux, itoa(hora.segundo, 10));
+    strcpy(minutoAux, intParaString(hora.minuto, 10));
+    strcpy(horaAux, intParaString(hora.hora, 10));
+    
+    resultado[0] = horaAux[0];
+    resultado[1] = horaAux[1];
+    resultado[2] = ':';
+    resultado[3] = minutoAux[0];
+    resultado[4] = minutoAux[1];
+    resultado[5] = '\0';
+    //    resultado[6] = segundoAux[0];
+    //    resultado[7] = segundoAux[1];
+    
+    return resultado;
+}
+
+// #################################
+// VERIFICAR SE A HORA RECEBIDA ESTA DENTRO DO EXPEDIENTE DA LOJA
+// PARAMETRO:
+//   - Uma instancia de Hora
+// RETORNO:
+//   - 'n': caso esteja fora do expediente;
+//   - 's': tah safe.
+char verificarHoraDentroExpediente(Hora horaEscolhida) {
+    char dentroExpediente = 's';
+    int inicioExpediente = 8, fimExpediente = 18;
+    
+    if((horaEscolhida.hora < inicioExpediente) || (horaEscolhida.hora > fimExpediente)) {
+        printarMensagem("\nFora do horario de funcionamento!(8h as 18h)\n");
+        return 'n';
+    }
+    
+    return dentroExpediente;
 }
 
 // #################################
@@ -320,156 +476,5 @@ int verificarTempoAteData(Data dataEscolhida, int mostrar_debug) {
     
     return -404;
 }
-
-// #################################
-// VERIFICAR SE A HORA RECEBIDA ESTA DENTRO DO EXPEDIENTE DA LOJA
-// PARAMETRO:
-//   - Uma instancia de Hora
-// RETORNO:
-//   - 'n': caso esteja fora do expediente;
-//   - 's': tah safe.
-char verificarHoraDentroExpediente(Hora horaEscolhida) {
-    char dentroExpediente = 's';
-    int inicioExpediente = 8, fimExpediente = 18;
-    
-    if((horaEscolhida.hora < inicioExpediente) || (horaEscolhida.hora > fimExpediente)) {
-        printarMensagem("\nFora do horario de funcionamento!(8h as 18h)\n");
-        return 'n';
-    }
-    
-    return dentroExpediente;
-}
-
-// #################################
-// FORMATAR DATA E RETORNAR A STRING
-// Por barras. Ex.:
-//    01/01/2001
-char* stringDataFormatada(Data data) {
-    char* resultado = (char*)calloc(11,sizeof(char));
-    char diaAux[3];
-    char mesAux[3];
-    char anoAux[5];
-    
-    strcpy(resultado, "00-00-0000");
-    
-    strcpy(diaAux, intParaString(data.dia, 10));
-    strcpy(mesAux, intParaString(data.mes, 10));
-    strcpy(anoAux, intParaString(data.ano, 10));
-    
-    if(data.dia <= 9) {
-        resultado[0] = '0';
-        resultado[1] = diaAux[0];
-    } else {
-        resultado[0] = diaAux[0];
-        resultado[1] = diaAux[1];
-    }
-    resultado[2] = '/';
-    
-    if(data.mes <= 9) {
-        resultado[3] = '0';
-        resultado[4] = mesAux[0];
-    } else {
-        resultado[3] = mesAux[0];
-        resultado[4] = mesAux[1];
-    }
-    
-    resultado[5] = '/';
-    
-    if(data.ano <= 9) {
-        resultado[6] = '0';
-        resultado[7] = mesAux[0];
-        resultado[8] = mesAux[1];
-        resultado[9] = mesAux[2];
-    } else {
-        resultado[6] = anoAux[0];
-        resultado[7] = anoAux[1];
-        resultado[8] = anoAux[2];
-        resultado[9] = anoAux[3];
-    }
-    //    resultado[6] = anoAux[0];
-    //    resultado[7] = anoAux[1];
-    //    resultado[8] = anoAux[2];
-    //    resultado[9] = anoAux[3];
-    
-    return resultado;
-}
-
-// #################################
-// FORMATAR HORA E RETORNAR A STRING
-// Por dois pontos. Ex.:
-//    12:59:00
-char* stringHoraFormatada(Hora hora) {
-    char* resultado = (char*)calloc(6,sizeof(char));
-    char horaAux[3];
-    char minutoAux[3];
-    //    char segundoAux[3];
-    
-    strcpy(resultado, "00:00:00");
-    
-    //    strcpy(segundoAux, itoa(hora.segundo, 10));
-    strcpy(minutoAux, intParaString(hora.minuto, 10));
-    strcpy(horaAux, intParaString(hora.hora, 10));
-    
-    resultado[0] = horaAux[0];
-    resultado[1] = horaAux[1];
-    resultado[2] = ':';
-    resultado[3] = minutoAux[0];
-    resultado[4] = minutoAux[1];
-    resultado[5] = '\0';
-    //    resultado[6] = segundoAux[0];
-    //    resultado[7] = segundoAux[1];
-    
-    return resultado;
-}
-
-// #################################
-// QUANTIDADE DE DIAS NO MES
-// RETORNO:
-//   - Retorna a quantidade de dias no mes/ultimo dia
-//   - -1 caso o mes seja invalido
-/*
-     Quantos dias tem cada mes
-     Num     Mes         Dias
-     2       Fevereiro   28 dias (29 dias nos anos bissextos)
-     
-     4       Abril       30 dias
-     6       Junho       30 dias
-     9       Setembro    30 dias
-     11      Novembro    30 dias
-     
-     1       Janeiro     31 dias
-     3       Março       31 dias
-     5       Maio        31 dias
-     7       Julho       31 dias
-     8       Agosto      31 dias
-     10      Outubro     31 dias
-     12      Dezembro    31 dias
- */
-int quantidadeDiaMes(int mes) {
-    switch(mes) {
-        case 2:
-            return 28;
-            
-        case 4:
-        case 6:
-        case 9:
-        case 11:
-            return 30;
-            
-        case 1:
-        case 3:
-        case 5:
-        case 7:
-        case 8:
-        case 10:
-        case 12:
-            return 31;
-            
-        default:
-            return -1;
-    }
-}
-
-
 
 #endif /* utilidades_h */

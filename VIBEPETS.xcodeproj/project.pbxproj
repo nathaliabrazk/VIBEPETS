@@ -28,7 +28,7 @@
 		6FB607A728E1D9D3007A834D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		6FD8706628F9BD48001ED7DE /* utilidades.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utilidades.h; sourceTree = "<group>"; };
 		6FD8706728F9C423001ED7DE /* tipos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tipos.h; sourceTree = "<group>"; };
-		6FD8706828F9C839001ED7DE /* interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
+		6FD8706928F9C8FB001ED7DE /* interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +45,7 @@
 		6F572E3128F9B154008CE337 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				6FD8706928F9C8FB001ED7DE /* interface.h */,
 				6F572E3228F9B154008CE337 /* main.h */,
 				6FD8706728F9C423001ED7DE /* tipos.h */,
 				6FD8706628F9BD48001ED7DE /* utilidades.h */,
@@ -55,7 +56,6 @@
 		6FB6079B28E1D9D3007A834D = {
 			isa = PBXGroup;
 			children = (
-				6FD8706828F9C839001ED7DE /* interface.h */,
 				6FB607A628E1D9D3007A834D /* VIBEPETS */,
 				6FB607A528E1D9D3007A834D /* Products */,
 			);
