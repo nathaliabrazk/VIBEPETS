@@ -21,6 +21,7 @@
 #include "utilidades.h"
 #include "validacoes.h"
 #include "Servico.h"
+#include "Agendamento.h"
 
 // #############################################################################
 // CONSTANTES
@@ -39,7 +40,6 @@
 
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
-FILE *ponteiroArquivoAGENDAMENTO;
 FILE *ponteiroArquivoCLIENTE;
 FILE *ponteiroArquivoFUNCIONARIO;
 FILE *ponteiroArquivoHORARIO;
@@ -56,13 +56,11 @@ FILE *ponteiroArquivoHORARIO;
 // #################################
 // ARQUIVOS
 void abrirTodosArquivos(void);
-void abrirArquivoAgendamento(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
 void abrirArquivoHorario(void);
 
 void fecharTodosArquivos(void);
-void fecharArquivoAgendamento(void);
 void fecharArquivoCliente(void);
 void fecharArquivoHorario(void);
 void fecharArquivoFuncionario(void);
@@ -72,11 +70,6 @@ void fecharArquivoFuncionario(void);
 // MENUS
 void menuPrincipal(void);
 
-void menuAgendamento(void);
-void menuAgendamentoListarTodos(void);
-void menuAgendamentoInserir(void);
-void menuAgendamentoAlterar(void);
-void menuAgendamentoDeletar(void);
 
 void menuCliente(void);
 void menuClienteListarTodos(void);
@@ -96,21 +89,7 @@ void menuHorarioListarTodos(void);
 void menuHorarioInserir(void);
 void menuHorarioAlterar(void);
 void menuHorarioDeletar(void);
-void menuAgendamentoHorarios(void);
 
-// #################################
-// FUNCOES CRUD
-int  salvarRegistroAgendamento(struct Agendamento);
-void printarCabecalhoListaAgendamento(void);
-void printarTodosRegistrosAgendamento(void);
-void printarAgendamentoLista(struct Agendamento);
-void printarAgendamentoTopicos(struct Agendamento);
-struct Agendamento buscarAgendamentoPorCod(int);
-int  buscarRegistroAgendamentoPorCod(int);
-void alterarAgendamento(int);
-int  acessarUltimoCodigoAgendamento(void);
-void deletarAgendamento(int);
-void lerDadosAgendamento(struct Agendamento*);
 
 void printarCabecalhoTodosClientes(void);
 int  salvarRegistroCliente(struct Cliente);
@@ -147,16 +126,6 @@ void alterarHorario(int);
 int  acessarUltimoCodigoHorario(void);
 void deletarHorario(int);
 void lerDadosHorario(struct Horario*);
-
-
-
-void mostrarQuadroHorarios(void);
-
-
-
-
-
-
 
 
 
