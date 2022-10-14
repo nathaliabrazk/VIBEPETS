@@ -2,7 +2,7 @@
 //  main.c
 //  VIBEPETS
 //
-//  Created by Nathelia Braz on 24/09/22.
+//  Created by Nathalia Braz on 24/09/22.
 //
 
 //#include "main.h"
@@ -72,7 +72,7 @@ void menuPrincipal() {
 //                break;
                 
             case 's':
-                menuServico();
+                menuServico(MOSTRAR_DEBUG, TEMA);
                 break;
                 
             case 'x':
@@ -358,100 +358,6 @@ void menuFuncionarioDeletar() {
     printarMensagemContinuar();
 }
 
-// #################################
-// MENU SERVICO
-void menuServico() {
-    char opcao = 'a';
-    
-    while(opcao != 'X' && opcao != 'x') {
-        limparTela(MOSTRAR_DEBUG);
-        
-        printf("\n MENU SERVICO\n");
-        printf("\tI) INSERIR NOVO\n");
-        printf("\tA) ALTERAR\n");
-        printf("\tL) LISTAR\n");
-        printf("\tD) DELETAR\n");
-        printf("\tX) VOLTAR\n");
-        printf("OPCAO: ");
-        //        scanf("%c", &opcao); fflush(stdin);
-        opcao = getchar();
-        fflush(stdin);
-        
-        switch(opcao) {
-            case 'i':
-            case 'I':
-                menuServicoInserir();
-                break;
-                
-            case 'a':
-            case 'A':
-                menuServicoAlterar();
-                break;
-                
-            case 'l':
-            case 'L':
-                menuServicoListarTodos();
-                break;
-                
-            case 'd':
-            case 'D':
-                menuServicoDeletar();
-                break;
-                
-            case 'x':
-            case 'X':
-                printf("VOLTANDO!");
-                break;
-                
-                
-            default:
-                printf("OPCAO INVALIDA!");
-        }
-    }
-}
-
-void menuServicoListarTodos() {
-    printarTodosRegistrosServico();
-    printarMensagemContinuar();
-}
-
-void menuServicoInserir() {
-    struct Servico servico;
-    
-    lerDadosServico(&servico);
-    salvarRegistroServico(servico);
-    printarServicoLista(servico);
-    printarServicoTopicos(servico);
-}
-
-void menuServicoAlterar() {
-    int codigo = 0;
-    int registro = 0;
-    
-    printarTodosRegistrosServico();
-    
-    printf("INFORME O CODIGO PARA ALTERAR: ");
-    scanf("%d", &codigo);
-    
-    registro = buscarRegistroServicoPorCod(codigo);
-    alterarServico(registro);
-    
-    printarMensagemContinuar();
-}
-
-void menuServicoDeletar() {
-    int codigo = 0;
-    int registro = 0;
-    
-    printarTodosRegistrosServico();
-    
-    printf("INFORME O CODIGO PARA ALTERAR: ");
-    scanf("%d", &codigo);
-    
-    registro = buscarRegistroServicoPorCod(codigo);
-    deletarServico(registro);
-    printarMensagemContinuar();
-}
 
 // #############################################################################
 // PERSISTENCIA EM BINARIOS
@@ -609,24 +515,6 @@ void abrirArquivoFuncionario() {
     }
 }
 
-void abrirArquivoServico() {
-    ponteiroArquivoSERVICO = fopen(BIN_SER, "r+b"); //tentar abrir
-    
-    if(ponteiroArquivoSERVICO == NULL){
-        ponteiroArquivoSERVICO  = fopen(BIN_SER, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoSERVICO == NULL){
-            if(MOSTRAR_DEBUG == 1) {
-                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_SER);
-            }
-            
-            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
-}
-
 // #################################
 // FECHAR OS ARQUIVOS
 void fecharTodosArquivos() {
@@ -671,13 +559,6 @@ void fecharArquivoFuncionario() {
     fclose(ponteiroArquivoFUNCIONARIO);
 }
 
-void fecharArquivoServico() {
-    // Atualizar o arquivo.
-    fflush(ponteiroArquivoSERVICO);
-    
-    // Fechar o arquivo.
-    fclose(ponteiroArquivoSERVICO);
-}
 
 
 // #############################################################################
@@ -807,11 +688,11 @@ void lerDadosAgendamento(struct Agendamento *agendamento) {
     // Pegar codigo Servico.
     entradaValida = 'n';
     while(entradaValida == 'n') {
-        menuServicoListarTodos();
+        menuServicoListarTodos(TEMA);
         printf("\nCODIGO DO SERVICO\n");
         scanf("%d", &pesquisaCodigo);
         
-        pesquisaCodigo = buscarServicoPorCod(pesquisaCodigo).codigo;
+        pesquisaCodigo = buscarServicoPorCod(pesquisaCodigo, MOSTRAR_DEBUG).codigo;
         
         if(pesquisaCodigo == -1) {
             if(MOSTRAR_DEBUG == 1) {
@@ -999,7 +880,7 @@ void printarAgendamentoLista(struct Agendamento agendamento) {
     
     cliente     = buscarClientePorCod(agendamento.codigoCliente);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
-    servico     = buscarServicoPorCod(agendamento.codigoServico);
+    servico     = buscarServicoPorCod(agendamento.codigoServico, MOSTRAR_DEBUG);
     
     printf("%05d|%-10s|%5s", agendamento.codigo, stringDataFormatada(agendamento.data), stringHoraFormatada(agendamento.hora));
     printf("|%-30s|%-30s|%-30s\n", servico.nome, cliente.nome, funcionario.nome);
@@ -1012,7 +893,7 @@ void printarAgendamentoTopicos(struct Agendamento agendamento) {
     
     cliente     = buscarClientePorCod(agendamento.codigoCliente);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
-    servico     = buscarServicoPorCod(agendamento.codigoServico);
+    servico     = buscarServicoPorCod(agendamento.codigoServico, MOSTRAR_DEBUG);
     
     if(agendamento.ativo == ' ') {
         printf("%-11s: %d\n", "CODIGO", agendamento.codigo);
@@ -1039,7 +920,7 @@ void printarTodosRegistrosAgendamento() {
     
     cliente     = buscarClientePorCod(agendamento.codigoCliente);
     funcionario = buscarFuncionarioPorCod(agendamento.codigoFuncionario);
-    servico     = buscarServicoPorCod(agendamento.codigoServico);
+    servico     = buscarServicoPorCod(agendamento.codigoServico, MOSTRAR_DEBUG);
     
     int n_Linhas = 0;
     
@@ -1952,321 +1833,6 @@ void mostrarQuadroHorarios() {
 
 
 
-
-
-
-
-
-
-
-
-// #############################################################################
-// SERVICO
-
-// #################################
-// LER OS DADOS DE SERVICO
-void lerDadosServico(struct Servico *servico) {
-    
-    fflush(stdin);
-    printf("Nome   : ");
-    gets(servico->nome); fflush(stdin);
-    
-    printf("Duracao: ");
-    scanf("%d", &servico->duracao);
-    
-    printf("Valor  : ");
-    scanf("%f", &servico->valor);
-    
-    if(MOSTRAR_DEBUG == 1) {
-        printf("🤔 VALOR INSERIDO: %f", servico->valor);
-    }
-    
-    servico->ativo = ' '; // Qualquer coisa menos '*' significa ativo
-}
-
-// #################################
-// SALVAR DADOS DE SERVICO
-// RETORNO:
-//  -    0: se nao houve erros;
-//  - != 0: se houve erro(s);
-int salvarRegistroServico(struct Servico servico) {
-    int resultado = 0;
-    
-    // Adicionar codigo, auto-incrementando,
-    // pega o codigo do ultimo registro e incrementa.
-    servico.codigo = acessarUltimoCodigoServico() + 1;
-    
-    // Poe o novo servico no final do arquivo.
-    fseek(ponteiroArquivoSERVICO, 0L, SEEK_END);
-    if(fwrite(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1) {
-        if(MOSTRAR_DEBUG == 1) {
-            printarMensagem("Adicionar servico: Falhou a escrita do registro");
-        }
-        
-        resultado = 1;
-    }
-    
-    // Retornando o valor do resultado.
-    return(resultado);
-}
-
-// #################################
-// BUSCAR SERVICO POR CODIGO
-// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
-// RETORNO:
-//  - A instancia de Servico com os dados encontrados;
-//  - 'servico.codigo = -1' caso nao encontre.
-struct Servico buscarServicoPorCod(int codigo) {
-    struct Servico servico;
-    int contadorCodigo = -1;
-    
-    servico.codigo = -1;
-    
-    // Testando se o arquivo foi aberto com sucesso
-    if(ponteiroArquivoSERVICO != NULL) {
-        if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
-        }
-        
-    } else {
-        if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
-        }
-        system("pause");
-        exit(1);
-    }
-    
-    rewind(ponteiroArquivoSERVICO);
-    // Procura em todos os registros do documento.
-    while(fread(&servico, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)) {
-        // Incrementa ++ porque comeca com -1.
-        contadorCodigo += 1;
-        
-        // Compara o cod recebido.
-        if(servico.codigo == codigo) {
-            // Se encontrar, retorna a poisicao(linha) do registro.
-            return  servico;
-        }
-    }
-    
-    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
-    if(MOSTRAR_DEBUG == 1) {
-        printf("\n\nERRO: registro nao encontrado.");
-    }
-    
-    return servico;
-}
-
-// #################################
-// BUSCAR SERVICO POR CODIGO
-// Uma funçao para retornar o registro (posicao no arquivo) procurando pelo codigo.
-// RETORNO:
-//  -  O numero do registro, caso encontre;
-//  - -1 caso, nao encontre.
-int buscarRegistroServicoPorCod(int codigo) {
-    struct Servico servico;
-    int contadorCodigo = -1;
-    
-    // Testando se o arquivo foi aberto com sucesso
-    if(ponteiroArquivoSERVICO != NULL) {
-        if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
-        }
-        
-    } else {
-        if(MOSTRAR_DEBUG == 1) {
-            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
-        }
-        
-        system ("pause");
-        exit(1);
-    }
-    
-    rewind(ponteiroArquivoSERVICO);
-    // Procura em todos os registros do documento.
-    while(fread(&servico, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)) {
-        // Incrementa ++ porque comeca com -1.
-        contadorCodigo += 1;
-        
-        // Compara o cod recebido.
-        if(servico.codigo == codigo) {
-            // Se encontrar, retorna a poisicao(linha) do registro.
-            return  contadorCodigo;
-        }
-    }
-    
-    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
-    if(MOSTRAR_DEBUG == 1) {
-        printf("\n\nERRO: registro nao encontrado.");
-    }
-    contadorCodigo = -1;
-    
-    return contadorCodigo;
-}
-
-// #################################
-// BUSCAR CODIGO DO ULTIMO REGISTRO
-// Uma funçao para ir ate o ultimo registro, ultimo servico cadastrado e
-// retorna seu respectivo codigo.
-// RETORNO:
-//  - O int do codigo.
-int acessarUltimoCodigoServico() {
-    struct Servico servico;
-    
-    fseek(ponteiroArquivoSERVICO, -1 * sizeof(struct Servico), SEEK_END);
-    if(fread(&servico, sizeof(struct Servico), -1, ponteiroArquivoSERVICO)!= 1){
-        if(MOSTRAR_DEBUG == 1) {
-            printarMensagem("04 - Problemas na leitura do registro!!!");
-        }
-        return -1;
-    }
-    
-    if(servico.codigo <= -1){
-        return 0;
-        
-    } else {
-        return servico.codigo;
-    }
-}
-
-// #################################
-// PRINTAR UM PERFIL DE SERVICO:
-// mostra na tela os dados existentes no registro
-void printarServicoLista(struct Servico servico) {
-    //TODO: criar View de perfil SERVICO.
-    
-    printf("%05d|%-30s|%-3d%-7s|R$ %5.2f\n", servico.codigo, servico.nome, servico.duracao, "min", servico.valor);
-}
-
-void printarServicoTopicos(struct Servico servico) {
-    
-    if(servico.ativo != '*') {
-        printf("%-7s: %d\n", "CODIGO", servico.codigo);
-        printf("%-7s: %s\n", "NOME", servico.nome);
-        
-        printf("%-7s: %d\n", "DURACAO", servico.duracao);
-        printf("%-7s: %f\n", "VALOR", servico.valor);
-        
-    } else {
-        printf("\nSERVICO DELETADO!\n");
-    }
-}
-
-// #################################
-// LER TODOS PERFIS DE SERVICO
-void printarTodosRegistrosServico() {
-    struct Servico servico;
-    int n_Linhas = 0;
-    
-    // Volta o ponteiro para o inicio.
-    rewind(ponteiroArquivoSERVICO);
-    
-    printf("SERVICOS\n");
-    interfaceLinhaSeparadora(150, TEMA);
-    printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
-    interfaceLinhaSeparadora(150, TEMA);
-    
-    while(1){
-        if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/
-        if(servico.ativo == '*') continue; /*Passa ao proximo*/
-        printarServicoLista(servico);
-        //        printarServicoTopicos(servico);
-        n_Linhas++;
-        if(n_Linhas%20 == 0)
-            printarMensagem("Pressione <Enter> para continuar .  .  .");
-    }
-}
-
-// #################################
-// ALTERAR UM PERFIL DE SERVICO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e mostra como está momento antes da alteracao, apos isso rece novos dados e atualiza.
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
-void alterarServico(int registro) {
-    struct Servico servicoAux;
-    
-    if(fseek(ponteiroArquivoSERVICO, (registro)*sizeof(servicoAux), SEEK_SET) != 0){
-        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
-        return;
-    }
-    
-    if(fread(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)!= 1){
-        printarMensagem("05 - Problemas na leitura do registro!!!");
-        return;
-    }
-    
-    if(servicoAux.ativo == '*'){
-        printarMensagem("Um registro apagado nao pode ser alterado!!! \n\n");
-        return;
-    }
-    
-    
-    printf("\n\n Dados Atuais \n\n");
-    printarServicoTopicos(servicoAux);
-    
-    printf("\n\n Novos dados \n\n");
-    lerDadosServico(&servicoAux);
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoSERVICO, -(int) sizeof(struct Servico), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO);
-    fflush(ponteiroArquivoSERVICO); /*despejar os arquivos no disco rígido*/
-}
-
-// #################################
-// DELETAR UM PERFIL DE SERVICO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e apaga logicamente (deixa invisivel);
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
-void deletarServico(int registro) {
-    struct Servico servicoAux;
-    
-    if(fseek(ponteiroArquivoSERVICO, (registro)*sizeof(servicoAux), SEEK_SET) != 0){
-        printarMensagem("Registro inexistente ou problemas no posicionamento!!!");
-        return;
-    }
-    
-    if(fread(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO)!= 1){
-        printarMensagem("06 - Problemas na leitura do registro!!!");
-        return;
-    }
-    
-    if(servicoAux.ativo == '*'){
-        printarMensagem("Registro já está apagado!!!\n\n");
-        return;
-    }
-    
-    
-    printf("\n\n Dados Atuais \n\n");
-    printarServicoTopicos(servicoAux);
-    
-    fflush(stdin);
-    printf("\n\n Apagar o registro (s/n)???: ");
-    char resp = getchar();
-    
-    if(resp != 's' && resp != 'S') {
-        return;
-    }
-    
-    fflush(stdin);
-    servicoAux.ativo = '*';
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoSERVICO, -(int) sizeof(struct Servico), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO);
-    fflush(ponteiroArquivoSERVICO); /*despejar os arquivos no disco rígido*/
-    
-    
-    // recuar um registro no arquivo
-    fseek(ponteiroArquivoSERVICO, -(int) sizeof(struct Servico), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&servicoAux, sizeof(struct Servico), 1, ponteiroArquivoSERVICO);
-    fflush(ponteiroArquivoSERVICO); /*despejar os arquivos no disco rígido*/
-}
 
 
 

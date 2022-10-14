@@ -20,6 +20,7 @@
 
 #include "utilidades.h"
 #include "validacoes.h"
+#include "Servico.h"
 
 // #############################################################################
 // CONSTANTES
@@ -42,7 +43,6 @@ FILE *ponteiroArquivoAGENDAMENTO;
 FILE *ponteiroArquivoCLIENTE;
 FILE *ponteiroArquivoFUNCIONARIO;
 FILE *ponteiroArquivoHORARIO;
-FILE *ponteiroArquivoSERVICO;
 //FILE *ponteiroArquivoPRODUTO;
 //FILE *ponteiroArquivoTELEFONE;
 //FILE *ponteiroArquivoENDERECO;
@@ -60,14 +60,12 @@ void abrirArquivoAgendamento(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
 void abrirArquivoHorario(void);
-void abrirArquivoServico(void);
 
 void fecharTodosArquivos(void);
 void fecharArquivoAgendamento(void);
 void fecharArquivoCliente(void);
 void fecharArquivoHorario(void);
 void fecharArquivoFuncionario(void);
-void fecharArquivoServico(void);
 
 
 // #################################
@@ -92,18 +90,13 @@ void menuFuncionarioInserir(void);
 void menuFuncionarioAlterar(void);
 void menuFuncionarioDeletar(void);
 
+
 void menuHorario(void);
 void menuHorarioListarTodos(void);
 void menuHorarioInserir(void);
 void menuHorarioAlterar(void);
 void menuHorarioDeletar(void);
 void menuAgendamentoHorarios(void);
-void menuServico(void);
-void menuServicoListarTodos(void);
-void menuServicoInserir(void);
-void menuServicoAlterar(void);
-void menuServicoDeletar(void);
-
 
 // #################################
 // FUNCOES CRUD
@@ -167,18 +160,6 @@ void mostrarQuadroHorarios(void);
 
 
 
-
-
-int  salvarRegistroServico(struct Servico);
-void printarTodosRegistrosServico(void);
-void printarServicoLista(struct Servico);
-void printarServicoTopicos(struct Servico);
-struct Servico buscarServicoPorCod(int);
-int  buscarRegistroServicoPorCod(int);
-void alterarServico(int);
-int  acessarUltimoCodigoServico(void);
-void deletarServico(int);
-void lerDadosServico(struct Servico*);
 
 
 
