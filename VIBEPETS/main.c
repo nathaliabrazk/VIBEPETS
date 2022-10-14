@@ -34,6 +34,7 @@
 FILE *ponteiroArquivoAGENDAMENTO;
 FILE *ponteiroArquivoCLIENTE;
 FILE *ponteiroArquivoFUNCIONARIO;
+FILE *ponteiroArquivoHORARIO;
 FILE *ponteiroArquivoSERVICO;
 //FILE *ponteiroArquivoPRODUTO;
 //FILE *ponteiroArquivoTELEFONE;
@@ -105,12 +106,12 @@ struct Cliente {
     int  codigo;
     char nome[30];
     char email[30];
-    //    Endereco endereco;
+//    Endereco endereco;
     char endereco[30];  // Passar para struct.
     char cpf[12];
     Data nascimento;
     int telefone;
-    //    Telefone telefone;
+//    Telefone telefone;
     char ativo;         // '*' = inativo/deletado.
 };
 
@@ -123,6 +124,14 @@ struct Funcionario {
     char senha[25];
     int  cargo;      // 0 = admin || 1 = funcionario
     char ativo;     // '*' = inativo/deletado
+};
+
+// #################################
+// Horarios
+struct Horario {
+    int  codigo;
+    int  codigoAgendamento;
+    char ocupado; // '*' = ocupado, agendado.
 };
 
 // #################################
@@ -145,11 +154,13 @@ void abrirTodosArquivos(void);
 void abrirArquivoAgendamento(void);
 void abrirArquivoCliente(void);
 void abrirArquivoFuncionario(void);
+void abrirArquivoHorario(void);
 void abrirArquivoServico(void);
 
 void fecharTodosArquivos(void);
 void fecharArquivoAgendamento(void);
 void fecharArquivoCliente(void);
+void fecharArquivoHorario(void);
 void fecharArquivoFuncionario(void);
 void fecharArquivoServico(void);
 
@@ -175,6 +186,12 @@ void menuFuncionarioListarTodos(void);
 void menuFuncionarioInserir(void);
 void menuFuncionarioAlterar(void);
 void menuFuncionarioDeletar(void);
+
+void menuHorario(void);
+void menuHorarioListarTodos(void);
+void menuHorarioInserir(void);
+void menuHorarioAlterar(void);
+void menuHorarioDeletar(void);
 
 void menuServico(void);
 void menuServicoListarTodos(void);
@@ -222,6 +239,31 @@ void deletarFuncionario(int);
 void lerDadosFuncionario(struct Funcionario*);
 struct Funcionario buscarFuncionarioPorCPF(char[]);
 
+int  salvarRegistroHorario(struct Horario);
+void printarTodosRegistrosHorario(void);
+void printarHorarioLista(struct Horario);
+void printarHorarioTopicos(struct Horario);
+struct Horario buscarHorarioPorCod(int);
+int  buscarRegistroHorarioPorCod(int);
+void alterarHorario(int);
+int  acessarUltimoCodigoHorario(void);
+void deletarHorario(int);
+void lerDadosHorario(struct Horario*);
+
+
+
+void mostrarQuadroHorarios(void);
+
+
+
+
+
+
+
+
+
+
+
 int  salvarRegistroServico(struct Servico);
 void printarTodosRegistrosServico(void);
 void printarServicoLista(struct Servico);
@@ -248,6 +290,9 @@ char* stringHoraFormatada(Hora);
 Data pegarDataDoSistema(void);
 Hora pegarHoraDoSistema(void);
 void printarStringCentralizada(char*, int);
+int quantidadeDiaMes(int);
+void printarCabecalhoQuadroHorarios(void);
+void printarCabecalhoQuadroHorarios(void);
 
 // #################################
 // VALIDACOES
@@ -264,6 +309,7 @@ char verificarHoraDentroExpediente(Hora);
 // #################################
 // ELEMENTOS DE INTERFACE
 void interfaceLinhaSeparadora(int);
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int);
 
 
 int main(int argc, char *argv[]) {
@@ -280,13 +326,13 @@ int main(int argc, char *argv[]) {
             remove(BIN_FUN);
         }
     }
-    abrirTodosArquivos();
-
-    // MENU PRINCIPAL
-    menuPrincipal();
-
-    fecharTodosArquivos();
-    
+//    abrirTodosArquivos();
+//
+//    // MENU PRINCIPAL
+//    menuPrincipal();
+//
+//    fecharTodosArquivos();
+    mostrarQuadroHorarios();
     
     printf("\n\n\n");
     system("pause");
@@ -307,10 +353,10 @@ void menuPrincipal() {
         printf("\tA) MENU AGENDAMENTO\n");
         printf("\tC) MENU CLIENTE\n");
         printf("\tF) MENU FUNCIONARIO\n");
-        printf("\tP) MENU PRODUTO\n");
+//        printf("\tP) MENU PRODUTO\n");
         printf("\tS) MENU SERVICOS\n");
         printf("\tX) SAIR\n");
-        opcao = receberValidarOpcaoLetra("apcfxs");
+        opcao = receberValidarOpcaoLetra("acfxs"); // add p depois.
         
         switch(opcao) {
             case 'a':
@@ -324,10 +370,10 @@ void menuPrincipal() {
             case 'f':
                 menuFuncionario();
                 break;
-                
-            case 'p':
-                printf("---> FAZER MENU PRODUTO <--- ");
-                break;
+//
+//            case 'p':
+//                printf("---> FAZER MENU PRODUTO <--- ");
+//                break;
                 
             case 's':
                 menuServico();
@@ -355,9 +401,10 @@ void menuAgendamento() {
         printf("\tI) INSERIR NOVO\n");
         printf("\tA) ALTERAR\n");
         printf("\tL) LISTAR\n");
+        printf("\tH) HORARIOS\n");
         printf("\tD) DELETAR\n");
         printf("\tX) VOLTAR\n");
-        opcao = receberValidarOpcaoLetra("ialdx");
+        opcao = receberValidarOpcaoLetra("iahldx");
         
         switch(opcao) {
             case 'a':
@@ -370,6 +417,10 @@ void menuAgendamento() {
                 
             case 'i':
                 menuAgendamentoInserir();
+                break;
+                
+            case 'h':
+                menuAgendamentoHorarios();
                 break;
                 
             case 'l':
@@ -2149,19 +2200,59 @@ void deletarFuncionario(int registro) {
 
 
 
-
-
+// #################################
+// MOSTRAR HORARIOS POR ANO
+// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
+void printarCabecalhoQuadroHorarios() {
+    int indice, inicioExpediente = 8, fimExpediente = 18;
+    printf("%-5s", "DATA");
+    
+    for(indice = inicioExpediente; indice < fimExpediente; indice++) {
+        printf("|%02d:00|%02d:30", indice, indice);
+    }
+}
 
 // #################################
-// DELETAR UM PERFIL DE FUNCIONARIO
-// Encontra a posicao do registro pelo numero que representa a linha na qual está
-// e apaga logicamente (deixa invisivel);
-// PARAMETRO:
-//   - registro: int da 'linha' que está o referido registro.
+// MOSTRAR HORARIOS POR ANO
+// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
 void mostrarQuadroHorarios() {
+    int larguraDaTabela = 125;
+    int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
+    char anoString[5] = "2022", mesString[3] = "12";
     
+    int indice, inicioExpediente = 8, fimExpediente = 18;
     
+    Data dataEscolhida;
+    dataEscolhida.dia = 1;
+    dataEscolhida.mes = 10;
+    dataEscolhida.ano = 2022;
     
+//    char stringMesAno;
+    
+    for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
+        sprintf(anoString, "%d", indiceAno);
+        interfaceLinhaSeparadora(larguraDaTabela);
+        printarStringCentralizada(anoString, larguraDaTabela);
+        interfaceLinhaSeparadora(larguraDaTabela);
+        
+        printarCabecalhoQuadroHorarios(); printf("\n");
+        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela);
+
+        for(indiceMes = 1; indiceMes <= 12; indiceMes++){
+            
+            for(indiceDia = 1; indiceDia <= quantidadeDiaMes(indiceMes); indiceDia++){
+                printf("\n%02d/%02d", indiceDia, indiceMes);
+                
+                for(indice = inicioExpediente; indice < fimExpediente; indice++) {
+                    printf("|%5s|%5s", " ", " ");
+                }
+                printf("\n");
+                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela);
+//                printf("\n");
+            }
+        }
+        
+    }
 }
 
 
@@ -2624,6 +2715,11 @@ char* intParaString(int val, int base){
 }
 
 // #################################
+// PEGA STRING E TRANSFORMA EM INT
+//char* stringParaInt(int val, int base){
+//}
+
+// #################################
 // PEGA A DATA ATUAL DO SISTEMA
 Data pegarDataDoSistema() {
     Data dataAtual;
@@ -2941,6 +3037,54 @@ char* stringHoraFormatada(Hora hora) {
     return resultado;
 }
 
+// #################################
+// QUANTIDADE DE DIAS NO MES
+// RETORNO:
+//   - Retorna a quantidade de dias no mes/ultimo dia
+//   - -1 caso o mes seja invalido
+/*
+     Quantos dias tem cada mes
+     Num     Mes         Dias
+     2       Fevereiro   28 dias (29 dias nos anos bissextos)
+     
+     4       Abril       30 dias
+     6       Junho       30 dias
+     9       Setembro    30 dias
+     11      Novembro    30 dias
+     
+     1       Janeiro     31 dias
+     3       Março       31 dias
+     5       Maio        31 dias
+     7       Julho       31 dias
+     8       Agosto      31 dias
+     10      Outubro     31 dias
+     12      Dezembro    31 dias
+ */
+int quantidadeDiaMes(int mes) {
+    switch(mes) {
+        case 2:
+            return 28;
+            
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            return 30;
+            
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            return 31;
+            
+        default:
+            return -1;
+    }
+}
+
 
 // #############################################################################
 // VALIDACOES
@@ -3166,24 +3310,6 @@ Data receberValidarData() {
                 //TODO: Tratar ano bissexto!
             }
             
-            /* Quantos dias tem cada mes
-             Num     Mes         Dias
-             2       Fevereiro   28 dias (29 dias nos anos bissextos)
-             
-             4       Abril       30 dias
-             6       Junho       30 dias
-             9       Setembro    30 dias
-             11      Novembro    30 dias
-             
-             1       Janeiro     31 dias
-             3       Março       31 dias
-             5       Maio        31 dias
-             7       Julho       31 dias
-             8       Agosto      31 dias
-             10      Outubro     31 dias
-             12      Dezembro    31 dias
-             */
-            
         }
         
         //        if((agendamento.data. < 1) || (agendamento.data. > maxDias)) {
@@ -3218,6 +3344,24 @@ void interfaceLinhaSeparadora(int tamanho) {
         printf("%c", caracter);
     }
     printf("\n");
+}
+
+// #################################
+// LINHA SEPARADORA SEM QUEBRA DE LINHA
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int tamanho) {
+    char caracter = ' ';
+    
+    switch(TEMA) {
+        case 1:
+            caracter = '=';
+            
+        default:
+            caracter = '-';
+    }
+    
+    for(int indice = 0; indice < tamanho; indice++) {
+        printf("%c", caracter);
+    }
 }
 
 /* PODE SER UTIL DEPOIS
