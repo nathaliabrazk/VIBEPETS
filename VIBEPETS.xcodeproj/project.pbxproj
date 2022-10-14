@@ -26,6 +26,9 @@
 		6F572E3228F9B154008CE337 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		6FB607A428E1D9D3007A834D /* VIBEPETS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VIBEPETS; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB607A728E1D9D3007A834D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		6FD8706628F9BD48001ED7DE /* utilidades.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utilidades.h; sourceTree = "<group>"; };
+		6FD8706728F9C423001ED7DE /* tipos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tipos.h; sourceTree = "<group>"; };
+		6FD8706828F9C839001ED7DE /* interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +46,8 @@
 			isa = PBXGroup;
 			children = (
 				6F572E3228F9B154008CE337 /* main.h */,
+				6FD8706728F9C423001ED7DE /* tipos.h */,
+				6FD8706628F9BD48001ED7DE /* utilidades.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -50,6 +55,7 @@
 		6FB6079B28E1D9D3007A834D = {
 			isa = PBXGroup;
 			children = (
+				6FD8706828F9C839001ED7DE /* interface.h */,
 				6FB607A628E1D9D3007A834D /* VIBEPETS */,
 				6FB607A528E1D9D3007A834D /* Products */,
 			);
@@ -66,8 +72,8 @@
 		6FB607A628E1D9D3007A834D /* VIBEPETS */ = {
 			isa = PBXGroup;
 			children = (
-				6F572E3128F9B154008CE337 /* Headers */,
 				6FB607A728E1D9D3007A834D /* main.c */,
+				6F572E3128F9B154008CE337 /* Headers */,
 			);
 			path = VIBEPETS;
 			sourceTree = "<group>";
