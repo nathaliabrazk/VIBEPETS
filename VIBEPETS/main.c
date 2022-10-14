@@ -56,7 +56,7 @@ void menuPrincipal() {
         
         switch(opcao) {
             case 'a':
-                menuAgendamento();
+                menuAgendamento(MOSTRAR_DEBUG, TEMA);
                 break;
                 
             case 'c':
