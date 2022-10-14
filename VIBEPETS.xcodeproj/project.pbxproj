@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		6F572E3228F9B154008CE337 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		6F5806D628F9D7780090B5FA /* tipos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tipos.h; sourceTree = "<group>"; };
+		6F5806D728F9D90B0090B5FA /* validacoes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = validacoes.h; sourceTree = "<group>"; };
 		6FB607A428E1D9D3007A834D /* VIBEPETS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VIBEPETS; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB607A728E1D9D3007A834D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		6FD8706628F9BD48001ED7DE /* utilidades.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utilidades.h; sourceTree = "<group>"; };
@@ -51,6 +52,7 @@
 				6F572E3228F9B154008CE337 /* main.h */,
 				6FD8706728F9C423001ED7DE /* tipos.h */,
 				6FD8706628F9BD48001ED7DE /* utilidades.h */,
+				6F5806D728F9D90B0090B5FA /* validacoes.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";

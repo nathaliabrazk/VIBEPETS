@@ -19,6 +19,7 @@
 #include <unistd.h>     // usleep
 
 #include "utilidades.h"
+#include "validacoes.h"
 
 // #############################################################################
 // CONSTANTES
@@ -180,14 +181,5 @@ void deletarServico(int);
 void lerDadosServico(struct Servico*);
 
 
-
-// #################################
-// VALIDACOES
-void receberValidarCPF(char*);
-int  receberValidarOpcaoNumero(int, int);
-char receberValidarOpcaoLetra(char*);
-Data receberValidarData(void);
-Hora receberValidarHora(void);
-void receberValidarEmail(char*);
 
 #endif /* main_h */
