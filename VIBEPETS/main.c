@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>     // usleep
+
 
 // #############################################################################
 // CONSTANTES
@@ -245,7 +247,7 @@ void printarHoraFormatada(Hora);
 char* stringHoraFormatada(Hora);
 Data pegarDataDoSistema(void);
 Hora pegarHoraDoSistema(void);
-
+void printarStringCentralizada(char*, int);
 
 // #################################
 // VALIDACOES
@@ -261,9 +263,7 @@ char verificarHoraDentroExpediente(Hora);
 
 // #################################
 // ELEMENTOS DE INTERFACE
-void interfaceLinhaSeparadoraGrande(void);
-void interfaceLinhaSeparadoraMedia(void);
-void interfaceLinhaSeparadoraPequena(void);
+void interfaceLinhaSeparadora(int);
 
 
 int main(int argc, char *argv[]) {
@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
     // INICIALIZACOES
     // Cuidado, esta acao apaga todo o Banco de Dados.
     if(LIMPAR_BD == 1) {
-        interfaceLinhaSeparadoraMedia();
+        interfaceLinhaSeparadora(100);
         printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
         fflush(stdin); opcao = getchar();
         if(opcao == 's' || opcao == 'S') {
@@ -286,6 +286,7 @@ int main(int argc, char *argv[]) {
     menuPrincipal();
 
     fecharTodosArquivos();
+    
     
     printf("\n\n\n");
     system("pause");
@@ -427,7 +428,6 @@ void menuAgendamentoDeletar() {
     deletarAgendamento(registro);
     printarMensagemContinuar();
 }
-
 
 
 // #################################
@@ -1232,9 +1232,9 @@ int acessarUltimoCodigoAgendamento() {
 // Mostra na tela os nomes dos 'campos'.
 void printarCabecalhoListaAgendamento() {
     printf("AGENDAMENTOS\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-10s|%-5s|%-30s|%-30s|%-30s\n", "COD", "DATA", "HORA", "SERVICO", "CLIENTE", "FUNCIONARIO");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
 }
 
 // #################################
@@ -1660,9 +1660,9 @@ void printarClienteTopicos(struct Cliente cliente) {
 
 void printarCabecalhoTodosClientes() {
     printf("CLIENTES\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-30s|%-15s|%-30s|%-30s|%-15s|%-10s|\n", "COD", "NOME", "CPF", "EMAIL", "ENDERECO","TELEFONE", "NASC");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
 }
 
 // #################################
@@ -2036,9 +2036,9 @@ void printarTodosRegistrosFuncionario() {
     rewind(ponteiroArquivoFUNCIONARIO);
     
     printf("FUNCIONARIOS\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     
     while(1){
         if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
@@ -2139,6 +2139,48 @@ void deletarFuncionario(int registro) {
     fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
     fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #################################
+// DELETAR UM PERFIL DE FUNCIONARIO
+// Encontra a posicao do registro pelo numero que representa a linha na qual está
+// e apaga logicamente (deixa invisivel);
+// PARAMETRO:
+//   - registro: int da 'linha' que está o referido registro.
+void mostrarQuadroHorarios() {
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // #############################################################################
@@ -2343,9 +2385,9 @@ void printarTodosRegistrosServico() {
     rewind(ponteiroArquivoSERVICO);
     
     printf("SERVICOS\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     
     while(1){
         if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/
@@ -2468,7 +2510,7 @@ void listarCaracteresASCII() {
     
 //    printf("%c\n\n\n\n", 187);
     
-    for(indice = -255; indice <= 255; indice++) {
+    for(indice = 0; indice <= 255; indice++) {
         printf("CHAR %3d: %-3c\t", indice, indice);
         
         if(indice % 10 == 0) {
@@ -2487,6 +2529,32 @@ void printarMensagem(char *msg){
 void printarMensagemContinuar() {
     printf("%s", "\n\n Pressione <Enter> para continuar . . .");
     getchar();
+}
+
+// #################################
+// CENTRALIZAR TEXTO
+// Pega um texto e poe mais ou menos no meio
+// Obs. Levar em consideracao algum 'pipe' ou caracter que possa pegar um espaco
+//       antes e depois(comeco e fim) da linha.
+// PARAMETRO:
+//   - Recebe uma String a ser printada
+//   - O tamanho Int do espaco disponivel
+void printarStringCentralizada(char *string, int tamanhoLinha) {
+    int tamanhoString = (int) strlen(string);
+    int indice = 0;
+    
+    int espacoVazio = tamanhoLinha - tamanhoString;
+    float espacoDirEsq = espacoVazio / 2;
+    
+    for(indice = 0; indice <= espacoDirEsq; indice++) {
+        printf(" ");
+    }
+    
+    printf("%s", string);
+    
+    for(indice = 0; indice <= espacoDirEsq; indice++) {
+        printf(" ");
+    }
 }
 
 // #################################
@@ -2522,7 +2590,6 @@ char *formatarCPF(char *cpf) {
     //    cpfFormatado[11] = '-';
     //    cpfFormatado[12] = cpf[9];
     //    cpfFormatado[13] = cpf[10];
-    
     
     // Outra forma de acrescentar
     for(i = 0; i < 15; i++) {
@@ -3135,32 +3202,25 @@ Data receberValidarData() {
 
 // #################################
 // LINHA SEPARADORA
-void interfaceLinhaSeparadoraGrande() {
+void interfaceLinhaSeparadora(int tamanho) {
+    char caracter = ' ';
+    
     switch(TEMA) {
+        case 1:
+            caracter = '=';
+            
         default:
-            printf("-------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            caracter = '-';
     }
-}
-
-void interfaceLinhaSeparadoraMedia() {
-    switch(TEMA) {
-        default:
-            printf("-------------------------------------------------------------------------\n");
+    
+    printf("\n");
+    for(int indice = 0; indice < tamanho; indice++) {
+        printf("%c", caracter);
     }
+    printf("\n");
 }
-
-void interfaceLinhaSeparadoraPequena() {
-    switch(TEMA) {
-        default:
-            printf("------------------------------------\n");
-    }
-}
-
 
 /* PODE SER UTIL DEPOIS
- 
- 
- 
  
  // Propriedades
  //    char opcao;
@@ -3229,6 +3289,7 @@ void interfaceLinhaSeparadoraPequena() {
  //            printf("Voce escolheu Amendoas e Ameixa\n");
  //            break;
  //        case 'B':
+ x
  //        case 'b':
  //            printf("Voce escolheu Avela e Cereja\n");
  //            break;
@@ -3239,7 +3300,4 @@ void interfaceLinhaSeparadoraPequena() {
  //        default:
  //            printf("Opcao invalida");
  //    }
- 
- 
- 
  */
