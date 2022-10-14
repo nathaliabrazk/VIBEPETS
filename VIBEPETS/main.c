@@ -3164,6 +3164,7 @@ void interfaceLinhaSeparadoraPequena() {
 
 //############################################################################
 //tive que testa na branch de produto!! Estava funcionando perfeitamente
+// temos que decidir onde vamos introduzir no código/ pensei na hora de abrir o "MENU SERVICOS" na parte de "LISTAR" poderia aparecer os combos
 				COOOOOOOOOOOOOOOOOOOOOOOOOOMBOS
  
 	char opcao;		
