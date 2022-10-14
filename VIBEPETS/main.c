@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>     // usleep
+
 
 // #############################################################################
 // CONSTANTES
@@ -248,6 +250,20 @@ int  acessarUltimoCodigoHorario(void);
 void deletarHorario(int);
 void lerDadosHorario(struct Horario*);
 
+
+
+void mostrarQuadroHorarios(void);
+
+
+
+
+
+
+
+
+
+
+
 int  salvarRegistroServico(struct Servico);
 void printarTodosRegistrosServico(void);
 void printarServicoLista(struct Servico);
@@ -273,7 +289,10 @@ void printarHoraFormatada(Hora);
 char* stringHoraFormatada(Hora);
 Data pegarDataDoSistema(void);
 Hora pegarHoraDoSistema(void);
-
+void printarStringCentralizada(char*, int);
+int quantidadeDiaMes(int);
+void printarCabecalhoQuadroHorarios(void);
+void printarCabecalhoQuadroHorarios(void);
 
 // #################################
 // VALIDACOES
@@ -289,9 +308,8 @@ char verificarHoraDentroExpediente(Hora);
 
 // #################################
 // ELEMENTOS DE INTERFACE
-void interfaceLinhaSeparadoraGrande(void);
-void interfaceLinhaSeparadoraMedia(void);
-void interfaceLinhaSeparadoraPequena(void);
+void interfaceLinhaSeparadora(int);
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int);
 
 
 int main(int argc, char *argv[]) {
@@ -301,19 +319,20 @@ int main(int argc, char *argv[]) {
     // INICIALIZACOES
     // Cuidado, esta acao apaga todo o Banco de Dados.
     if(LIMPAR_BD == 1) {
-        interfaceLinhaSeparadoraMedia();
+        interfaceLinhaSeparadora(100);
         printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
         fflush(stdin); opcao = getchar();
         if(opcao == 's' || opcao == 'S') {
             remove(BIN_FUN);
         }
     }
-    abrirTodosArquivos();
-
-    // MENU PRINCIPAL
-    menuPrincipal();
-
-    fecharTodosArquivos();
+//    abrirTodosArquivos();
+//
+//    // MENU PRINCIPAL
+//    menuPrincipal();
+//
+//    fecharTodosArquivos();
+    mostrarQuadroHorarios();
     
     printf("\n\n\n");
     system("pause");
@@ -460,7 +479,6 @@ void menuAgendamentoDeletar() {
     deletarAgendamento(registro);
     printarMensagemContinuar();
 }
-
 
 
 // #################################
@@ -1265,9 +1283,9 @@ int acessarUltimoCodigoAgendamento() {
 // Mostra na tela os nomes dos 'campos'.
 void printarCabecalhoListaAgendamento() {
     printf("AGENDAMENTOS\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-10s|%-5s|%-30s|%-30s|%-30s\n", "COD", "DATA", "HORA", "SERVICO", "CLIENTE", "FUNCIONARIO");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
 }
 
 // #################################
@@ -1693,9 +1711,9 @@ void printarClienteTopicos(struct Cliente cliente) {
 
 void printarCabecalhoTodosClientes() {
     printf("CLIENTES\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-30s|%-15s|%-30s|%-30s|%-15s|%-10s|\n", "COD", "NOME", "CPF", "EMAIL", "ENDERECO","TELEFONE", "NASC");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
 }
 
 // #################################
@@ -2069,9 +2087,9 @@ void printarTodosRegistrosFuncionario() {
     rewind(ponteiroArquivoFUNCIONARIO);
     
     printf("FUNCIONARIOS\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     
     while(1){
         if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
@@ -2172,6 +2190,88 @@ void deletarFuncionario(int registro) {
     fwrite(&funcionarioAux, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO);
     fflush(ponteiroArquivoFUNCIONARIO); /*despejar os arquivos no disco rígido*/
 }
+
+
+
+
+
+
+
+
+
+
+// #################################
+// MOSTRAR HORARIOS POR ANO
+// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
+void printarCabecalhoQuadroHorarios() {
+    int indice, inicioExpediente = 8, fimExpediente = 18;
+    printf("%-5s", "DATA");
+    
+    for(indice = inicioExpediente; indice < fimExpediente; indice++) {
+        printf("|%02d:00|%02d:30", indice, indice);
+    }
+}
+
+// #################################
+// MOSTRAR HORARIOS POR ANO
+// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
+void mostrarQuadroHorarios() {
+    int larguraDaTabela = 125;
+    int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
+    char anoString[5] = "2022", mesString[3] = "12";
+    
+    int indice, inicioExpediente = 8, fimExpediente = 18;
+    
+    Data dataEscolhida;
+    dataEscolhida.dia = 1;
+    dataEscolhida.mes = 10;
+    dataEscolhida.ano = 2022;
+    
+//    char stringMesAno;
+    
+    for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
+        sprintf(anoString, "%d", indiceAno);
+        interfaceLinhaSeparadora(larguraDaTabela);
+        printarStringCentralizada(anoString, larguraDaTabela);
+        interfaceLinhaSeparadora(larguraDaTabela);
+        
+        printarCabecalhoQuadroHorarios(); printf("\n");
+        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela);
+
+        for(indiceMes = 1; indiceMes <= 12; indiceMes++){
+            
+            for(indiceDia = 1; indiceDia <= quantidadeDiaMes(indiceMes); indiceDia++){
+                printf("\n%02d/%02d", indiceDia, indiceMes);
+                
+                for(indice = inicioExpediente; indice < fimExpediente; indice++) {
+                    printf("|%5s|%5s", " ", " ");
+                }
+                printf("\n");
+                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela);
+//                printf("\n");
+            }
+        }
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // #############################################################################
@@ -2376,9 +2476,9 @@ void printarTodosRegistrosServico() {
     rewind(ponteiroArquivoSERVICO);
     
     printf("SERVICOS\n");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
-    interfaceLinhaSeparadoraGrande();
+    interfaceLinhaSeparadora(150);
     
     while(1){
         if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/
@@ -2501,7 +2601,7 @@ void listarCaracteresASCII() {
     
 //    printf("%c\n\n\n\n", 187);
     
-    for(indice = -255; indice <= 255; indice++) {
+    for(indice = 0; indice <= 255; indice++) {
         printf("CHAR %3d: %-3c\t", indice, indice);
         
         if(indice % 10 == 0) {
@@ -2520,6 +2620,32 @@ void printarMensagem(char *msg){
 void printarMensagemContinuar() {
     printf("%s", "\n\n Pressione <Enter> para continuar . . .");
     getchar();
+}
+
+// #################################
+// CENTRALIZAR TEXTO
+// Pega um texto e poe mais ou menos no meio
+// Obs. Levar em consideracao algum 'pipe' ou caracter que possa pegar um espaco
+//       antes e depois(comeco e fim) da linha.
+// PARAMETRO:
+//   - Recebe uma String a ser printada
+//   - O tamanho Int do espaco disponivel
+void printarStringCentralizada(char *string, int tamanhoLinha) {
+    int tamanhoString = (int) strlen(string);
+    int indice = 0;
+    
+    int espacoVazio = tamanhoLinha - tamanhoString;
+    float espacoDirEsq = espacoVazio / 2;
+    
+    for(indice = 0; indice <= espacoDirEsq; indice++) {
+        printf(" ");
+    }
+    
+    printf("%s", string);
+    
+    for(indice = 0; indice <= espacoDirEsq; indice++) {
+        printf(" ");
+    }
 }
 
 // #################################
@@ -2556,7 +2682,6 @@ char *formatarCPF(char *cpf) {
     //    cpfFormatado[12] = cpf[9];
     //    cpfFormatado[13] = cpf[10];
     
-    
     // Outra forma de acrescentar
     for(i = 0; i < 15; i++) {
         
@@ -2588,6 +2713,11 @@ char* intParaString(int val, int base){
     return &buf[i+1];
     
 }
+
+// #################################
+// PEGA STRING E TRANSFORMA EM INT
+//char* stringParaInt(int val, int base){
+//}
 
 // #################################
 // PEGA A DATA ATUAL DO SISTEMA
@@ -2907,6 +3037,54 @@ char* stringHoraFormatada(Hora hora) {
     return resultado;
 }
 
+// #################################
+// QUANTIDADE DE DIAS NO MES
+// RETORNO:
+//   - Retorna a quantidade de dias no mes/ultimo dia
+//   - -1 caso o mes seja invalido
+/*
+     Quantos dias tem cada mes
+     Num     Mes         Dias
+     2       Fevereiro   28 dias (29 dias nos anos bissextos)
+     
+     4       Abril       30 dias
+     6       Junho       30 dias
+     9       Setembro    30 dias
+     11      Novembro    30 dias
+     
+     1       Janeiro     31 dias
+     3       Março       31 dias
+     5       Maio        31 dias
+     7       Julho       31 dias
+     8       Agosto      31 dias
+     10      Outubro     31 dias
+     12      Dezembro    31 dias
+ */
+int quantidadeDiaMes(int mes) {
+    switch(mes) {
+        case 2:
+            return 28;
+            
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            return 30;
+            
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            return 31;
+            
+        default:
+            return -1;
+    }
+}
+
 
 // #############################################################################
 // VALIDACOES
@@ -3132,24 +3310,6 @@ Data receberValidarData() {
                 //TODO: Tratar ano bissexto!
             }
             
-            /* Quantos dias tem cada mes
-             Num     Mes         Dias
-             2       Fevereiro   28 dias (29 dias nos anos bissextos)
-             
-             4       Abril       30 dias
-             6       Junho       30 dias
-             9       Setembro    30 dias
-             11      Novembro    30 dias
-             
-             1       Janeiro     31 dias
-             3       Março       31 dias
-             5       Maio        31 dias
-             7       Julho       31 dias
-             8       Agosto      31 dias
-             10      Outubro     31 dias
-             12      Dezembro    31 dias
-             */
-            
         }
         
         //        if((agendamento.data. < 1) || (agendamento.data. > maxDias)) {
@@ -3168,32 +3328,43 @@ Data receberValidarData() {
 
 // #################################
 // LINHA SEPARADORA
-void interfaceLinhaSeparadoraGrande() {
+void interfaceLinhaSeparadora(int tamanho) {
+    char caracter = ' ';
+    
     switch(TEMA) {
+        case 1:
+            caracter = '=';
+            
         default:
-            printf("-------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            caracter = '-';
     }
+    
+    printf("\n");
+    for(int indice = 0; indice < tamanho; indice++) {
+        printf("%c", caracter);
+    }
+    printf("\n");
 }
 
-void interfaceLinhaSeparadoraMedia() {
+// #################################
+// LINHA SEPARADORA SEM QUEBRA DE LINHA
+void interfaceLinhaSeparadoraSemQuebraDeLinha(int tamanho) {
+    char caracter = ' ';
+    
     switch(TEMA) {
+        case 1:
+            caracter = '=';
+            
         default:
-            printf("-------------------------------------------------------------------------\n");
+            caracter = '-';
+    }
+    
+    for(int indice = 0; indice < tamanho; indice++) {
+        printf("%c", caracter);
     }
 }
-
-void interfaceLinhaSeparadoraPequena() {
-    switch(TEMA) {
-        default:
-            printf("------------------------------------\n");
-    }
-}
-
 
 /* PODE SER UTIL DEPOIS
- 
- 
- 
  
  // Propriedades
  //    char opcao;
@@ -3262,6 +3433,7 @@ void interfaceLinhaSeparadoraPequena() {
  //            printf("Voce escolheu Amendoas e Ameixa\n");
  //            break;
  //        case 'B':
+ x
  //        case 'b':
  //            printf("Voce escolheu Avela e Cereja\n");
  //            break;
@@ -3272,7 +3444,4 @@ void interfaceLinhaSeparadoraPequena() {
  //        default:
  //            printf("Opcao invalida");
  //    }
- 
- 
- 
  */
