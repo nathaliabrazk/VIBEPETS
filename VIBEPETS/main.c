@@ -34,10 +34,10 @@ int main(int argc, char *argv[]) {
     printf("O email digitado e: %s", email);*/
     scanf("O dia digitado foi:  %d", &dia);
     
-	printf ("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n"); 
-	printf ("Escolha o Shampoo para seu pet:\n");
-	printf ("A- Shampoo Pré-Banho Pelôncio \nB- Shampoo Pelos Claros Pelôncio \nC- Shampoo Pelos Escuros Pelôncio \nFragrâncias:	Avelã - Melância - Dove - Morango\n"); 
-	printf ("Opção:\n"); 
+printf ("Escolha um dos nossos servicos!\n "); 
+	printf ("OBSERVA��O (S� PODE SER ESCOLHIDO UM COMBO DE SERVI�O POR DIA E POR PET)\n");
+	printf ("A)------------------------------------------------------------------\n-Tosa e banho\n-Shampoo Banho de Carinho Petz\n-Condicionador Chegou o Brincalh�o Petz\n-Col�nia Hydra Groomers Forevers\n-Creme Hidratante de Patinhas\n-Vela Arom�tica Perfumada | Lavanda\nB)------------------------------------------------------------------\n-Tosa e banho\n-Shampoo Pet Society Neutro\n-Condicionador Pet Society\n-Col�nia Pet Society Lovely\n-Creme hidrantante Pet Society Lovely\n-Vela Arom�tica Perfumada| Canela\nC)------------------------------------------------------------------\n-Tosa e banho\n-Shampoo Matacura Sarnicida e Anti-Pulgas\n-Condicionador Matacura Sarnicida e Anti-Pulgas\n-Perfume Ibasa de Col�nia Affection para C�es e Gatos\n-Creme Hidratante Equil�brio Hidrapet\nVela Arom�tica Perfumada | Baunilha\n"); 
+	printf ("OPCAO:\n"); 
 	scanf ("%s", &opcao); 
 	fflush (stdin); 
 	system ("cls"); 
@@ -47,73 +47,20 @@ int main(int argc, char *argv[]) {
 	{ 
 	case 'A':  
 	case 'a': 
-	printf ("Você escolheu  Shampoo Pré-Banho Pelôncio\n"); 
+	printf ("Voce escolheu o combo (A)\n-Tosa e banho\n-Shampoo Banho de Carinho Petz\n-Condicionador Chegou o Brincalh�o Petz\n-Col�nia Hydra Groomers Forevers\n-Creme Hidratante de Patinhas\n-Vela Arom�tica Perfumada | Lavanda\n"); 
 	break; 
 	case 'B': 
 	case 'b': 
-	printf ("Você escolheu Shampoo Pelos Claros Pelôncio\n"); 
+	printf ("Voce escolheu o combo (B)\n-Tosa e banho\n-Shampoo Pet Society Neutro\n-Condicionador Pet Society\n-Col�nia Pet Society Lovely\n-Creme hidrantante Pet Society Lovely\n-Vela Arom�tica Perfumada| Canela\n"); 
 	break;
 	case 'C':  
 	case 'c': 
-	printf ("Você escolheu Shampoo Pelos Escuros Pelôncio\n"); 
+	printf ("Voce escolheu o combo (C)\n-Tosa e banho\n-Shampoo Matacura Sarnicida e Anti-Pulgas\n-Condicionador Matacura Sarnicida e Anti-Pulgas\n-Perfume Ibasa de Col�nia Affection para C�es e Gatos\n-Creme Hidratante Equil�brio Hidrapet\nVela Arom�tica Perfumada | Baunilha\n"); 
 	break; 
 	default: 
-	printf ("Opção inválida"); 
+	printf ("OPCAO INVALIDA"); 
 	}
-	
-	printf ("Escolha a fragrância do Condicionador para seu pet:\n");
-	printf ("A-Avelã \nB- Melância \nC- Morango\n");
-	printf ("Opção:\n");
-	scanf ("%c", &opcao);
-	fflush (stdin); 
-	system ("cls"); 
-	
-	switch (opcao)
-	
-	{
-	case 'A':  
-	case 'a': 
-	printf ("Você escolheu Avelã\n"); 
-	break; 
-	case 'B':  
-	case 'b': 
-	printf ("Você escolheu Melância\n"); 
-	break; 
-	case 'C': 
-	case 'c': 
-	printf ("Você escolheu Morango\n"); 
-	break; 
-	default: 
-	
-	printf ("Opção inválida");  
-	}
-	printf ("Escolha a colônia Perfume Pet Clean Max para seu pet:\n"); 
-	printf ("A-  Amêndoas e Ameixa \nB- Avelã e Cereja \nC- Melancia\n"); 
-	printf ("Opção:\n"); 
-	scanf ("%c", &opcao); 
-	fflush (stdin); 
-	system ("cls"); 
-	
-	switch (opcao)
-	{
-	case 'A': 
-	case 'a': 
-	printf ("Você escolheu Amêndoas e Ameixa\n"); 
-	break; 
-	case 'B':  
-	case 'b': 
-	printf ("Você escolheu Avelã e Cereja\n"); 
-	break; 
-	case 'C': 
-	case 'c': 
-	printf ("Você escolheu Melância\n"); 
-	break; 
-	default: 
-	printf ("Opção inválida");
-	}
-	
-	
-	
+
 	
 	  
 	    
