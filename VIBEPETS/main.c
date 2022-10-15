@@ -209,7 +209,6 @@ void fecharTodosArquivos() {
     //    fclose(ponteiroArquivoENDERECO);
 }
 
-
 /* PODE SER UTIL DEPOIS
  
  // Propriedades
