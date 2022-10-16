@@ -166,23 +166,10 @@ void abrirTodosArquivos() {
         }
     }
     
-    // ---------------------------------
-    // Abrir arquivo de Servico
-    ponteiroArquivoSERVICO = fopen(BIN_SER, "r+b"); //tentar abrir
     
-    if(ponteiroArquivoSERVICO == NULL){
-        ponteiroArquivoSERVICO  = fopen(BIN_SER, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoSERVICO == NULL){
-            if(MOSTRAR_DEBUG == 1) {
-                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_SER);
-            }
-            
-            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
+//    // ---------------------------------
+//    // Abrir arquivo de Servico
+    abrirArquivoServico(MOSTRAR_DEBUG);
     
     //    #define BIN_TEL "vibe_pet-persistencia_tel.bin"
     //    #define BIN_END "vibe_pet-persistencia_end.bin"
