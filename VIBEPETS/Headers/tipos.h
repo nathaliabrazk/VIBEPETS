@@ -107,9 +107,9 @@ struct Funcionario {
 // #################################
 // Horarios
 struct Horario {
-    int  codigo;
+    char codigo[13];    // Ex.: 2022-01-01-1
     int  codigoAgendamento;
-    char ocupado; // '*' = ocupado, agendado.
+    char ocupado;       // '*' = ocupado, agendado.
 };
 
 // #################################

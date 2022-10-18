@@ -44,7 +44,6 @@
 
 
 // Ponteiro para indicar o 'endereco' do arquivo a ser manipulado.
-FILE *ponteiroArquivoHORARIO;
 //FILE *ponteiroArquivoPRODUTO;
 //FILE *ponteiroArquivoTELEFONE;
 //FILE *ponteiroArquivoENDERECO;
@@ -56,33 +55,12 @@ FILE *ponteiroArquivoHORARIO;
 // #################################
 // ARQUIVOS
 void abrirTodosArquivos(void);
-void abrirArquivoHorario(void);
 
 void fecharTodosArquivos(void);
-void fecharArquivoHorario(void);
 
 
 // #################################
 // MENUS
 void menuPrincipal(void);
-
-
-void menuHorario(void);
-void menuHorarioListarTodos(void);
-void menuHorarioInserir(void);
-void menuHorarioAlterar(void);
-void menuHorarioDeletar(void);
-
-
-int  salvarRegistroHorario(struct Horario);
-void printarTodosRegistrosHorario(void);
-void printarHorarioLista(struct Horario);
-void printarHorarioTopicos(struct Horario);
-struct Horario buscarHorarioPorCod(int);
-int  buscarRegistroHorarioPorCod(int);
-void alterarHorario(int);
-int  acessarUltimoCodigoHorario(void);
-void deletarHorario(int);
-void lerDadosHorario(struct Horario*);
 
 #endif /* main_h */

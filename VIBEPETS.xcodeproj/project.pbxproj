@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6F0B21AE28FCCE1700917854 /* Horario.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Horario.h; sourceTree = "<group>"; };
 		6F572E3228F9B154008CE337 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		6F5806D628F9D7780090B5FA /* tipos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tipos.h; sourceTree = "<group>"; };
 		6F5806D728F9D90B0090B5FA /* validacoes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = validacoes.h; sourceTree = "<group>"; };
@@ -65,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				6F5806D828F9DA540090B5FA /* Servico.h */,
+				6F0B21AE28FCCE1700917854 /* Horario.h */,
 				6F5806D928F9E4E70090B5FA /* Agendamento.h */,
 				6F5806DA28F9EB270090B5FA /* Cliente.h */,
 				6F5806DB28F9F3C10090B5FA /* Funcionario.h */,

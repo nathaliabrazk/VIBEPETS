@@ -13,6 +13,7 @@
 
 #include "Cliente.h"
 #include "Funcionario.h"
+#include "Horario.h"
 
 // #################################
 // CONSTANTES
@@ -24,10 +25,9 @@ FILE *ponteiroArquivoAGENDAMENTO;
 void menuAgendamento(int, int);
 void menuAgendamentoAlterar(int, int);
 void menuAgendamentoDeletar(int, int);
-void menuAgendamentoHorarios(int);
+void menuAgendamentoHorarios(int, int);
 void menuAgendamentoInserir(int, int);
 void menuAgendamentoListarTodos(int, int);
-void mostrarQuadroHorarios(int);
 
 void abrirArquivoAgendamento(int);
 void fecharArquivoAgendamento(void);
@@ -35,7 +35,7 @@ void fecharArquivoAgendamento(void);
 int  acessarUltimoCodigoAgendamento(int);
 void alterarAgendamento(int, int, int);
 int  buscarRegistroAgendamentoPorCod(int, int);
-struct Agendamento buscarAgendamentoPorCod(int, int);
+struct Agendamento buscarAgendamentoPorCodigo(int, int);
 void deletarAgendamento(int, int);
 void lerDadosAgendamento(struct Agendamento*, int, int);
 void printarCabecalhoListaAgendamento(int);
@@ -77,7 +77,7 @@ void menuAgendamento(int mostrar_debug, int tema) {
                 break;
                 
             case 'h':
-                menuAgendamentoHorarios(tema);
+                menuAgendamentoHorarios(mostrar_debug, tema);
                 break;
                 
             case 'l':
@@ -137,8 +137,8 @@ void menuAgendamentoDeletar(int mostrar_debug, int tema) {
     printarMensagemContinuar();
 }
 
-void menuAgendamentoHorarios(int tema) {
-    mostrarQuadroHorarios(tema);
+void menuAgendamentoHorarios(int mostrar_debug, int tema) {
+    mostrarQuadroHorarios(mostrar_debug, tema);
 }
 
 
@@ -160,6 +160,8 @@ void abrirArquivoAgendamento(int mostrar_debug) {
     }
 }
 
+
+
 void fecharArquivoAgendamento() {
     // Atualizar o arquivo.
     fflush(ponteiroArquivoAGENDAMENTO);
@@ -167,6 +169,7 @@ void fecharArquivoAgendamento() {
     // Fechar o arquivo.
     fclose(ponteiroArquivoAGENDAMENTO);
 }
+
 
 
 // #################################
@@ -237,7 +240,7 @@ void alterarAgendamento(int registro, int mostrar_debug, int tema) {
 // RETORNO:
 //  - A instancia de Agendamento com os dados encontrados;
 //  - 'agendamento.codigo = -1' caso nao encontre.
-struct Agendamento buscarAgendamentoPorCod(int codigo, int mostrar_debug) {
+struct Agendamento buscarAgendamentoPorCodigo(int codigo, int mostrar_debug) {
     struct Agendamento agendamento;
     int contadorCodigo = -1;
     
@@ -524,49 +527,6 @@ void lerDadosAgendamento(struct Agendamento *agendamento, int mostrar_debug, int
     // Pegar codigo Funcionario.
     //TODO: Pegar o id do funcionario que estiver logado no momento
     agendamento->codigoFuncionario = 0;
-}
-
-// #################################
-// MOSTRAR HORARIOS POR ANO
-// Mostra uma tabela com os horarios do mes selecionado, disponiveis ou nao.
-void mostrarQuadroHorarios(int tema) {
-    int larguraDaTabela = 125;
-    int indiceAno = 2022, indiceMes = 1, indiceDia = 1;
-    char anoString[5] = "2022";//, mesString[3] = "12";
-    
-    int indice, inicioExpediente = 8, fimExpediente = 18;
-    
-    Data dataEscolhida;
-    dataEscolhida.dia = 1;
-    dataEscolhida.mes = 10;
-    dataEscolhida.ano = 2022;
-    
-//    char stringMesAno;
-    
-    for(indiceAno = 2022; indiceAno <= 2023; indiceAno++){
-        sprintf(anoString, "%d", indiceAno);
-        interfaceLinhaSeparadora(larguraDaTabela, tema);
-        printarStringCentralizada(anoString, larguraDaTabela);
-        interfaceLinhaSeparadora(larguraDaTabela, tema);
-        
-        printarCabecalhoQuadroHorarios(); printf("\n");
-        interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
-
-        for(indiceMes = 1; indiceMes <= 12; indiceMes++){
-            
-            for(indiceDia = 1; indiceDia <= quantidadeDiaMes(indiceMes); indiceDia++){
-                printf("\n%02d/%02d", indiceDia, indiceMes);
-                
-                for(indice = inicioExpediente; indice < fimExpediente; indice++) {
-                    printf("|%5s|%5s", " ", " ");
-                }
-                printf("\n");
-                interfaceLinhaSeparadoraSemQuebraDeLinha(larguraDaTabela, tema);
-//                printf("\n");
-            }
-        }
-        
-    }
 }
 
 // #################################

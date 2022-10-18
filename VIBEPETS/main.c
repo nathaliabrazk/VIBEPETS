@@ -22,13 +22,16 @@ int main(int argc, char *argv[]) {
             remove(BIN_FUN);
         }
     }
-    abrirTodosArquivos();
-
-    // MENU PRINCIPAL
-    menuPrincipal();
-
-    fecharTodosArquivos();
-//    mostrarQuadroHorarios();
+//    abrirTodosArquivos();
+//
+//    // MENU PRINCIPAL
+//    menuPrincipal();
+//
+//    fecharTodosArquivos();
+    
+//    criarTodosHorariosMesAtualSeguinte(MOSTRAR_DEBUG, TEMA);
+    mostrarQuadroHorarios(MOSTRAR_DEBUG, TEMA);
+//    mostrarQuadroHorarios(TEMA);
     
     printf("\n\n\n");
     system("pause");
@@ -114,61 +117,22 @@ void abrirTodosArquivos() {
     
     // ---------------------------------
     // Abrir arquivo de Agendamento.
-    ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
-    
-    if(ponteiroArquivoAGENDAMENTO == NULL){
-        ponteiroArquivoAGENDAMENTO  = fopen(BIN_AGE, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoAGENDAMENTO == NULL){
-            if(MOSTRAR_DEBUG == 1) {
-                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_AGE);
-            }
-            
-            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
+    abrirArquivoAgendamento(MOSTRAR_DEBUG);
     
     // ---------------------------------
     // Abrir arquivo de Clientes
-    ponteiroArquivoCLIENTE = fopen(BIN_CLI, "r+b"); //tentar abrir
-    
-    if(ponteiroArquivoCLIENTE == NULL){
-        ponteiroArquivoCLIENTE  = fopen(BIN_CLI, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoCLIENTE == NULL){
-            if(MOSTRAR_DEBUG == 1) {
-                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_CLI);
-            }
-            
-            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
+    abrirArquivoCliente(MOSTRAR_DEBUG);
     
     // ---------------------------------
     // Abrir arquivo de Funcionarios
-    ponteiroArquivoFUNCIONARIO = fopen(BIN_FUN, "r+b"); //tentar abrir
+    abrirArquivoFuncionario(MOSTRAR_DEBUG);
     
-    if(ponteiroArquivoFUNCIONARIO == NULL){
-        ponteiroArquivoFUNCIONARIO  = fopen(BIN_FUN, "w+b"); // criar o arquivo
-        
-        if(ponteiroArquivoFUNCIONARIO == NULL){
-            if(MOSTRAR_DEBUG == 1) {
-                printf("Erro fatal: impossivel abrir/criar o arquivo '%s'\n", BIN_FUN);
-            }
-            
-            // Se chegar ate aqui, quer dizer que nao conseguiu abrir de jeito neNhum...
-            // ai encerra o programa 🍃
-            exit(1);
-        }
-    }
+    // ---------------------------------
+    // Abrir arquivo de Funcionarios
+    abrirArquivoHorario(MOSTRAR_DEBUG);
     
-    
-//    // ---------------------------------
-//    // Abrir arquivo de Servico
+    // ---------------------------------
+    // Abrir arquivo de Servico
     abrirArquivoServico(MOSTRAR_DEBUG);
     
     //    #define BIN_TEL "vibe_pet-persistencia_tel.bin"
