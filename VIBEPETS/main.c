@@ -5,6 +5,10 @@
 //  Created by Nathalia Braz on 24/09/22.
 //
 
+
+#include <conio.h>
+#include <locale.h>
+
 //#include "main.h"
 #include "Headers/main.h"
 
@@ -12,6 +16,34 @@ int main(int argc, char *argv[]) {
     //    struct Funcionario funcionario;
     char opcao = 'a';
     
+    //Entradas do sistema de login
+    setlocale(LC_ALL, "Portuguese");
+
+    char usuario[75], senha[50], c;
+    int i=10, j=0, v=0;
+    while (v==0){
+        printf("Digite o seu login: ");
+        gets(usuario);
+        printf("Digite sua senha: ");
+        while((c=getch())!=13){
+            senha[j] = c;
+            j++;
+            printf("*");
+        }
+        senha[j]='\0';
+        j=0;
+        system("cls");
+        i = strcmp(senha,"josafa");
+        if(i==0){
+            printf("Login autorizado! Seja bem vindo(a).");
+            v=1;
+        } else{
+            printf("Login não autorizado! Usuário ou senha estão incorretos!");
+            printf("\nTente novamente.\n");
+        }
+
+    }
+
     // INICIALIZACOES
     // Cuidado, esta acao apaga todo o Banco de Dados.
     if(LIMPAR_BD == 1) {
@@ -112,6 +144,13 @@ void menuPrincipal() {
 // se já existir, abre-o em modo de leitura e escrita (r+b)
 void abrirTodosArquivos() {
     
+    // Saida
+    /*printf("O nome digitado e: %s", nome);
+    printf("O email digitado e: %s", email);*/
+    scanf("O dia digitado foi:  %d", &dia);
+
+
+    return 0;
     // ---------------------------------
     // Abrir arquivo de Agendamento.
     ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
