@@ -6,65 +6,78 @@
 //
 
 
-#include <conio.h>
+//#include <conio.h>
 #include <locale.h>
 
 //#include "main.h"
 #include "Headers/main.h"
 
 int main(int argc, char *argv[]) {
+    setlocale(LC_ALL, "Portuguese");
+    
+    // Propriedades
     //    struct Funcionario funcionario;
     char opcao = 'a';
+    char nome[50], email[50];
+    int  dia, mes, ano, endereco, cpf, tel;
     
     //Entradas do sistema de login
-    setlocale(LC_ALL, "Portuguese");
-
-    char usuario[75], senha[50], c;
-    int i=10, j=0, v=0;
-    while (v==0){
-        printf("Digite o seu login: ");
-        gets(usuario);
-        printf("Digite sua senha: ");
-        while((c=getch())!=13){
-            senha[j] = c;
-            j++;
-            printf("*");
+    char usuario[75], senha[50];
+    int i = 10, j = 0, logado = 0;
+    
+    if(logado == 0) {
+        while (logado == 0){
+            printf("Digite o seu login: ");
+            gets(usuario);
+            printf("Digite sua senha: ");
+            //        while((getc(c)) != '13') {
+            gets(senha);
+            //            senha[j] = c;
+            //            j++;
+            //            printf("*");
+            //        }
+            //        senha[j]='\0';
+            j = 0;
+            //        system("cls");
+            i = strcmp(senha, "josafa");
+            
+            if(i==0){
+                printf("Login autorizado! Seja bem vindo(a).");
+                logado=1;
+            } else{
+                printf("Login não autorizado! Usuário ou senha estão incorretos!");
+                printf("\nTente novamente.\n");
+            }
         }
-        senha[j]='\0';
-        j=0;
-        system("cls");
-        i = strcmp(senha,"josafa");
-        if(i==0){
-            printf("Login autorizado! Seja bem vindo(a).");
-            v=1;
-        } else{
-            printf("Login não autorizado! Usuário ou senha estão incorretos!");
-            printf("\nTente novamente.\n");
+        
+    } else {
+        // INICIALIZACOES
+        // Cuidado, esta acao apaga todo o Banco de Dados.
+        if(LIMPAR_BD == 1) {
+            interfaceLinhaSeparadora(100, TEMA);
+            printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
+            fflush(stdin); opcao = getchar();
+            if(opcao == 's' || opcao == 'S') {
+                remove(BIN_FUN);
+            }
         }
-
+        abrirTodosArquivos();
+        
+        // MENU PRINCIPAL
+        menuPrincipal();
+        
+        fecharTodosArquivos();
+        //    mostrarQuadroHorarios();
     }
-
-    // INICIALIZACOES
-    // Cuidado, esta acao apaga todo o Banco de Dados.
-    if(LIMPAR_BD == 1) {
-        interfaceLinhaSeparadora(100, TEMA);
-        printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
-        fflush(stdin); opcao = getchar();
-        if(opcao == 's' || opcao == 'S') {
-            remove(BIN_FUN);
-        }
-    }
-    abrirTodosArquivos();
-
-    // MENU PRINCIPAL
-    menuPrincipal();
-
-    fecharTodosArquivos();
-//    mostrarQuadroHorarios();
     
     printf("\n\n\n");
     system("pause");
     
+    // Saida
+    /*printf("O nome digitado e: %s", nome);
+    printf("O email digitado e: %s", email);*/
+//    scanf("O dia digitado foi:  %d", &dia);
+
     return 0;
 }
 
@@ -144,13 +157,6 @@ void menuPrincipal() {
 // se já existir, abre-o em modo de leitura e escrita (r+b)
 void abrirTodosArquivos() {
     
-    // Saida
-    /*printf("O nome digitado e: %s", nome);
-    printf("O email digitado e: %s", email);*/
-    scanf("O dia digitado foi:  %d", &dia);
-
-
-    return 0;
     // ---------------------------------
     // Abrir arquivo de Agendamento.
     ponteiroArquivoAGENDAMENTO = fopen(BIN_AGE, "r+b"); //tentar abrir
