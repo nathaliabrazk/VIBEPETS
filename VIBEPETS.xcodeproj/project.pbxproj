@@ -23,8 +23,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6F572E3228F9B154008CE337 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		6F5806D628F9D7780090B5FA /* tipos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tipos.h; sourceTree = "<group>"; };
+		6F5806D728F9D90B0090B5FA /* validacoes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = validacoes.h; sourceTree = "<group>"; };
+		6F5806D828F9DA540090B5FA /* Servico.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Servico.h; sourceTree = "<group>"; };
+		6F5806D928F9E4E70090B5FA /* Agendamento.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agendamento.h; sourceTree = "<group>"; };
+		6F5806DA28F9EB270090B5FA /* Cliente.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cliente.h; sourceTree = "<group>"; };
+		6F5806DB28F9F3C10090B5FA /* Funcionario.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Funcionario.h; sourceTree = "<group>"; };
 		6FB607A428E1D9D3007A834D /* VIBEPETS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VIBEPETS; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FB607A728E1D9D3007A834D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		6FD8706628F9BD48001ED7DE /* utilidades.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utilidades.h; sourceTree = "<group>"; };
+		6FD8706728F9C423001ED7DE /* tipos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tipos.h; sourceTree = "<group>"; };
+		6FD8706928F9C8FB001ED7DE /* interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +48,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6F572E3128F9B154008CE337 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				6F5806D628F9D7780090B5FA /* tipos.h */,
+				6FD8706928F9C8FB001ED7DE /* interface.h */,
+				6F572E3228F9B154008CE337 /* main.h */,
+				6FD8706728F9C423001ED7DE /* tipos.h */,
+				6FD8706628F9BD48001ED7DE /* utilidades.h */,
+				6F5806D728F9D90B0090B5FA /* validacoes.h */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		6F5806D528F9D7430090B5FA /* CRUD */ = {
+			isa = PBXGroup;
+			children = (
+				6F5806D828F9DA540090B5FA /* Servico.h */,
+				6F5806D928F9E4E70090B5FA /* Agendamento.h */,
+				6F5806DA28F9EB270090B5FA /* Cliente.h */,
+				6F5806DB28F9F3C10090B5FA /* Funcionario.h */,
+			);
+			path = CRUD;
+			sourceTree = "<group>";
+		};
 		6FB6079B28E1D9D3007A834D = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +92,8 @@
 			isa = PBXGroup;
 			children = (
 				6FB607A728E1D9D3007A834D /* main.c */,
+				6F5806D528F9D7430090B5FA /* CRUD */,
+				6F572E3128F9B154008CE337 /* Headers */,
 			);
 			path = VIBEPETS;
 			sourceTree = "<group>";
