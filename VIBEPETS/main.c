@@ -40,25 +40,25 @@ int main(int argc, char *argv[]) {
     printf("\t- Tosa e banho\n");
     printf("\t- Shampoo Banho de Carinho Petz\n");
     printf("\t- Condicionador Chegou o Brincalhao Petz\n");
-    printf("\t- Colônia Hydra Groomers Forevers\n");
+    printf("\t- Colonia Hydra Groomers Forevers\n");
     printf("\t- Creme Hidratante de Patinhas\n");
     printf("\t- Vela Aromatica Perfumada | Lavanda\n");
     printf("|VALOR: 100,00|\n");
     
     printf("B)------------------------------------------------------------------\n");
-    printf("-Tosa e banho\n");
-    printf("-Shampoo Pet Society Neutro\n");
-    printf("-Condicionador Pet Society\n");
-    printf("-Colônia Pet Society Lovely\n");
-    printf("-Creme hidrantante Pet Society Lovely\n");
-    printf("-Vela Aromatica Perfumada| Canela\n");
+    printf("\t-Tosa e banho\n");
+    printf("\t-Shampoo Pet Society Neutro\n");
+    printf("\t-Condicionador Pet Society\n");
+    printf("\t-Colonia Pet Society Lovely\n");
+    printf("\t-Creme hidrantante Pet Society Lovely\n");
+    printf("\t-Vela Aromatica Perfumada| Canela\n");
     printf("|VALOR: 90,00|\n");
    printf("C)------------------------------------------------------------------\n");
-    printf("-Tosa e banho\n");
-    printf("-Shampoo Matacura Sarnicida e Anti-Pulgas\n");
-    printf("-Condicionador Matacura Sarnicida e Anti-Pulgas\n");
-    printf("-Perfume Ibasa de Colônia Affection para Caes e Gatos\n");
-    printf("-Creme Hidratante Equilibrio Hidrapet\n");
+    printf("\t-Tosa e banho\n");
+    printf("\t-Shampoo Matacura Sarnicida e Anti-Pulgas\n");
+    printf("\t-Condicionador Matacura Sarnicida e Anti-Pulgas\n");
+    printf("\t-Perfume Ibasa de Colonia Affection para Caes e Gatos\n");
+    printf("\t-Creme Hidratante Equilibrio Hidrapet\n");
     printf("Vela Aromatica Perfumada | Baunilha\n");
     printf("|VALOR: 80,00|\n");
     printf ("OPCAO: ");
@@ -70,32 +70,32 @@ int main(int argc, char *argv[]) {
         case 'A':
         case 'a':
             printf ("Voce escolheu o combo (A)\n");
-            printf("-Tosa e banho\n");
-            printf("-Shampoo Banho de Carinho Petz\n");
-            printf("-Condicionador Chegou o Brincalhao Petz\n");
-            printf("-Colônia Hydra Groomers Forevers\n");
-            printf("-Creme Hidratante de Patinhas\n");
-            printf("-Vela Aromatica Perfumada | Lavanda\n");
+            printf("\t-Tosa e banho\n");
+            printf("\t-Shampoo Banho de Carinho Petz\n");
+            printf("\t-Condicionador Chegou o Brincalhao Petz\n");
+            printf("\t-Colonia Hydra Groomers Forevers\n");
+            printf("\t-Creme Hidratante de Patinhas\n");
+            printf("\t-Vela Aromatica Perfumada | Lavanda\n");
             printf("|VALOR: 100,00|\n");
             break;
         case 'B':
         case 'b':
             printf("Voce escolheu o combo (B)\n");
-            printf("-Tosa e banho\n-Shampoo Pet Society Neutro\n");
-            printf("-Condicionador Pet Society\n-Colônia Pet Society Lovely\n");
-            printf("-Creme hidrantante Pet Society Lovely\n");
-            printf("-Vela Aromatica Perfumada| Canela\n");
+            printf("\t-Tosa e banho\n-Shampoo Pet Society Neutro\n");
+            printf("\t-Condicionador Pet Society\n-Colonia Pet Society Lovely\n");
+            printf("\t-Creme hidrantante Pet Society Lovely\n");
+            printf("\t-Vela Aromatica Perfumada| Canela\n");
             printf("|VALOR: 90,00|\n");
             break;
         case 'C':
         case 'c':
             printf("Voce escolheu o combo (C)\n");
-            printf("-Tosa e banho\n");
-            printf("-Shampoo Matacura Sarnicida e Anti-Pulgas\n");
-            printf("-Condicionador Matacura Sarnicida e Anti-Pulgas\n");
-            printf("-Perfume Ibasa de Colônia Affection para Caes e Gatos\n");
-            printf("-Creme Hidratante Equilibrio Hidrapet\n");
-            printf("Vela Aromatica Perfumada | Baunilha\n");
+            printf("\t-Tosa e banho\n");
+            printf("\t-Shampoo Matacura Sarnicida e Anti-Pulgas\n");
+            printf("\t-Condicionador Matacura Sarnicida e Anti-Pulgas\n");
+            printf("\t-Perfume Ibasa de Colonia Affection para Caes e Gatos\n");
+            printf("\t-Creme Hidratante Equilibrio Hidrapet\n");
+            printf("\tVela Aromatica Perfumada | Baunilha\n");
             printf("|VALOR: 80,00|\n");
             break;
         default:
