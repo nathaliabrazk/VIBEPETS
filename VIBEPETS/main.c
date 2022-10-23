@@ -5,79 +5,34 @@
 //  Created by Nathalia Braz on 24/09/22.
 //
 
-
-//#include <conio.h>
-#include <locale.h>
-
 //#include "main.h"
 #include "Headers/main.h"
 
 int main(int argc, char *argv[]) {
-    setlocale(LC_ALL, "Portuguese");
-    
-    // Propriedades
     //    struct Funcionario funcionario;
     char opcao = 'a';
-    char nome[50], email[50];
-    int  dia, mes, ano, endereco, cpf, tel;
     
-    //Entradas do sistema de login
-    char usuario[75], senha[50];
-    int i = 10, j = 0, logado = 0;
-    
-    if(logado == 0) {
-        while (logado == 0){
-            printf("Digite o seu login: ");
-            gets(usuario);
-            printf("Digite sua senha: ");
-            //        while((getc(c)) != '13') {
-            gets(senha);
-            //            senha[j] = c;
-            //            j++;
-            //            printf("*");
-            //        }
-            //        senha[j]='\0';
-            j = 0;
-            //        system("cls");
-            i = strcmp(senha, "josafa");
-            
-            if(i==0){
-                printf("Login autorizado! Seja bem vindo(a).");
-                logado=1;
-            } else{
-                printf("Login não autorizado! Usuário ou senha estão incorretos!");
-                printf("\nTente novamente.\n");
-            }
+    // INICIALIZACOES
+    // Cuidado, esta acao apaga todo o Banco de Dados.
+    if(LIMPAR_BD == 1) {
+        interfaceLinhaSeparadora(100, TEMA);
+        printarMensagem("----- DESEJA APAGAR TODOS OS REGISTROS (s/n)? -----\n(Acao irreversivel) ");
+        fflush(stdin); opcao = getchar();
+        if(opcao == 's' || opcao == 'S') {
+            remove(BIN_FUN);
         }
-        
-    } else {
-        // INICIALIZACOES
-        // Cuidado, esta acao apaga todo o Banco de Dados.
-        if(LIMPAR_BD == 1) {
-            interfaceLinhaSeparadora(100, TEMA);
-            printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
-            fflush(stdin); opcao = getchar();
-            if(opcao == 's' || opcao == 'S') {
-                remove(BIN_FUN);
-            }
-        }
-        abrirTodosArquivos();
-        
-        // MENU PRINCIPAL
-        menuPrincipal();
-        
-        fecharTodosArquivos();
-        //    mostrarQuadroHorarios();
     }
+    abrirTodosArquivos();
+
+    // MENU PRINCIPAL
+    menuPrincipal();
+
+    fecharTodosArquivos();
+//    mostrarQuadroHorarios();
     
     printf("\n\n\n");
     system("pause");
     
-    // Saida
-    /*printf("O nome digitado e: %s", nome);
-    printf("O email digitado e: %s", email);*/
-//    scanf("O dia digitado foi:  %d", &dia);
-
     return 0;
 }
 
@@ -90,12 +45,12 @@ void menuPrincipal() {
     while(opcao != 'x' && opcao != 'X') {
         limparTela(MOSTRAR_DEBUG);
         
-        printf("\nMENU PRINCIPAL\n");
-        printf("\tA) MENU AGENDAMENTO\n");
-        printf("\tC) MENU CLIENTE\n");
-        printf("\tF) MENU FUNCIONARIO\n");
+        printf("\n --------------- MENU PRINCIPAL ---------------\n \n--------------- SELECIONE A OPÇÃO QUE VOCÊ DESEJA ACESSAR ---------------\n");
+        printf("\tA) MENU DOS AGENDAMENTOS\n");
+        printf("\tC) MENU DOS CLIENTES\n");
+        printf("\tF) MENU DOS FUNCIONARIOS\n");
 //        printf("\tP) MENU PRODUTO\n");
-        printf("\tS) MENU SERVICOS\n");
+        printf("\tS) MENU DE SERVICOS\n");
         printf("\tX) SAIR\n");
         opcao = receberValidarOpcaoLetra("acfxs"); // add p depois.
         
@@ -121,11 +76,12 @@ void menuPrincipal() {
                 break;
                 
             case 'x':
-                printf("SAINDO!");
+                printf("\n--------------- SAINDO DOS MENUS ---------------\n");
+                printf("\n--------------- OBRIGADO ---------------\n");
                 break;
                 
             default:
-                printf("OPCAO INVALIDA!");
+                printf("OPCAO INVALIDA! POR FAVOR SELECIONE UMA LETRA VÁLIDA");
         }
     }
 }
@@ -263,7 +219,7 @@ void fecharTodosArquivos() {
  //    printf("Escolha os produtos que deseja da linha para o dia de Spa do seu pet\n");
  //    printf("Escolha o Shampoo para seu pet:\n");
  //    printf("A- Shampoo Pro-Banho Pelencio \nB- Shampoo Pelos Claros Peloncio \nC- Shampoo Pelos Escuros Peloncio \nFragrancias:    Avela - Melancia - Dove - Morango\n");
- //    printf("Opcao:\n");
+ //    printf("Selecione a letra do produto desejado:\n");
  //    scanf ("%s", &opcao);
  //    fflush (stdin);
  //    sho
@@ -271,23 +227,23 @@ void fecharTodosArquivos() {
  //    switch (opcao) {
  //        case 'A':
  //        case 'a':
- //            printf("Voce escolheu  Shampoo Pro-Banho Peloncio\n");
+ //            printf("MUITO BOM!!! Voce escolheu  Shampoo Pro-Banho Peloncio\n");
  //            break;
  //        case 'B':
  //        case 'b':
- //            printf("Voc escolheu Shampoo Pelos Claros Peloncio\n");
+ //            printf("MUITO BOM!!! Voce escolheu Shampoo Pelos Claros Peloncio\n");
  //            break;
  //        case 'C':
  //        case 'c':
- //            printf("Voce escolheu Shampoo Pelos Escuros Peloncio\n");
+ //            printf("MUITO BOM!!! Voce escolheu Shampoo Pelos Escuros Peloncio\n");
  //            break;
  //        default:
- //            printf("Opcao invalida");
+ //            printf("Opcao invalida, favor escolher uma opçao correta");
  //    }
  //
  //    printf("Escolha a fragrancia do Condicionador para seu pet:\n");
  //    printf("A-Avela \nB- Melancia \nC- Morango\n");
- //    printf("Opcao:\n");
+ //    printf("Selecione uma letra para fragrancia desejada:\n");
  //    scanf ("%c", &opcao);
  //    fflush (stdin);
  //    limparTela(MOSTRAR_DEBUG);
@@ -295,23 +251,23 @@ void fecharTodosArquivos() {
  //    switch (opcao) {
  //        case 'A':
  //        case 'a':
- //            printf("Voce escolheu Avela\n");
+ //            printf("MUITO BOM!!! Voce escolheu Avela\n");
  //            break;
  //        case 'B':
  //        case 'b':
- //            printf("Voce escolheu Melancia\n");
+ //            printf("MUITO BOM!!! Voce escolheu Melancia\n");
  //            break;
  //        case 'C':
  //        case 'c':
- //            printf("Voce escolheu Morango\n");
+ //            printf("MUITO BOM!!! Voce escolheu Morango\n");
  //            break;
  //        default:
  //
- //            printf("Opcao invalida");
+ //            printf("Opcao invalida, favor selecionar uma opçao correta");
  //    }
  //    printf("Escolha a colonia Perfume Pet Clean Max para seu pet:\n");
  //    printf("A-  Amendoas e Ameixa \nB- Avela e Cereja \nC- Melancia\n");
- //    printf("Opcao:\n");
+ //    printf("Selecione uma letra para a colonia desejada:\n");
  //    scanf ("%c", &opcao);
  //    fflush (stdin);
  //    limparTela(MOSTRAR_DEBUG);
@@ -320,18 +276,18 @@ void fecharTodosArquivos() {
  //    {
  //        case 'A':
  //        case 'a':
- //            printf("Voce escolheu Amendoas e Ameixa\n");
+ //            printf("MUITO BOM!!! Voce escolheu Amendoas e Ameixa\n");
  //            break;
  //        case 'B':
  x
  //        case 'b':
- //            printf("Voce escolheu Avela e Cereja\n");
+ //            printf("MUITO BOM!!! Voce escolheu Avela e Cereja\n");
  //            break;
  //        case 'C':
  //        case 'c':
- //            printf("Voce escolheu Melancia\n");
+ //            printf("MUITO BOM!!! Voce escolheu Melancia\n");
  //            break;
  //        default:
- //            printf("Opcao invalida");
+ //            printf("Opcao invalida, favor selecioanr uma opçao valida");
  //    }
  */

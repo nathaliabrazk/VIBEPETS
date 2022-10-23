@@ -1,10 +1,3 @@
-//
-//  Cliente.h
-//  VIBEPETS
-//
-//  Created by Luiz Araujo on 14/10/22.
-//
-
 // #############################################################################
 // CLIENTE
 
@@ -24,7 +17,7 @@ void fecharArquivoCliente(void);
 void menuCliente(int, int);
 void menuClienteAlterar(int, int);
 void menuClienteDeletar(int, int);
-void menuClienteInserir(int);
+void menuClienteInserir(int); 
 void menuClienteListarTodos(int, int);
 
 int  acessarUltimoCodigoCliente(int);
@@ -49,11 +42,11 @@ void menuCliente(int mostrar_debug, int tema) {
     while(opcao != 'x' && opcao != 'X') {
         limparTela(mostrar_debug);
         
-        printf("\nMENU CLIENTE\n");
-        printf("\tA) ALTERAR\n");
-        printf("\tD) DELETAR\n");
-        printf("\tI) INSERIR\n");
-        printf("\tL) LISTAR\n");
+        printf("\n--------------- MENU DO CLIENTE ---------------\n");
+        printf("\tA) ALTERAR LISTA DE CLIENTES\n");
+        printf("\tD) DELETAR CLIENTE\n");
+        printf("\tI) INSERIR CLIENTE\n");
+        printf("\tL) LISTAR CLIENTES\n");
         printf("\tX) VOLTAR\n");
         opcao = receberValidarOpcaoLetra("ialdx");
         
@@ -75,11 +68,11 @@ void menuCliente(int mostrar_debug, int tema) {
                 break;
                 
             case 'x':
-                printf("VOLTANDO!");
+                printf("VOLTANDO AO INÍCIO!");
                 break;
                 
             default:
-                printf("OPCAO INVALIDA!");
+                printf("OPCAO INVALIDA!, FAVOR SELECIONAR LETRA VÁLIDA");
         }
     }
 }
@@ -105,7 +98,7 @@ void menuClienteDeletar(int mostrar_debug, int tema) {
     
     printarTodosRegistrosCliente(mostrar_debug, tema);
     
-    printf("INFORME O CODIGO PARA ALTERAR: ");
+    printf("INFORME O CODIGO PARA DELETAR: ");
     scanf("%d", &codigo);
     
     registro = buscarRegistroClientePorCod(codigo, mostrar_debug);
@@ -427,13 +420,13 @@ void lerDadosCliente(struct Cliente *cliente) {
 //    gets(cliente->email); fflush(stdin);
     receberValidarCPF(cliente->email);
     
-    printf("Endereco:");
+    printf("----- Endereco:");
     gets(cliente->endereco); fflush (stdin);
     
-    printf("Telefone:");
+    printf("----- Telefone:");
     scanf("%d", &cliente->telefone); fflush (stdin);
     
-    printf("DATA DE NASCIMENTO\n");
+    printf("----- DATA DE NASCIMENTO\n");
 //    printf("Dia: ");
 //    scanf("%d", &cliente->nascimento.dia);
 //
