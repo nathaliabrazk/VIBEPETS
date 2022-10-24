@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
             scanf("%d", &codigo);
             login.codigo = codigo;
             
-            if (codigo == 0) {
+            if(codigo == 0) {
                 if(MOSTRAR_DEBUG == 1) {
                     printarMensagem("\nCODIGO ADMINISTRADOR!");
                 }
