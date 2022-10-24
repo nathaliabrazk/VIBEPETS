@@ -104,7 +104,7 @@ void interfaceLinhaSeparadora(int tamanho, int tema) {
             caracter = '-';
     }
     
-    printf("\n");
+//    printf("\n");
     for(int indice = 0; indice < tamanho; indice++) {
         printf("%c", caracter);
     }

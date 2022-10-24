@@ -23,6 +23,7 @@ void menuServicoAlterar(int, int);
 void menuServicoDeletar(int, int);
 void menuServicoInserir(int);
 void menuServicoListarTodos(int);
+void menuServicoListarCombos(int);
 
 int  acessarUltimoCodigoServico(int);
 void alterarServico(int, int);
@@ -49,9 +50,9 @@ void menuServico(int mostrar_debug, int tema) {
         limparTela(mostrar_debug);
         
         printf("\n MENU SERVICO\n");
-        printf("\tI) INSERIR NOVO\n");
+        printf("\tC) COMBOS\n");
         printf("\tA) ALTERAR\n");
-        printf("\tL) LISTAR\n");
+        printf("\tI) INSERIR NOVO\n");
         printf("\tD) DELETAR\n");
         printf("\tX) VOLTAR\n");
         printf("OPCAO: ");
@@ -60,19 +61,20 @@ void menuServico(int mostrar_debug, int tema) {
         fflush(stdin);
         
         switch(opcao) {
-            case 'i':
-            case 'I':
-                menuServicoInserir(mostrar_debug);
-                break;
-                
             case 'a':
             case 'A':
                 menuServicoAlterar(mostrar_debug, tema);
                 break;
                 
-            case 'l':
-            case 'L':
-                menuServicoListarTodos(tema);
+            case 'c':
+            case 'C':
+//                menuServicoListarTodos(tema);
+                menuServicoListarCombos(tema);
+                break;
+                
+            case 'i':
+            case 'I':
+                menuServicoInserir(mostrar_debug);
                 break;
                 
             case 'd':
@@ -131,6 +133,106 @@ void menuServicoInserir(int mostrar_debug) {
 }
 
 void menuServicoListarTodos(int tema) {
+    printarTodosRegistrosServico(tema);
+    printarMensagemContinuar();
+}
+
+void menuServicoListarCombos(int tema) {
+    struct Servico servico;
+    char opcao = ' ';
+    
+    servico.ativo = ' ';
+    
+    interfaceLinhaSeparadoraSemQuebraDeLinha(100, 1);
+    printf ("\nEscolha um dos nossos servicos!\n ");
+    printf("\nOBSERVACAO (SO PODE SER ESCOLHIDO UM COMBO DE SERVICO POR DIA E POR PET)\n");
+    
+    interfaceLinhaSeparadoraSemQuebraDeLinha(100, 1);
+    printf("\nA)");
+    printf("\n-Tosa e banho");
+    printf("\n-Shampoo Banho de Carinho Petz");
+    printf("\n-Condicionador Chegou o Brincalhao Petz");
+    printf("\n-Colonia Hydra Groomers Forevers");
+    printf("\n-Creme Hidratante de Patinhas");
+    printf("\n-Vela Aromatica Perfumada | Lavanda");
+    printf("\n|VALOR: 100,00|");
+    
+    interfaceLinhaSeparadoraSemQuebraDeLinha(100, 1);
+    printf("\nB)");
+    printf("\n-Tosa e banho");
+    printf("\n-Shampoo Pet Society Neutro");
+    printf("\n-Condicionador Pet Society");
+    printf("\n-Colonia Pet Society Lovely");
+    printf("\n-Creme hidrantante Pet Society Lovely");
+    printf("\n-Vela Aromatica Perfumada| Canela");
+    printf("\n|VALOR: 90,00|");
+    
+    interfaceLinhaSeparadoraSemQuebraDeLinha(100, 1);
+    printf("\nC)");
+    printf("\n-Tosa e banho");
+    printf("\n-Shampoo Matacura Sarnicida e Anti-Pulgas");
+    printf("\n-Condicionador Matacura Sarnicida e Anti-Pulgas");
+    printf("\n-Perfume Ibasa de ColÙnia Affection para Caes e Gatos");
+    printf("\n-Creme Hidratante Equilibrio Hidrapet");
+    printf("\n-Vela Aromatica Perfumada | Baunilha");
+    interfaceLinhaSeparadoraSemQuebraDeLinha(100, 1);
+    
+    printf("\n|VALOR: 80,00|");
+    printf("\nOPCAO:\n");
+    scanf ("%s", &opcao);
+    fflush (stdin);
+    system ("cls");
+    
+    while(opcao == ' ') {
+        
+        switch (opcao) {
+            case 'A':
+            case 'a':
+                printf ("\nVoce escolheu o combo (A)");
+                printf("\n-Tosa e banho");
+                printf("\n-Shampoo Banho de Carinho Petz");
+                printf("\n-Condicionador Chegou o Brincalhao Petz");
+                printf("\n-Colonia Hydra Groomers Forevers");
+                printf("\n-Creme Hidratante de Patinhas");
+                printf("\n-Vela Aromatica Perfumada | Lavanda");
+                printf("\n|VALOR: 100,00|\n");
+                strcpy(servico.nome, "COMBO A");
+                servico.valor = 100;
+                break;
+                
+            case 'B':
+            case 'b':
+                printf("\nVoce escolheu o combo (B)");
+                printf("\n-Tosa e banho\n-Shampoo Pet Society Neutro");
+                printf("\n-Condicionador Pet Society");
+                printf("\n-Colonia Pet Society Lovely");
+                printf("\n-Creme hidrantante Pet Society Lovely");
+                printf("\n-Vela Aromatica Perfumada| Canela");
+                printf("\n|VALOR: 90,00|\n");
+                strcpy(servico.nome, "COMBO B");
+                servico.valor = 90;
+                break;
+                
+            case 'C':
+            case 'c':
+                printf("\nVoce escolheu o combo (C)");
+                printf("\n-Tosa e banho");
+                printf("\n-Shampoo Matacura Sarnicida e Anti-Pulgas");
+                printf("\n-Condicionador Matacura Sarnicida e Anti-Pulgas");
+                printf("\n-Perfume Ibasa de Colonia Affection para Caes e Gatos");
+                printf("\n-Creme Hidratante Equilibrio Hidrapet");
+                printf("\n-Vela Aromatica Perfumada | Baunilha");
+                printf("\n|VALOR: 80,00|");
+                strcpy(servico.nome, "COMBO C");
+                servico.valor = 80;
+                break;
+                
+            default:
+                printf ("\nOPCAO INVALIDA\n");
+                opcao = ' ';
+        }
+    }
+    
     printarTodosRegistrosServico(tema);
     printarMensagemContinuar();
 }
@@ -426,9 +528,9 @@ void printarTodosRegistrosServico(int tema) {
     rewind(ponteiroArquivoSERVICO);
     
     printf("SERVICOS\n");
-    interfaceLinhaSeparadora(150, tema);
+    interfaceLinhaSeparadora(100, tema);
     printf("%-5s|%-30s|%-10s|%-10s\n", "COD", "NOME", "DURACAO", "VALOR");
-    interfaceLinhaSeparadora(150, tema);
+    interfaceLinhaSeparadora(100, tema);
     
     while(1){
         if(fread(&servico, sizeof(servico), 1, ponteiroArquivoSERVICO)!= 1)break; /*Sair do laço*/

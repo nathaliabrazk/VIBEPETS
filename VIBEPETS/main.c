@@ -163,7 +163,7 @@ void menuPrincipal() {
     while(opcao != 'x' && opcao != 'X') {
         limparTela(MOSTRAR_DEBUG);
         
-        printf("\n --------------- MENU PRINCIPAL ---------------\n \n--------------- SELECIONE A OPÇÃO QUE VOCÊ DESEJA ACESSAR ---------------\n");
+        printf("\n --------------- MENU PRINCIPAL ---------------\n \n--------------- SELECIONE A OPCAO QUE VOCÊ DESEJA ACESSAR ---------------\n");
         printf("\tA) MENU DOS AGENDAMENTOS\n");
         printf("\tC) MENU DOS CLIENTES\n");
         printf("\tF) MENU DOS FUNCIONARIOS\n");
@@ -409,3 +409,12 @@ void fecharTodosArquivos() {
  //            printf("Opcao invalida, favor selecioanr uma opçao valida");
  //    }
  */
+
+
+
+
+//############################################################################
+//tive que testa na branch de produto!! Estava funcionando perfeitamente
+// temos que decidir onde vamos introduzir no cÛdigo/ pensei na hora de abrir o "MENU SERVICOS" na parte de "LISTAR" poderia aparecer os combos
+//                COOOOOOOOOOOOOOOOOOOOOOOOOOMBOS
+ 
