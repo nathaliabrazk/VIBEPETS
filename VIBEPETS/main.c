@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
             printf("Digite o seu codigo: ");
             scanf("%d", &codigo);
             login.codigo = codigo;
-            printf("\n3codigo: %d", codigo);
             
             if (codigo == 0) {
                 if(MOSTRAR_DEBUG == 1) {
@@ -40,22 +39,16 @@ int main(int argc, char *argv[]) {
                 logado = 0;
                 
             } else if(codigo >= 1) {
-                printf("\n4codigo: %d", codigo);
                 login = buscarFuncionarioPorCod(codigo, MOSTRAR_DEBUG);
-                
-                printf("\n4login.codigo: %d", login.codigo);
-                
-                printf("\nENTROU 6");
+                                
                 if(login.codigo <= -1) {
                     if(MOSTRAR_DEBUG == 1) {
                         printarMensagem("\nCODIGO INVALIDO!");
                     }
                     logado = 1;
-                    printf("\nENTROU 5");
 
                 } else {
                     logado = 0;
-                    printf("\nENTROU 4");
                 }
             } else {
                 logado = 1;
