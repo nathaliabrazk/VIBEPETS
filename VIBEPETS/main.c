@@ -9,32 +9,157 @@
 #include "Headers/main.h"
 
 int main(int argc, char *argv[]) {
-    //    struct Funcionario funcionario;
+    // Propriedades
+    struct Funcionario login;
     char opcao = 'a';
+    //    char nome[50], email[50];
+    //    int  dia, mes, ano, endereco, cpf, tel;
     
-    // INICIALIZACOES
-    // Cuidado, esta acao apaga todo o Banco de Dados.
-    if(LIMPAR_BD == 1) {
-        interfaceLinhaSeparadora(100, TEMA);
-        printarMensagem("----- DESEJA APAGAR TODOS OS REGISTROS (s/n)? -----\n(Acao irreversivel) ");
-        fflush(stdin); opcao = getchar();
-        if(opcao == 's' || opcao == 'S') {
-            remove(BIN_FUN);
+    //Entradas do sistema de login
+    char senha[50];
+    int codigo = -1, j = 0, logado = 1;
+    
+    login.codigo = -1;
+    
+    abrirTodosArquivos();
+    
+    while (logado == 1){
+        while(codigo <= -1) {
+            printf("Digite o seu codigo: ");
+            scanf("%d", &codigo);
+            login.codigo = codigo;
+            printf("\n3codigo: %d", codigo);
+            
+            if (codigo == 0) {
+                if(MOSTRAR_DEBUG == 1) {
+                    printarMensagem("\nCODIGO ADMINISTRADOR!");
+                }
+                login.codigo = 0;
+                strcpy(senha, "admin123");
+                strcpy(login.senha, "admin123");
+                logado = 0;
+                
+            } else if(codigo >= 1) {
+                printf("\n4codigo: %d", codigo);
+                login = buscarFuncionarioPorCod(codigo, MOSTRAR_DEBUG);
+                
+                printf("\n4login.codigo: %d", login.codigo);
+                
+                printf("\nENTROU 6");
+                if(login.codigo <= -1) {
+                    if(MOSTRAR_DEBUG == 1) {
+                        printarMensagem("\nCODIGO INVALIDO!");
+                    }
+                    logado = 1;
+                    printf("\nENTROU 5");
+
+                } else {
+                    logado = 0;
+                    printf("\nENTROU 4");
+                }
+            } else {
+                logado = 1;
+            }
+        }
+        
+        if(login.codigo >= 0) {
+            
+            printf("Digite sua senha: ");
+            //        while((getc(c)) != '13') {
+            fflush(stdin); gets(senha);
+            j = 0;
+            
+            // Checa se o login está certo
+            if(login.codigo == 0) {
+                if(strcmp(senha, "admin123") == 0){
+                    logado = 0;
+                } else {
+                    logado = 1;
+                }
+                
+            } else {
+                if(strcmp(senha, login.senha) == 0){
+                    logado = 0;
+                    
+                } else {
+                    logado = 1;
+                }
+            }
+            
+            if(logado == 0){
+                printf("\n\nLogin autorizado!");
+                if(login.codigo == 0) {
+                    printf("\nSeja bem vindo(a) ADMINISTRADOR.\n\n");
+                } else {
+                    printf("\nSeja bem vindo(a) %s.\n\n", login.nome);
+                }
+                
+            } else{
+                printf("Login não autorizado! Usuário ou senha estão incorretos!");
+                printf("\nTente novamente.\n");
+                logado = 1;
+            }
+        } else {
+            logado = 1;
         }
     }
-    abrirTodosArquivos();
-
-    // MENU PRINCIPAL
-    menuPrincipal();
-
+    
+    if(logado == 0) {
+        // INICIALIZACOES
+        // Cuidado, esta acao apaga todo o Banco de Dados.
+        if(LIMPAR_BD == 1) {
+            interfaceLinhaSeparadora(100, TEMA);
+            printarMensagem("DESEJA APAGAR TODOS OS REGISTROS (s/n)?\n(Acao irreversivel) ");
+            fflush(stdin); opcao = getchar();
+            if(opcao == 's' || opcao == 'S') {
+                remove(BIN_FUN);
+            }
+        }
+        
+        // MENU PRINCIPAL
+        menuPrincipal();
+    }
+    
+    
     fecharTodosArquivos();
-//    mostrarQuadroHorarios();
+    //    mostrarQuadroHorarios();
     
     printf("\n\n\n");
     system("pause");
     
+    // Saida
+    /*printf("O nome digitado e: %s", nome);
+     printf("O email digitado e: %s", email);*/
+    //    scanf("O dia digitado foi:  %d", &dia);
+    
     return 0;
 }
+//    struct Funcionario funcionario;
+//    char opcao = 'a';
+//
+//    // INICIALIZACOES
+//    // Cuidado, esta acao apaga todo o Banco de Dados.
+//    if(LIMPAR_BD == 1) {
+//        interfaceLinhaSeparadora(100, TEMA);
+//        printarMensagem("----- DESEJA APAGAR TODOS OS REGISTROS (s/n)? -----\n(Acao irreversivel) ");
+//        fflush(stdin); opcao = getchar();
+//        if(opcao == 's' || opcao == 'S') {
+//            remove(BIN_FUN);
+//        }
+//    }
+//    abrirTodosArquivos();
+//
+//    // MENU PRINCIPAL
+//    menuPrincipal();
+//
+//    fecharTodosArquivos();
+////    mostrarQuadroHorarios();
+//
+//    printf("\n\n\n");
+//    system("pause");
+//
+//    return 0;
+//}
 
 
 // #############################################################################
@@ -49,7 +174,7 @@ void menuPrincipal() {
         printf("\tA) MENU DOS AGENDAMENTOS\n");
         printf("\tC) MENU DOS CLIENTES\n");
         printf("\tF) MENU DOS FUNCIONARIOS\n");
-//        printf("\tP) MENU PRODUTO\n");
+        //        printf("\tP) MENU PRODUTO\n");
         printf("\tS) MENU DE SERVICOS\n");
         printf("\tX) SAIR\n");
         opcao = receberValidarOpcaoLetra("acfxs"); // add p depois.
@@ -66,10 +191,10 @@ void menuPrincipal() {
             case 'f':
                 menuFuncionario(MOSTRAR_DEBUG, TEMA);
                 break;
-//
-//            case 'p':
-//                printf("---> FAZER MENU PRODUTO <--- ");
-//                break;
+                //
+                //            case 'p':
+                //                printf("---> FAZER MENU PRODUTO <--- ");
+                //                break;
                 
             case 's':
                 menuServico(MOSTRAR_DEBUG, TEMA);

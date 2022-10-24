@@ -476,9 +476,9 @@ void printarTodosRegistrosFuncionario(int mostrar_debug, int tema) {
     rewind(ponteiroArquivoFUNCIONARIO);
     
     printf("FUNCIONARIOS\n");
-    interfaceLinhaSeparadora(150, tema);
+    interfaceLinhaSeparadora(100, tema);
     printf("%-5s|%-30s|%-15s|%-30s\n", "COD", "NOME", "CPF", "SENHA");
-    interfaceLinhaSeparadora(150, tema);
+    interfaceLinhaSeparadora(100, tema);
     
     while(1){
         if(fread(&funcionario, sizeof(funcionario), 1, ponteiroArquivoFUNCIONARIO)!= 1)break; /*Sair do laço*/
@@ -516,5 +516,54 @@ int salvarRegistroFuncionario(struct Funcionario funcionario, int mostrar_debug)
     // Retornando o valor do resultado.
     return(resultado);
 }
+
+
+
+
+//// #############################################################################
+//// LOGIN FUNCs
+//
+//
+//// #################################
+//// VERIFICA SE O LOGIN EXISTO NO BD
+//// RETORNO:
+////  -    0: se nao houve erros;
+////  - != 0: se houve erro(s);
+//int buscarPorLogin(char* entradaLogin, int mostrar_debug) {
+//    struct Funcionario funcionario;
+//    int retorno = 1;
+//
+//    // Testando se o arquivo foi aberto com sucesso
+//    if(ponteiroArquivoFUNCIONARIO != NULL) {
+//        if(mostrar_debug == 1) {
+//            printf("\n\nArquivo %s foi aberto com sucesso\n\n", BIN_FUN);
+//        }
+//
+//    } else {
+//        if(mostrar_debug == 1) {
+//            printf("\n\nERRO: O arquivo %s nao foi aberto e criado\n", BIN_FUN);
+//        }
+//        system ("pause");
+//        exit(1);
+//    }
+//
+//    rewind(ponteiroArquivoFUNCIONARIO);
+//    // Procura em todos os registros do documento.
+//    while(fread(&funcionario, sizeof(struct Funcionario), 1, ponteiroArquivoFUNCIONARIO)) {
+//
+//        // Compara o cod recebido.
+//        if(strcmp(funcionario.cpf, entradaLogin) == 0) {
+//            // Se encontrar, retorna encontrado.
+//            return  contadorCodigo;
+//        }
+//    }
+//
+//    // Se nao achar o codigo, retorna -1 para indicar que nao achou.
+//    if(mostrar_debug == 1) {
+//        printf("\n\nERRO: registro nao encontrado.");
+//    }
+//
+//    return retorno;
+//}
 
 #endif /* Funcionario_h */
